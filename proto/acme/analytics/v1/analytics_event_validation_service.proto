@@ -1,0 +1,223 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.analytics.v1;
+
+import "acme/analytics/v1/analytics.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Analytics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/analytics/v1;analyticsv1";
+option java_multiple_files = true;
+option java_outer_classname = "AnalyticsEventValidationServiceProto";
+option java_package = "com.acme.analytics.v1";
+
+// Checks analytics events against the rules before anything acts on them.
+service AnalyticsEventValidationService {
+  // Validates an analytics event.
+  rpc ValidateAnalyticsEvent(ValidateAnalyticsEventRequest) returns (ValidateAnalyticsEventResponse);
+
+  // Previews an analytics event.
+  rpc PreviewAnalyticsEvent(PreviewAnalyticsEventRequest) returns (PreviewAnalyticsEventResponse);
+
+  // Normalizes an analytics event.
+  rpc NormalizeAnalyticsEvent(NormalizeAnalyticsEventRequest) returns (NormalizeAnalyticsEventResponse);
+
+  // Explains an analytics event.
+  rpc ExplainAnalyticsEventDecision(ExplainAnalyticsEventDecisionRequest) returns (ExplainAnalyticsEventDecisionResponse);
+
+  // Lints an analytics event.
+  rpc LintAnalyticsEvents(LintAnalyticsEventsRequest) returns (LintAnalyticsEventsResponse);
+
+  // Returns an analytics event.
+  rpc GetAnalyticsEventRules(GetAnalyticsEventRulesRequest) returns (GetAnalyticsEventRulesResponse);
+}
+
+// The request of `ValidateAnalyticsEvent`.
+message ValidateAnalyticsEventRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_event_id = 2;
+  AnalyticsEvent analytics_event = 3;
+  ValidateAnalyticsEventRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateAnalyticsEvent`.
+message ValidateAnalyticsEventResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsEvent analytics_event = 1;
+  ValidateAnalyticsEventResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewAnalyticsEvent`.
+message PreviewAnalyticsEventRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_event_id = 2;
+  AnalyticsEvent analytics_event = 3;
+  PreviewAnalyticsEventRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewAnalyticsEvent`.
+message PreviewAnalyticsEventResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsEvent analytics_event = 1;
+  PreviewAnalyticsEventResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeAnalyticsEvent`.
+message NormalizeAnalyticsEventRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_event_id = 2;
+  AnalyticsEvent analytics_event = 3;
+  NormalizeAnalyticsEventRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeAnalyticsEvent`.
+message NormalizeAnalyticsEventResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsEvent analytics_event = 1;
+  NormalizeAnalyticsEventResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainAnalyticsEventDecision`.
+message ExplainAnalyticsEventDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_event_id = 2;
+  AnalyticsEvent analytics_event = 3;
+  ExplainAnalyticsEventDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainAnalyticsEventDecision`.
+message ExplainAnalyticsEventDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsEvent analytics_event = 1;
+  ExplainAnalyticsEventDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintAnalyticsEvents`.
+message LintAnalyticsEventsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_event_id = 2;
+  AnalyticsEvent analytics_event = 3;
+  LintAnalyticsEventsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintAnalyticsEvents`.
+message LintAnalyticsEventsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsEvent analytics_event = 1;
+  LintAnalyticsEventsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAnalyticsEventRules`.
+message GetAnalyticsEventRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string analytics_event_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAnalyticsEventRules`.
+message GetAnalyticsEventRulesResponse {
+  AnalyticsEvent analytics_event = 1;
+  acme.common.v1.OperationResult result = 2;
+}

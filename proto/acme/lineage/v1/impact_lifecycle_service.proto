@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lineage.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/lineage/v1/lineage.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lineage.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lineage/v1;lineagev1";
+option java_multiple_files = true;
+option java_outer_classname = "ImpactLifecycleServiceProto";
+option java_package = "com.acme.lineage.v1";
+
+// Moves an impact between the states of its lifecycle.
+service ImpactLifecycleService {
+  // Activates an impact.
+  rpc ActivateImpact(ActivateImpactRequest) returns (ActivateImpactResponse);
+
+  // Suspends an impact.
+  rpc SuspendImpact(SuspendImpactRequest) returns (SuspendImpactResponse);
+
+  // Reinstates an impact.
+  rpc ReinstateImpact(ReinstateImpactRequest) returns (ReinstateImpactResponse);
+
+  // Terminates an impact.
+  rpc TerminateImpact(TerminateImpactRequest) returns (TerminateImpactResponse);
+
+  // Renews an impact.
+  rpc RenewImpact(RenewImpactRequest) returns (RenewImpactResponse);
+
+  // Expires an impact.
+  rpc ExpireImpact(ExpireImpactRequest) returns (ExpireImpactResponse);
+
+  // Returns an impact.
+  rpc GetImpactLifecycle(GetImpactLifecycleRequest) returns (GetImpactLifecycleResponse);
+
+  // Schedules an impact.
+  rpc ScheduleImpactExpiry(ScheduleImpactExpiryRequest) returns (ScheduleImpactExpiryResponse);
+}
+
+// The request of `ActivateImpact`.
+message ActivateImpactRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  ActivateImpactRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateImpact`.
+message ActivateImpactResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  ActivateImpactResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendImpact`.
+message SuspendImpactRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  SuspendImpactRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendImpact`.
+message SuspendImpactResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  SuspendImpactResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateImpact`.
+message ReinstateImpactRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  ReinstateImpactRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateImpact`.
+message ReinstateImpactResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  ReinstateImpactResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateImpact`.
+message TerminateImpactRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  TerminateImpactRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateImpact`.
+message TerminateImpactResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  TerminateImpactResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewImpact`.
+message RenewImpactRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  RenewImpactRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewImpact`.
+message RenewImpactResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  RenewImpactResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireImpact`.
+message ExpireImpactRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  ExpireImpactRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireImpact`.
+message ExpireImpactResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  ExpireImpactResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetImpactLifecycle`.
+message GetImpactLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetImpactLifecycle`.
+message GetImpactLifecycleResponse {
+  Impact impact = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleImpactExpiry`.
+message ScheduleImpactExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  ScheduleImpactExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleImpactExpiry`.
+message ScheduleImpactExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  ScheduleImpactExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

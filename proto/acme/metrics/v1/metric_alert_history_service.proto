@@ -1,0 +1,232 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.metrics.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/metrics/v1/metrics.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Metrics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/metrics/v1;metricsv1";
+option java_multiple_files = true;
+option java_outer_classname = "MetricAlertHistoryServiceProto";
+option java_package = "com.acme.metrics.v1";
+
+// Keeps every version of a metric alert and restores earlier ones.
+service MetricAlertHistoryService {
+  // Records a metric alert.
+  rpc RecordMetricAlertVersion(RecordMetricAlertVersionRequest) returns (RecordMetricAlertVersionResponse);
+
+  // Lists metric alerts a page at a time.
+  rpc ListMetricAlertVersions(ListMetricAlertVersionsRequest) returns (ListMetricAlertVersionsResponse);
+
+  // Returns a metric alert.
+  rpc GetMetricAlertVersion(GetMetricAlertVersionRequest) returns (GetMetricAlertVersionResponse);
+
+  // Compares a metric alert.
+  rpc CompareMetricAlertVersions(CompareMetricAlertVersionsRequest) returns (CompareMetricAlertVersionsResponse);
+
+  // Reverts a metric alert.
+  rpc RevertMetricAlert(RevertMetricAlertRequest) returns (RevertMetricAlertResponse);
+
+  // Annotates a metric alert.
+  rpc AnnotateMetricAlertVersion(AnnotateMetricAlertVersionRequest) returns (AnnotateMetricAlertVersionResponse);
+
+  // Deletes a metric alert.
+  rpc PruneMetricAlertVersions(PruneMetricAlertVersionsRequest) returns (PruneMetricAlertVersionsResponse);
+}
+
+// The request of `RecordMetricAlertVersion`.
+message RecordMetricAlertVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  MetricAlert metric_alert = 3;
+  RecordMetricAlertVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecordMetricAlertVersion`.
+message RecordMetricAlertVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  RecordMetricAlertVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListMetricAlertVersions`.
+message ListMetricAlertVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated MetricAlertStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListMetricAlertVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListMetricAlertVersions`.
+message ListMetricAlertVersionsResponse {
+  repeated MetricAlert metric_alerts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetMetricAlertVersion`.
+message GetMetricAlertVersionRequest {
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetMetricAlertVersion`.
+message GetMetricAlertVersionResponse {
+  MetricAlert metric_alert = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CompareMetricAlertVersions`.
+message CompareMetricAlertVersionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  MetricAlert metric_alert = 3;
+  CompareMetricAlertVersionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareMetricAlertVersions`.
+message CompareMetricAlertVersionsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  CompareMetricAlertVersionsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RevertMetricAlert`.
+message RevertMetricAlertRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  MetricAlert metric_alert = 3;
+  RevertMetricAlertRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RevertMetricAlert`.
+message RevertMetricAlertResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  RevertMetricAlertResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AnnotateMetricAlertVersion`.
+message AnnotateMetricAlertVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  MetricAlert metric_alert = 3;
+  AnnotateMetricAlertVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AnnotateMetricAlertVersion`.
+message AnnotateMetricAlertVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  AnnotateMetricAlertVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PruneMetricAlertVersions`.
+message PruneMetricAlertVersionsRequest {
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PruneMetricAlertVersions`.
+message PruneMetricAlertVersionsResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

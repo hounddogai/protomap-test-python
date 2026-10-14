@@ -1,0 +1,231 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.pipelines.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/pipelines/v1/pipelines.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Pipelines.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/pipelines/v1;pipelinesv1";
+option java_multiple_files = true;
+option java_outer_classname = "PipelineValidationServiceProto";
+option java_package = "com.acme.pipelines.v1";
+
+// Checks pipelines against the rules before anything acts on them.
+service PipelineValidationService {
+  // Validates a pipeline.
+  rpc ValidatePipeline(ValidatePipelineRequest) returns (ValidatePipelineResponse);
+
+  // Previews a pipeline.
+  rpc PreviewPipeline(PreviewPipelineRequest) returns (PreviewPipelineResponse);
+
+  // Checks a pipeline.
+  rpc CheckPipelineEligibility(CheckPipelineEligibilityRequest) returns (CheckPipelineEligibilityResponse);
+
+  // Normalizes a pipeline.
+  rpc NormalizePipeline(NormalizePipelineRequest) returns (NormalizePipelineResponse);
+
+  // Scores a pipeline.
+  rpc ScorePipeline(ScorePipelineRequest) returns (ScorePipelineResponse);
+
+  // Returns a pipeline.
+  rpc GetPipelineRules(GetPipelineRulesRequest) returns (GetPipelineRulesResponse);
+}
+
+// The request of `ValidatePipeline`.
+message ValidatePipelineRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  ValidatePipelineRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidatePipeline`.
+message ValidatePipelineResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  ValidatePipelineResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewPipeline`.
+message PreviewPipelineRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  PreviewPipelineRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewPipeline`.
+message PreviewPipelineResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  PreviewPipelineResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckPipelineEligibility`.
+message CheckPipelineEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  CheckPipelineEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckPipelineEligibility`.
+message CheckPipelineEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  CheckPipelineEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizePipeline`.
+message NormalizePipelineRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  NormalizePipelineRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizePipeline`.
+message NormalizePipelineResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  NormalizePipelineResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScorePipeline`.
+message ScorePipelineRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  ScorePipelineRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScorePipeline`.
+message ScorePipelineResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScorePipelineResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Pipeline pipeline = 1;
+  ScorePipelineResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPipelineRules`.
+message GetPipelineRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPipelineRules`.
+message GetPipelineRulesResponse {
+  Pipeline pipeline = 1;
+  acme.common.v1.OperationResult result = 2;
+}

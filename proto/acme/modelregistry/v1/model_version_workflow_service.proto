@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.modelregistry.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/modelregistry/v1/modelregistry.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Modelregistry.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/modelregistry/v1;modelregistryv1";
+option java_multiple_files = true;
+option java_outer_classname = "ModelVersionWorkflowServiceProto";
+option java_package = "com.acme.modelregistry.v1";
+
+// Runs the long-lived workflow that takes a model version from start to finish.
+service ModelVersionWorkflowService {
+  // Starts a model version.
+  rpc StartModelVersionWorkflow(StartModelVersionWorkflowRequest) returns (StartModelVersionWorkflowResponse);
+
+  // Advances a model version.
+  rpc AdvanceModelVersionWorkflow(AdvanceModelVersionWorkflowRequest) returns (AdvanceModelVersionWorkflowResponse);
+
+  // Cancels a model version.
+  rpc CancelModelVersionWorkflow(CancelModelVersionWorkflowRequest) returns (CancelModelVersionWorkflowResponse);
+
+  // Retrys a model version.
+  rpc RetryModelVersionWorkflow(RetryModelVersionWorkflowRequest) returns (RetryModelVersionWorkflowResponse);
+
+  // Pauses a model version.
+  rpc PauseModelVersionWorkflow(PauseModelVersionWorkflowRequest) returns (PauseModelVersionWorkflowResponse);
+
+  // Resumes a model version.
+  rpc ResumeModelVersionWorkflow(ResumeModelVersionWorkflowRequest) returns (ResumeModelVersionWorkflowResponse);
+
+  // Returns a model version.
+  rpc InspectModelVersionWorkflow(InspectModelVersionWorkflowRequest) returns (InspectModelVersionWorkflowResponse);
+
+  // Lists model versions a page at a time.
+  rpc ListModelVersionWorkflows(ListModelVersionWorkflowsRequest) returns (ListModelVersionWorkflowsResponse);
+
+  // Signals a model version.
+  rpc SignalModelVersionWorkflow(SignalModelVersionWorkflowRequest) returns (SignalModelVersionWorkflowResponse);
+}
+
+// The request of `StartModelVersionWorkflow`.
+message StartModelVersionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  StartModelVersionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartModelVersionWorkflow`.
+message StartModelVersionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  StartModelVersionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceModelVersionWorkflow`.
+message AdvanceModelVersionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  AdvanceModelVersionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceModelVersionWorkflow`.
+message AdvanceModelVersionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  AdvanceModelVersionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelModelVersionWorkflow`.
+message CancelModelVersionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  CancelModelVersionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelModelVersionWorkflow`.
+message CancelModelVersionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  CancelModelVersionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryModelVersionWorkflow`.
+message RetryModelVersionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  RetryModelVersionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryModelVersionWorkflow`.
+message RetryModelVersionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  RetryModelVersionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseModelVersionWorkflow`.
+message PauseModelVersionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  PauseModelVersionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseModelVersionWorkflow`.
+message PauseModelVersionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  PauseModelVersionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeModelVersionWorkflow`.
+message ResumeModelVersionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  ResumeModelVersionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeModelVersionWorkflow`.
+message ResumeModelVersionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  ResumeModelVersionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectModelVersionWorkflow`.
+message InspectModelVersionWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectModelVersionWorkflow`.
+message InspectModelVersionWorkflowResponse {
+  ModelVersion model_version = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListModelVersionWorkflows`.
+message ListModelVersionWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ModelVersionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListModelVersionWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListModelVersionWorkflows`.
+message ListModelVersionWorkflowsResponse {
+  repeated ModelVersion model_versions = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalModelVersionWorkflow`.
+message SignalModelVersionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  SignalModelVersionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalModelVersionWorkflow`.
+message SignalModelVersionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  SignalModelVersionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

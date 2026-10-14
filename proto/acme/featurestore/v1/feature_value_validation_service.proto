@@ -1,0 +1,268 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featurestore.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/featurestore/v1/featurestore.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featurestore.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featurestore/v1;featurestorev1";
+option java_multiple_files = true;
+option java_outer_classname = "FeatureValueValidationServiceProto";
+option java_package = "com.acme.featurestore.v1";
+
+// Checks feature values against the rules before anything acts on them.
+service FeatureValueValidationService {
+  // Validates a feature value.
+  rpc ValidateFeatureValue(ValidateFeatureValueRequest) returns (ValidateFeatureValueResponse);
+
+  // Previews a feature value.
+  rpc PreviewFeatureValue(PreviewFeatureValueRequest) returns (PreviewFeatureValueResponse);
+
+  // Normalizes a feature value.
+  rpc NormalizeFeatureValue(NormalizeFeatureValueRequest) returns (NormalizeFeatureValueResponse);
+
+  // Explains a feature value.
+  rpc ExplainFeatureValueDecision(ExplainFeatureValueDecisionRequest) returns (ExplainFeatureValueDecisionResponse);
+
+  // Scores a feature value.
+  rpc ScoreFeatureValue(ScoreFeatureValueRequest) returns (ScoreFeatureValueResponse);
+
+  // Lints a feature value.
+  rpc LintFeatureValues(LintFeatureValuesRequest) returns (LintFeatureValuesResponse);
+
+  // Returns a feature value.
+  rpc GetFeatureValueRules(GetFeatureValueRulesRequest) returns (GetFeatureValueRulesResponse);
+}
+
+// The request of `ValidateFeatureValue`.
+message ValidateFeatureValueRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  FeatureValue feature_value = 3;
+  ValidateFeatureValueRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateFeatureValue`.
+message ValidateFeatureValueResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureValue feature_value = 1;
+  ValidateFeatureValueResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewFeatureValue`.
+message PreviewFeatureValueRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  FeatureValue feature_value = 3;
+  PreviewFeatureValueRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewFeatureValue`.
+message PreviewFeatureValueResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureValue feature_value = 1;
+  PreviewFeatureValueResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeFeatureValue`.
+message NormalizeFeatureValueRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  FeatureValue feature_value = 3;
+  NormalizeFeatureValueRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeFeatureValue`.
+message NormalizeFeatureValueResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureValue feature_value = 1;
+  NormalizeFeatureValueResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainFeatureValueDecision`.
+message ExplainFeatureValueDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  FeatureValue feature_value = 3;
+  ExplainFeatureValueDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainFeatureValueDecision`.
+message ExplainFeatureValueDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureValue feature_value = 1;
+  ExplainFeatureValueDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreFeatureValue`.
+message ScoreFeatureValueRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  FeatureValue feature_value = 3;
+  ScoreFeatureValueRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreFeatureValue`.
+message ScoreFeatureValueResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreFeatureValueResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FeatureValue feature_value = 1;
+  ScoreFeatureValueResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintFeatureValues`.
+message LintFeatureValuesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  FeatureValue feature_value = 3;
+  LintFeatureValuesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintFeatureValues`.
+message LintFeatureValuesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureValue feature_value = 1;
+  LintFeatureValuesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFeatureValueRules`.
+message GetFeatureValueRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFeatureValueRules`.
+message GetFeatureValueRulesResponse {
+  FeatureValue feature_value = 1;
+  acme.common.v1.OperationResult result = 2;
+}

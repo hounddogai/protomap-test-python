@@ -1,0 +1,292 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datasets.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/datasets/v1/datasets.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datasets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datasets/v1;datasetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DataSchemaCalculationServiceProto";
+option java_package = "com.acme.datasets.v1";
+
+// Computes the figures of a data schema, such as totals, taxes, and estimates.
+service DataSchemaCalculationService {
+  // Calculates a data schema.
+  rpc CalculateDataSchema(CalculateDataSchemaRequest) returns (CalculateDataSchemaResponse);
+
+  // Estimates a data schema.
+  rpc EstimateDataSchema(EstimateDataSchemaRequest) returns (EstimateDataSchemaResponse);
+
+  // Quotes a data schema.
+  rpc QuoteDataSchema(QuoteDataSchemaRequest) returns (QuoteDataSchemaResponse);
+
+  // Compares a data schema.
+  rpc CompareDataSchemaOptions(CompareDataSchemaOptionsRequest) returns (CompareDataSchemaOptionsResponse);
+
+  // Recalculates a data schema.
+  rpc RecalculateDataSchemas(RecalculateDataSchemasRequest) returns (RecalculateDataSchemasResponse);
+
+  // Explains a data schema.
+  rpc ExplainDataSchemaCalculation(ExplainDataSchemaCalculationRequest) returns (ExplainDataSchemaCalculationResponse);
+
+  // Returns a data schema.
+  rpc GetDataSchemaRates(GetDataSchemaRatesRequest) returns (GetDataSchemaRatesResponse);
+}
+
+// The request of `CalculateDataSchema`.
+message CalculateDataSchemaRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  CalculateDataSchemaRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateDataSchema`.
+message CalculateDataSchemaResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateDataSchemaResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  DataSchema data_schema = 1;
+  CalculateDataSchemaResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateDataSchema`.
+message EstimateDataSchemaRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  EstimateDataSchemaRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateDataSchema`.
+message EstimateDataSchemaResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateDataSchemaResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  DataSchema data_schema = 1;
+  EstimateDataSchemaResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteDataSchema`.
+message QuoteDataSchemaRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  QuoteDataSchemaRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteDataSchema`.
+message QuoteDataSchemaResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteDataSchemaResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  DataSchema data_schema = 1;
+  QuoteDataSchemaResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareDataSchemaOptions`.
+message CompareDataSchemaOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  CompareDataSchemaOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareDataSchemaOptions`.
+message CompareDataSchemaOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareDataSchemaOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  DataSchema data_schema = 1;
+  CompareDataSchemaOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateDataSchemas`.
+message RecalculateDataSchemasRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  RecalculateDataSchemasRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateDataSchemas`.
+message RecalculateDataSchemasResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateDataSchemasResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  DataSchema data_schema = 1;
+  RecalculateDataSchemasResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainDataSchemaCalculation`.
+message ExplainDataSchemaCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  ExplainDataSchemaCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainDataSchemaCalculation`.
+message ExplainDataSchemaCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  ExplainDataSchemaCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDataSchemaRates`.
+message GetDataSchemaRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDataSchemaRates`.
+message GetDataSchemaRatesResponse {
+  DataSchema data_schema = 1;
+  acme.common.v1.OperationResult result = 2;
+}

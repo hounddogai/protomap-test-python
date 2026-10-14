@@ -1,0 +1,260 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lineage.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/lineage/v1/lineage.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lineage.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lineage/v1;lineagev1";
+option java_multiple_files = true;
+option java_outer_classname = "LineageNodeValidationServiceProto";
+option java_package = "com.acme.lineage.v1";
+
+// Checks lineage nodes against the rules before anything acts on them.
+service LineageNodeValidationService {
+  // Validates a lineage node.
+  rpc ValidateLineageNode(ValidateLineageNodeRequest) returns (ValidateLineageNodeResponse);
+
+  // Previews a lineage node.
+  rpc PreviewLineageNode(PreviewLineageNodeRequest) returns (PreviewLineageNodeResponse);
+
+  // Checks a lineage node.
+  rpc CheckLineageNodeEligibility(CheckLineageNodeEligibilityRequest) returns (CheckLineageNodeEligibilityResponse);
+
+  // Normalizes a lineage node.
+  rpc NormalizeLineageNode(NormalizeLineageNodeRequest) returns (NormalizeLineageNodeResponse);
+
+  // Explains a lineage node.
+  rpc ExplainLineageNodeDecision(ExplainLineageNodeDecisionRequest) returns (ExplainLineageNodeDecisionResponse);
+
+  // Lints a lineage node.
+  rpc LintLineageNodes(LintLineageNodesRequest) returns (LintLineageNodesResponse);
+
+  // Returns a lineage node.
+  rpc GetLineageNodeRules(GetLineageNodeRulesRequest) returns (GetLineageNodeRulesResponse);
+}
+
+// The request of `ValidateLineageNode`.
+message ValidateLineageNodeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  ValidateLineageNodeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateLineageNode`.
+message ValidateLineageNodeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  ValidateLineageNodeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewLineageNode`.
+message PreviewLineageNodeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  PreviewLineageNodeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewLineageNode`.
+message PreviewLineageNodeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  PreviewLineageNodeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckLineageNodeEligibility`.
+message CheckLineageNodeEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  CheckLineageNodeEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckLineageNodeEligibility`.
+message CheckLineageNodeEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  CheckLineageNodeEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeLineageNode`.
+message NormalizeLineageNodeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  NormalizeLineageNodeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeLineageNode`.
+message NormalizeLineageNodeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  NormalizeLineageNodeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainLineageNodeDecision`.
+message ExplainLineageNodeDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  ExplainLineageNodeDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainLineageNodeDecision`.
+message ExplainLineageNodeDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  ExplainLineageNodeDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintLineageNodes`.
+message LintLineageNodesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  LintLineageNodesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintLineageNodes`.
+message LintLineageNodesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  LintLineageNodesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLineageNodeRules`.
+message GetLineageNodeRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLineageNodeRules`.
+message GetLineageNodeRulesResponse {
+  LineageNode lineage_node = 1;
+  acme.common.v1.OperationResult result = 2;
+}

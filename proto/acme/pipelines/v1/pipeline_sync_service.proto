@@ -1,0 +1,284 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.pipelines.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/pipelines/v1/pipelines.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Pipelines.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/pipelines/v1;pipelinesv1";
+option java_multiple_files = true;
+option java_outer_classname = "PipelineSyncServiceProto";
+option java_package = "com.acme.pipelines.v1";
+
+// Keeps pipelines in step with the systems of record in other regions.
+service PipelineSyncService {
+  // Syncs a pipeline.
+  rpc SyncPipelines(SyncPipelinesRequest) returns (SyncPipelinesResponse);
+
+  // Pushs a pipeline.
+  rpc PushPipeline(PushPipelineRequest) returns (PushPipelineResponse);
+
+  // Pulls a pipeline.
+  rpc PullPipelines(PullPipelinesRequest) returns (PullPipelinesResponse);
+
+  // Reconciles a pipeline.
+  rpc ReconcilePipelines(ReconcilePipelinesRequest) returns (ReconcilePipelinesResponse);
+
+  // Exchanges changes of pipelines with a peer.
+  rpc StreamPipelineChanges(stream StreamPipelineChangesRequest) returns (stream StreamPipelineChangesResponse);
+
+  // Resolves a pipeline.
+  rpc ResolvePipelineConflict(ResolvePipelineConflictRequest) returns (ResolvePipelineConflictResponse);
+
+  // Returns a pipeline.
+  rpc GetPipelineSyncState(GetPipelineSyncStateRequest) returns (GetPipelineSyncStateResponse);
+
+  // Lists pipelines a page at a time.
+  rpc ListPipelineConflicts(ListPipelineConflictsRequest) returns (ListPipelineConflictsResponse);
+}
+
+// The request of `SyncPipelines`.
+message SyncPipelinesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  SyncPipelinesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncPipelines`.
+message SyncPipelinesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  SyncPipelinesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushPipeline`.
+message PushPipelineRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  PushPipelineRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushPipeline`.
+message PushPipelineResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  PushPipelineResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PullPipelines`.
+message PullPipelinesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  PullPipelinesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PullPipelines`.
+message PullPipelinesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  PullPipelinesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReconcilePipelines`.
+message ReconcilePipelinesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  ReconcilePipelinesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ReconcilePipelines`.
+message ReconcilePipelinesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  ReconcilePipelinesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamPipelineChanges`.
+message StreamPipelineChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    Pipeline change = 2;
+    StreamPipelineChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamPipelineChanges`.
+message StreamPipelineChangesResponse {
+  Pipeline pipeline = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolvePipelineConflict`.
+message ResolvePipelineConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  ResolvePipelineConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolvePipelineConflict`.
+message ResolvePipelineConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  ResolvePipelineConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPipelineSyncState`.
+message GetPipelineSyncStateRequest {
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPipelineSyncState`.
+message GetPipelineSyncStateResponse {
+  Pipeline pipeline = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListPipelineConflicts`.
+message ListPipelineConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PipelineStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPipelineConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPipelineConflicts`.
+message ListPipelineConflictsResponse {
+  repeated Pipeline pipelines = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

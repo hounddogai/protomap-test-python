@@ -1,0 +1,253 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featurestore.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/featurestore/v1/featurestore.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featurestore.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featurestore/v1;featurestorev1";
+option java_multiple_files = true;
+option java_outer_classname = "EntityImportServiceProto";
+option java_package = "com.acme.featurestore.v1";
+
+// Takes entities in bulk from partners and legacy systems.
+service EntityImportService {
+  // Takes a stream of entities and answers once at the end.
+  rpc ImportEntities(stream ImportEntitiesRequest) returns (ImportEntitiesResponse);
+
+  // Returns an entity.
+  rpc GetEntityImportStatus(GetEntityImportStatusRequest) returns (GetEntityImportStatusResponse);
+
+  // Cancels an entity.
+  rpc CancelEntityImport(CancelEntityImportRequest) returns (CancelEntityImportResponse);
+
+  // Validates an entity.
+  rpc ValidateEntityImport(ValidateEntityImportRequest) returns (ValidateEntityImportResponse);
+
+  // Lists entities a page at a time.
+  rpc ListEntityImports(ListEntityImportsRequest) returns (ListEntityImportsResponse);
+
+  // Retrys an entity.
+  rpc RetryEntityImport(RetryEntityImportRequest) returns (RetryEntityImportResponse);
+
+  // Maps an entity.
+  rpc MapEntityImportColumns(MapEntityImportColumnsRequest) returns (MapEntityImportColumnsResponse);
+}
+
+// The request of `ImportEntities`.
+message ImportEntitiesRequest {
+  // What a stream of records starts with.
+  message StreamHeader {
+    string source = 1;
+    string format = 2;
+    int64 total_records = 3;
+    acme.common.v1.ContactInfo submitted_by = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof chunk {
+    ImportEntitiesRequest.StreamHeader header = 2;
+    Entity record = 3;
+  }
+  int64 sequence = 4;
+}
+
+// The response of `ImportEntities`.
+message ImportEntitiesResponse {
+  // A record the import turned down.
+  message Rejection {
+    int64 sequence = 1;
+    string reason = 2;
+    string entity_id = 3;
+  }
+
+  int64 accepted = 1;
+  int64 rejected = 2;
+  repeated ImportEntitiesResponse.Rejection rejections = 3;
+  acme.common.v1.OperationResult result = 4;
+}
+
+// The request of `GetEntityImportStatus`.
+message GetEntityImportStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetEntityImportStatus`.
+message GetEntityImportStatusResponse {
+  Entity entity = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CancelEntityImport`.
+message CancelEntityImportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  CancelEntityImportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `CancelEntityImport`.
+message CancelEntityImportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  CancelEntityImportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ValidateEntityImport`.
+message ValidateEntityImportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  ValidateEntityImportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateEntityImport`.
+message ValidateEntityImportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  ValidateEntityImportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListEntityImports`.
+message ListEntityImportsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated EntityStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListEntityImportsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListEntityImports`.
+message ListEntityImportsResponse {
+  repeated Entity entities = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryEntityImport`.
+message RetryEntityImportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  RetryEntityImportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryEntityImport`.
+message RetryEntityImportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  RetryEntityImportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `MapEntityImportColumns`.
+message MapEntityImportColumnsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  MapEntityImportColumnsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `MapEntityImportColumns`.
+message MapEntityImportColumnsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  MapEntityImportColumnsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.anomalies.v1;
+
+import "acme/anomalies/v1/anomalies.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Anomalies.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/anomalies/v1;anomaliesv1";
+option java_multiple_files = true;
+option java_outer_classname = "DetectorApprovalServiceProto";
+option java_package = "com.acme.anomalies.v1";
+
+// Routes detectors through approval, with escalation and delegation.
+service DetectorApprovalService {
+  // Submits a detector.
+  rpc SubmitDetector(SubmitDetectorRequest) returns (SubmitDetectorResponse);
+
+  // Approves a detector.
+  rpc ApproveDetector(ApproveDetectorRequest) returns (ApproveDetectorResponse);
+
+  // Rejects a detector.
+  rpc RejectDetector(RejectDetectorRequest) returns (RejectDetectorResponse);
+
+  // Escalates a detector.
+  rpc EscalateDetector(EscalateDetectorRequest) returns (EscalateDetectorResponse);
+
+  // Lists detectors a page at a time.
+  rpc ListPendingDetectors(ListPendingDetectorsRequest) returns (ListPendingDetectorsResponse);
+
+  // Delegates a detector.
+  rpc DelegateDetectorApproval(DelegateDetectorApprovalRequest) returns (DelegateDetectorApprovalResponse);
+
+  // Recalls a detector.
+  rpc RecallDetector(RecallDetectorRequest) returns (RecallDetectorResponse);
+
+  // Returns a detector.
+  rpc GetDetectorApprovalStatus(GetDetectorApprovalStatusRequest) returns (GetDetectorApprovalStatusResponse);
+
+  // Comments a detector.
+  rpc CommentDetectorApproval(CommentDetectorApprovalRequest) returns (CommentDetectorApprovalResponse);
+}
+
+// The request of `SubmitDetector`.
+message SubmitDetectorRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  Detector detector = 3;
+  SubmitDetectorRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitDetector`.
+message SubmitDetectorResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Detector detector = 1;
+  SubmitDetectorResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveDetector`.
+message ApproveDetectorRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  Detector detector = 3;
+  ApproveDetectorRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveDetector`.
+message ApproveDetectorResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Detector detector = 1;
+  ApproveDetectorResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectDetector`.
+message RejectDetectorRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  Detector detector = 3;
+  RejectDetectorRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectDetector`.
+message RejectDetectorResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Detector detector = 1;
+  RejectDetectorResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateDetector`.
+message EscalateDetectorRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  Detector detector = 3;
+  EscalateDetectorRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateDetector`.
+message EscalateDetectorResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Detector detector = 1;
+  EscalateDetectorResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingDetectors`.
+message ListPendingDetectorsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DetectorStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingDetectorsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingDetectors`.
+message ListPendingDetectorsResponse {
+  repeated Detector detectors = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateDetectorApproval`.
+message DelegateDetectorApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  Detector detector = 3;
+  DelegateDetectorApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateDetectorApproval`.
+message DelegateDetectorApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Detector detector = 1;
+  DelegateDetectorApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallDetector`.
+message RecallDetectorRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  Detector detector = 3;
+  RecallDetectorRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallDetector`.
+message RecallDetectorResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Detector detector = 1;
+  RecallDetectorResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDetectorApprovalStatus`.
+message GetDetectorApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDetectorApprovalStatus`.
+message GetDetectorApprovalStatusResponse {
+  Detector detector = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentDetectorApproval`.
+message CommentDetectorApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  Detector detector = 3;
+  CommentDetectorApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentDetectorApproval`.
+message CommentDetectorApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Detector detector = 1;
+  CommentDetectorApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

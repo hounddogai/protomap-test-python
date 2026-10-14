@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featurestore.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/featurestore/v1/featurestore.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featurestore.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featurestore/v1;featurestorev1";
+option java_multiple_files = true;
+option java_outer_classname = "EntityValidationServiceProto";
+option java_package = "com.acme.featurestore.v1";
+
+// Checks entities against the rules before anything acts on them.
+service EntityValidationService {
+  // Validates an entity.
+  rpc ValidateEntity(ValidateEntityRequest) returns (ValidateEntityResponse);
+
+  // Previews an entity.
+  rpc PreviewEntity(PreviewEntityRequest) returns (PreviewEntityResponse);
+
+  // Checks an entity.
+  rpc CheckEntityEligibility(CheckEntityEligibilityRequest) returns (CheckEntityEligibilityResponse);
+
+  // Normalizes an entity.
+  rpc NormalizeEntity(NormalizeEntityRequest) returns (NormalizeEntityResponse);
+
+  // Explains an entity.
+  rpc ExplainEntityDecision(ExplainEntityDecisionRequest) returns (ExplainEntityDecisionResponse);
+
+  // Scores an entity.
+  rpc ScoreEntity(ScoreEntityRequest) returns (ScoreEntityResponse);
+
+  // Lints an entity.
+  rpc LintEntities(LintEntitiesRequest) returns (LintEntitiesResponse);
+
+  // Returns an entity.
+  rpc GetEntityRules(GetEntityRulesRequest) returns (GetEntityRulesResponse);
+}
+
+// The request of `ValidateEntity`.
+message ValidateEntityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  ValidateEntityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateEntity`.
+message ValidateEntityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  ValidateEntityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewEntity`.
+message PreviewEntityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  PreviewEntityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewEntity`.
+message PreviewEntityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  PreviewEntityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckEntityEligibility`.
+message CheckEntityEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  CheckEntityEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckEntityEligibility`.
+message CheckEntityEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  CheckEntityEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeEntity`.
+message NormalizeEntityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  NormalizeEntityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeEntity`.
+message NormalizeEntityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  NormalizeEntityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainEntityDecision`.
+message ExplainEntityDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  ExplainEntityDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainEntityDecision`.
+message ExplainEntityDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  ExplainEntityDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreEntity`.
+message ScoreEntityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  ScoreEntityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreEntity`.
+message ScoreEntityResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreEntityResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Entity entity = 1;
+  ScoreEntityResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintEntities`.
+message LintEntitiesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  LintEntitiesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintEntities`.
+message LintEntitiesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  LintEntitiesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetEntityRules`.
+message GetEntityRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetEntityRules`.
+message GetEntityRulesResponse {
+  Entity entity = 1;
+  acme.common.v1.OperationResult result = 2;
+}

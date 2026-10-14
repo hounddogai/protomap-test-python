@@ -1,0 +1,284 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.metrics.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/metrics/v1/metrics.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Metrics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/metrics/v1;metricsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DashboardSyncServiceProto";
+option java_package = "com.acme.metrics.v1";
+
+// Keeps dashboards in step with the systems of record in other regions.
+service DashboardSyncService {
+  // Syncs a dashboard.
+  rpc SyncDashboards(SyncDashboardsRequest) returns (SyncDashboardsResponse);
+
+  // Pushs a dashboard.
+  rpc PushDashboard(PushDashboardRequest) returns (PushDashboardResponse);
+
+  // Pulls a dashboard.
+  rpc PullDashboards(PullDashboardsRequest) returns (PullDashboardsResponse);
+
+  // Reconciles a dashboard.
+  rpc ReconcileDashboards(ReconcileDashboardsRequest) returns (ReconcileDashboardsResponse);
+
+  // Exchanges changes of dashboards with a peer.
+  rpc StreamDashboardChanges(stream StreamDashboardChangesRequest) returns (stream StreamDashboardChangesResponse);
+
+  // Resolves a dashboard.
+  rpc ResolveDashboardConflict(ResolveDashboardConflictRequest) returns (ResolveDashboardConflictResponse);
+
+  // Returns a dashboard.
+  rpc GetDashboardSyncState(GetDashboardSyncStateRequest) returns (GetDashboardSyncStateResponse);
+
+  // Lists dashboards a page at a time.
+  rpc ListDashboardConflicts(ListDashboardConflictsRequest) returns (ListDashboardConflictsResponse);
+}
+
+// The request of `SyncDashboards`.
+message SyncDashboardsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  Dashboard dashboard = 3;
+  SyncDashboardsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncDashboards`.
+message SyncDashboardsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  SyncDashboardsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushDashboard`.
+message PushDashboardRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  Dashboard dashboard = 3;
+  PushDashboardRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushDashboard`.
+message PushDashboardResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  PushDashboardResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PullDashboards`.
+message PullDashboardsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  Dashboard dashboard = 3;
+  PullDashboardsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PullDashboards`.
+message PullDashboardsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  PullDashboardsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReconcileDashboards`.
+message ReconcileDashboardsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  Dashboard dashboard = 3;
+  ReconcileDashboardsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ReconcileDashboards`.
+message ReconcileDashboardsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  ReconcileDashboardsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamDashboardChanges`.
+message StreamDashboardChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    Dashboard change = 2;
+    StreamDashboardChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamDashboardChanges`.
+message StreamDashboardChangesResponse {
+  Dashboard dashboard = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolveDashboardConflict`.
+message ResolveDashboardConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  Dashboard dashboard = 3;
+  ResolveDashboardConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolveDashboardConflict`.
+message ResolveDashboardConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  ResolveDashboardConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDashboardSyncState`.
+message GetDashboardSyncStateRequest {
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDashboardSyncState`.
+message GetDashboardSyncStateResponse {
+  Dashboard dashboard = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListDashboardConflicts`.
+message ListDashboardConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DashboardStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListDashboardConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListDashboardConflicts`.
+message ListDashboardConflictsResponse {
+  repeated Dashboard dashboards = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

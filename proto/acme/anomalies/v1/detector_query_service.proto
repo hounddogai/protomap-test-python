@@ -1,0 +1,197 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.anomalies.v1;
+
+import "acme/anomalies/v1/anomalies.proto";
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Anomalies.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/anomalies/v1;anomaliesv1";
+option java_multiple_files = true;
+option java_outer_classname = "DetectorQueryServiceProto";
+option java_package = "com.acme.anomalies.v1";
+
+// Answers read-only questions about detectors, for screens and reports.
+service DetectorQueryService {
+  // Returns a detector.
+  rpc LookupDetector(LookupDetectorRequest) returns (LookupDetectorResponse);
+
+  // Lists detectors a page at a time.
+  rpc BrowseDetectors(BrowseDetectorsRequest) returns (BrowseDetectorsResponse);
+
+  // Lists detectors a page at a time.
+  rpc FindDetectors(FindDetectorsRequest) returns (FindDetectorsResponse);
+
+  // Counts detectors by status.
+  rpc CountDetectors(CountDetectorsRequest) returns (CountDetectorsResponse);
+
+  // Summarizes a detector.
+  rpc SummarizeDetectors(SummarizeDetectorsRequest) returns (SummarizeDetectorsResponse);
+
+  // Lists detectors a page at a time.
+  rpc SuggestDetectors(SuggestDetectorsRequest) returns (SuggestDetectorsResponse);
+
+  // Returns a detector.
+  rpc PeekDetector(PeekDetectorRequest) returns (PeekDetectorResponse);
+}
+
+// The request of `LookupDetector`.
+message LookupDetectorRequest {
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupDetector`.
+message LookupDetectorResponse {
+  Detector detector = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseDetectors`.
+message BrowseDetectorsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DetectorStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseDetectorsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseDetectors`.
+message BrowseDetectorsResponse {
+  repeated Detector detectors = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindDetectors`.
+message FindDetectorsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DetectorStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindDetectorsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindDetectors`.
+message FindDetectorsResponse {
+  repeated Detector detectors = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountDetectors`.
+message CountDetectorsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DetectorStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountDetectorsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountDetectors`.
+message CountDetectorsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SummarizeDetectors`.
+message SummarizeDetectorsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  SummarizeDetectorsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SummarizeDetectors`.
+message SummarizeDetectorsResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestDetectors`.
+message SuggestDetectorsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DetectorStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestDetectorsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestDetectors`.
+message SuggestDetectorsResponse {
+  repeated Detector detectors = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PeekDetector`.
+message PeekDetectorRequest {
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekDetector`.
+message PeekDetectorResponse {
+  Detector detector = 1;
+  acme.common.v1.OperationResult result = 2;
+}

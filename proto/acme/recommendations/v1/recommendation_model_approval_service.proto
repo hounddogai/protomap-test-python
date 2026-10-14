@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.recommendations.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/recommendations/v1/recommendations.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Recommendations.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/recommendations/v1;recommendationsv1";
+option java_multiple_files = true;
+option java_outer_classname = "RecommendationModelApprovalServiceProto";
+option java_package = "com.acme.recommendations.v1";
+
+// Routes recommendation models through approval, with escalation and delegation.
+service RecommendationModelApprovalService {
+  // Submits a recommendation model.
+  rpc SubmitRecommendationModel(SubmitRecommendationModelRequest) returns (SubmitRecommendationModelResponse);
+
+  // Approves a recommendation model.
+  rpc ApproveRecommendationModel(ApproveRecommendationModelRequest) returns (ApproveRecommendationModelResponse);
+
+  // Rejects a recommendation model.
+  rpc RejectRecommendationModel(RejectRecommendationModelRequest) returns (RejectRecommendationModelResponse);
+
+  // Escalates a recommendation model.
+  rpc EscalateRecommendationModel(EscalateRecommendationModelRequest) returns (EscalateRecommendationModelResponse);
+
+  // Lists recommendation models a page at a time.
+  rpc ListPendingRecommendationModels(ListPendingRecommendationModelsRequest) returns (ListPendingRecommendationModelsResponse);
+
+  // Delegates a recommendation model.
+  rpc DelegateRecommendationModelApproval(DelegateRecommendationModelApprovalRequest) returns (DelegateRecommendationModelApprovalResponse);
+
+  // Recalls a recommendation model.
+  rpc RecallRecommendationModel(RecallRecommendationModelRequest) returns (RecallRecommendationModelResponse);
+
+  // Returns a recommendation model.
+  rpc GetRecommendationModelApprovalStatus(GetRecommendationModelApprovalStatusRequest) returns (GetRecommendationModelApprovalStatusResponse);
+
+  // Comments a recommendation model.
+  rpc CommentRecommendationModelApproval(CommentRecommendationModelApprovalRequest) returns (CommentRecommendationModelApprovalResponse);
+}
+
+// The request of `SubmitRecommendationModel`.
+message SubmitRecommendationModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  SubmitRecommendationModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitRecommendationModel`.
+message SubmitRecommendationModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  SubmitRecommendationModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveRecommendationModel`.
+message ApproveRecommendationModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  ApproveRecommendationModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveRecommendationModel`.
+message ApproveRecommendationModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  ApproveRecommendationModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectRecommendationModel`.
+message RejectRecommendationModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  RejectRecommendationModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectRecommendationModel`.
+message RejectRecommendationModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  RejectRecommendationModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateRecommendationModel`.
+message EscalateRecommendationModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  EscalateRecommendationModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateRecommendationModel`.
+message EscalateRecommendationModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  EscalateRecommendationModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingRecommendationModels`.
+message ListPendingRecommendationModelsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RecommendationModelStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingRecommendationModelsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingRecommendationModels`.
+message ListPendingRecommendationModelsResponse {
+  repeated RecommendationModel recommendation_models = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateRecommendationModelApproval`.
+message DelegateRecommendationModelApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  DelegateRecommendationModelApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateRecommendationModelApproval`.
+message DelegateRecommendationModelApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  DelegateRecommendationModelApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallRecommendationModel`.
+message RecallRecommendationModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  RecallRecommendationModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallRecommendationModel`.
+message RecallRecommendationModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  RecallRecommendationModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRecommendationModelApprovalStatus`.
+message GetRecommendationModelApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRecommendationModelApprovalStatus`.
+message GetRecommendationModelApprovalStatusResponse {
+  RecommendationModel recommendation_model = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentRecommendationModelApproval`.
+message CommentRecommendationModelApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  CommentRecommendationModelApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentRecommendationModelApproval`.
+message CommentRecommendationModelApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  CommentRecommendationModelApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,257 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lineage.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/lineage/v1/lineage.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lineage.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lineage/v1;lineagev1";
+option java_multiple_files = true;
+option java_outer_classname = "ImpactApprovalServiceProto";
+option java_package = "com.acme.lineage.v1";
+
+// Routes impacts through approval, with escalation and delegation.
+service ImpactApprovalService {
+  // Submits an impact.
+  rpc SubmitImpact(SubmitImpactRequest) returns (SubmitImpactResponse);
+
+  // Approves an impact.
+  rpc ApproveImpact(ApproveImpactRequest) returns (ApproveImpactResponse);
+
+  // Rejects an impact.
+  rpc RejectImpact(RejectImpactRequest) returns (RejectImpactResponse);
+
+  // Lists impacts a page at a time.
+  rpc ListPendingImpacts(ListPendingImpactsRequest) returns (ListPendingImpactsResponse);
+
+  // Delegates an impact.
+  rpc DelegateImpactApproval(DelegateImpactApprovalRequest) returns (DelegateImpactApprovalResponse);
+
+  // Recalls an impact.
+  rpc RecallImpact(RecallImpactRequest) returns (RecallImpactResponse);
+
+  // Returns an impact.
+  rpc GetImpactApprovalStatus(GetImpactApprovalStatusRequest) returns (GetImpactApprovalStatusResponse);
+}
+
+// The request of `SubmitImpact`.
+message SubmitImpactRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  SubmitImpactRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitImpact`.
+message SubmitImpactResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  SubmitImpactResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveImpact`.
+message ApproveImpactRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  ApproveImpactRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveImpact`.
+message ApproveImpactResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  ApproveImpactResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectImpact`.
+message RejectImpactRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  RejectImpactRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectImpact`.
+message RejectImpactResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  RejectImpactResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingImpacts`.
+message ListPendingImpactsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ImpactStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingImpactsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingImpacts`.
+message ListPendingImpactsResponse {
+  repeated Impact impacts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateImpactApproval`.
+message DelegateImpactApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  DelegateImpactApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateImpactApproval`.
+message DelegateImpactApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  DelegateImpactApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallImpact`.
+message RecallImpactRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  RecallImpactRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallImpact`.
+message RecallImpactResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  RecallImpactResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetImpactApprovalStatus`.
+message GetImpactApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetImpactApprovalStatus`.
+message GetImpactApprovalStatusResponse {
+  Impact impact = 1;
+  acme.common.v1.OperationResult result = 2;
+}

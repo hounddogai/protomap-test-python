@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featurestore.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/featurestore/v1/featurestore.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featurestore.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featurestore/v1;featurestorev1";
+option java_multiple_files = true;
+option java_outer_classname = "FeatureValueLifecycleServiceProto";
+option java_package = "com.acme.featurestore.v1";
+
+// Moves a feature value between the states of its lifecycle.
+service FeatureValueLifecycleService {
+  // Activates a feature value.
+  rpc ActivateFeatureValue(ActivateFeatureValueRequest) returns (ActivateFeatureValueResponse);
+
+  // Suspends a feature value.
+  rpc SuspendFeatureValue(SuspendFeatureValueRequest) returns (SuspendFeatureValueResponse);
+
+  // Reinstates a feature value.
+  rpc ReinstateFeatureValue(ReinstateFeatureValueRequest) returns (ReinstateFeatureValueResponse);
+
+  // Terminates a feature value.
+  rpc TerminateFeatureValue(TerminateFeatureValueRequest) returns (TerminateFeatureValueResponse);
+
+  // Renews a feature value.
+  rpc RenewFeatureValue(RenewFeatureValueRequest) returns (RenewFeatureValueResponse);
+
+  // Expires a feature value.
+  rpc ExpireFeatureValue(ExpireFeatureValueRequest) returns (ExpireFeatureValueResponse);
+
+  // Returns a feature value.
+  rpc GetFeatureValueLifecycle(GetFeatureValueLifecycleRequest) returns (GetFeatureValueLifecycleResponse);
+
+  // Schedules a feature value.
+  rpc ScheduleFeatureValueExpiry(ScheduleFeatureValueExpiryRequest) returns (ScheduleFeatureValueExpiryResponse);
+}
+
+// The request of `ActivateFeatureValue`.
+message ActivateFeatureValueRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  ActivateFeatureValueRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateFeatureValue`.
+message ActivateFeatureValueResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureValue feature_value = 1;
+  ActivateFeatureValueResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendFeatureValue`.
+message SuspendFeatureValueRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  SuspendFeatureValueRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendFeatureValue`.
+message SuspendFeatureValueResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureValue feature_value = 1;
+  SuspendFeatureValueResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateFeatureValue`.
+message ReinstateFeatureValueRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  ReinstateFeatureValueRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateFeatureValue`.
+message ReinstateFeatureValueResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureValue feature_value = 1;
+  ReinstateFeatureValueResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateFeatureValue`.
+message TerminateFeatureValueRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  TerminateFeatureValueRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateFeatureValue`.
+message TerminateFeatureValueResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureValue feature_value = 1;
+  TerminateFeatureValueResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewFeatureValue`.
+message RenewFeatureValueRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  RenewFeatureValueRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewFeatureValue`.
+message RenewFeatureValueResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureValue feature_value = 1;
+  RenewFeatureValueResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireFeatureValue`.
+message ExpireFeatureValueRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  ExpireFeatureValueRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireFeatureValue`.
+message ExpireFeatureValueResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureValue feature_value = 1;
+  ExpireFeatureValueResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFeatureValueLifecycle`.
+message GetFeatureValueLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFeatureValueLifecycle`.
+message GetFeatureValueLifecycleResponse {
+  FeatureValue feature_value = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleFeatureValueExpiry`.
+message ScheduleFeatureValueExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  FeatureValue feature_value = 3;
+  ScheduleFeatureValueExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleFeatureValueExpiry`.
+message ScheduleFeatureValueExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureValue feature_value = 1;
+  ScheduleFeatureValueExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

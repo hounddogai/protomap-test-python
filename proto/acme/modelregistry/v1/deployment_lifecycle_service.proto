@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.modelregistry.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/modelregistry/v1/modelregistry.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Modelregistry.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/modelregistry/v1;modelregistryv1";
+option java_multiple_files = true;
+option java_outer_classname = "DeploymentLifecycleServiceProto";
+option java_package = "com.acme.modelregistry.v1";
+
+// Moves a deployment between the states of its lifecycle.
+service DeploymentLifecycleService {
+  // Activates a deployment.
+  rpc ActivateDeployment(ActivateDeploymentRequest) returns (ActivateDeploymentResponse);
+
+  // Suspends a deployment.
+  rpc SuspendDeployment(SuspendDeploymentRequest) returns (SuspendDeploymentResponse);
+
+  // Reinstates a deployment.
+  rpc ReinstateDeployment(ReinstateDeploymentRequest) returns (ReinstateDeploymentResponse);
+
+  // Terminates a deployment.
+  rpc TerminateDeployment(TerminateDeploymentRequest) returns (TerminateDeploymentResponse);
+
+  // Renews a deployment.
+  rpc RenewDeployment(RenewDeploymentRequest) returns (RenewDeploymentResponse);
+
+  // Expires a deployment.
+  rpc ExpireDeployment(ExpireDeploymentRequest) returns (ExpireDeploymentResponse);
+
+  // Returns a deployment.
+  rpc GetDeploymentLifecycle(GetDeploymentLifecycleRequest) returns (GetDeploymentLifecycleResponse);
+
+  // Schedules a deployment.
+  rpc ScheduleDeploymentExpiry(ScheduleDeploymentExpiryRequest) returns (ScheduleDeploymentExpiryResponse);
+}
+
+// The request of `ActivateDeployment`.
+message ActivateDeploymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  ActivateDeploymentRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateDeployment`.
+message ActivateDeploymentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  ActivateDeploymentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendDeployment`.
+message SuspendDeploymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  SuspendDeploymentRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendDeployment`.
+message SuspendDeploymentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  SuspendDeploymentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateDeployment`.
+message ReinstateDeploymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  ReinstateDeploymentRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateDeployment`.
+message ReinstateDeploymentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  ReinstateDeploymentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateDeployment`.
+message TerminateDeploymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  TerminateDeploymentRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateDeployment`.
+message TerminateDeploymentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  TerminateDeploymentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewDeployment`.
+message RenewDeploymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  RenewDeploymentRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewDeployment`.
+message RenewDeploymentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  RenewDeploymentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireDeployment`.
+message ExpireDeploymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  ExpireDeploymentRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireDeployment`.
+message ExpireDeploymentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  ExpireDeploymentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDeploymentLifecycle`.
+message GetDeploymentLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDeploymentLifecycle`.
+message GetDeploymentLifecycleResponse {
+  Deployment deployment = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleDeploymentExpiry`.
+message ScheduleDeploymentExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  ScheduleDeploymentExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleDeploymentExpiry`.
+message ScheduleDeploymentExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  ScheduleDeploymentExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

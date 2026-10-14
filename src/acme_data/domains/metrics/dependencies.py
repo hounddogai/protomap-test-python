@@ -1,0 +1,51 @@
+"""Explicit dependencies of the metrics services."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+from acme.featureflags.v1 import feature_flag_service_pb2_grpc as featureflags_v1_feature_flag_service_pb2_grpc
+from acme.metrics.v1 import dashboard_admin_service_pb2_grpc as metrics_v1_dashboard_admin_service_pb2_grpc
+from acme.metrics.v1 import dashboard_export_service_pb2_grpc as metrics_v1_dashboard_export_service_pb2_grpc
+from acme.metrics.v1 import dashboard_history_service_pb2_grpc as metrics_v1_dashboard_history_service_pb2_grpc
+from acme.metrics.v1 import dashboard_sync_service_pb2_grpc as metrics_v1_dashboard_sync_service_pb2_grpc
+from acme.metrics.v1 import metric_alert_export_service_pb2_grpc as metrics_v1_metric_alert_export_service_pb2_grpc
+from acme.metrics.v1 import metric_series_admin_service_pb2_grpc as metrics_v1_metric_series_admin_service_pb2_grpc
+from acme.metrics.v1 import metric_series_export_service_pb2_grpc as metrics_v1_metric_series_export_service_pb2_grpc
+from acme.metrics.v1 import metric_series_history_service_pb2_grpc as metrics_v1_metric_series_history_service_pb2_grpc
+from acme.metrics.v1 import (
+    metric_series_notification_service_pb2_grpc as metrics_v1_metric_series_notification_service_pb2_grpc,
+)
+from acme.venues.v1 import venue_query_service_pb2_grpc as venues_v1_venue_query_service_pb2_grpc
+from acme.venues.v1 import venue_service_pb2_grpc as venues_v1_venue_service_pb2_grpc
+from acme.venues.v1 import venue_validation_service_pb2_grpc as venues_v1_venue_validation_service_pb2_grpc
+
+from acme_data.domains.metrics.repository import DomainRepository
+from acme_data.platform.config import Settings
+from acme_data.platform.events import EventBus
+
+
+@dataclass(slots=True)
+class Clients:
+    featureflags_feature_flag: featureflags_v1_feature_flag_service_pb2_grpc.FeatureFlagServiceStub
+    metrics_dashboard_admin: metrics_v1_dashboard_admin_service_pb2_grpc.DashboardAdminServiceStub
+    metrics_dashboard_export: metrics_v1_dashboard_export_service_pb2_grpc.DashboardExportServiceStub
+    metrics_dashboard_history: metrics_v1_dashboard_history_service_pb2_grpc.DashboardHistoryServiceStub
+    metrics_dashboard_sync: metrics_v1_dashboard_sync_service_pb2_grpc.DashboardSyncServiceStub
+    metrics_metric_alert_export: metrics_v1_metric_alert_export_service_pb2_grpc.MetricAlertExportServiceStub
+    metrics_metric_series_admin: metrics_v1_metric_series_admin_service_pb2_grpc.MetricSeriesAdminServiceStub
+    metrics_metric_series_export: metrics_v1_metric_series_export_service_pb2_grpc.MetricSeriesExportServiceStub
+    metrics_metric_series_history: metrics_v1_metric_series_history_service_pb2_grpc.MetricSeriesHistoryServiceStub
+    metrics_metric_series_notification: metrics_v1_metric_series_notification_service_pb2_grpc.MetricSeriesNotificationServiceStub
+    venues_venue_query: venues_v1_venue_query_service_pb2_grpc.VenueQueryServiceStub
+    venues_venue: venues_v1_venue_service_pb2_grpc.VenueServiceStub
+    venues_venue_validation: venues_v1_venue_validation_service_pb2_grpc.VenueValidationServiceStub
+    registry: dict[str, object]
+
+
+@dataclass(frozen=True, slots=True)
+class Dependencies:
+    clients: Clients
+    repository: DomainRepository
+    settings: Settings
+    bus: EventBus

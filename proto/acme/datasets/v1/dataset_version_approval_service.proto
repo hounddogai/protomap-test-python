@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datasets.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/datasets/v1/datasets.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datasets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datasets/v1;datasetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DatasetVersionApprovalServiceProto";
+option java_package = "com.acme.datasets.v1";
+
+// Routes dataset versions through approval, with escalation and delegation.
+service DatasetVersionApprovalService {
+  // Submits a dataset version.
+  rpc SubmitDatasetVersion(SubmitDatasetVersionRequest) returns (SubmitDatasetVersionResponse);
+
+  // Approves a dataset version.
+  rpc ApproveDatasetVersion(ApproveDatasetVersionRequest) returns (ApproveDatasetVersionResponse);
+
+  // Escalates a dataset version.
+  rpc EscalateDatasetVersion(EscalateDatasetVersionRequest) returns (EscalateDatasetVersionResponse);
+
+  // Lists dataset versions a page at a time.
+  rpc ListPendingDatasetVersions(ListPendingDatasetVersionsRequest) returns (ListPendingDatasetVersionsResponse);
+
+  // Delegates a dataset version.
+  rpc DelegateDatasetVersionApproval(DelegateDatasetVersionApprovalRequest) returns (DelegateDatasetVersionApprovalResponse);
+
+  // Recalls a dataset version.
+  rpc RecallDatasetVersion(RecallDatasetVersionRequest) returns (RecallDatasetVersionResponse);
+
+  // Returns a dataset version.
+  rpc GetDatasetVersionApprovalStatus(GetDatasetVersionApprovalStatusRequest) returns (GetDatasetVersionApprovalStatusResponse);
+
+  // Comments a dataset version.
+  rpc CommentDatasetVersionApproval(CommentDatasetVersionApprovalRequest) returns (CommentDatasetVersionApprovalResponse);
+}
+
+// The request of `SubmitDatasetVersion`.
+message SubmitDatasetVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  SubmitDatasetVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitDatasetVersion`.
+message SubmitDatasetVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  SubmitDatasetVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveDatasetVersion`.
+message ApproveDatasetVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  ApproveDatasetVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveDatasetVersion`.
+message ApproveDatasetVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  ApproveDatasetVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateDatasetVersion`.
+message EscalateDatasetVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  EscalateDatasetVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateDatasetVersion`.
+message EscalateDatasetVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  EscalateDatasetVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingDatasetVersions`.
+message ListPendingDatasetVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DatasetVersionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingDatasetVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingDatasetVersions`.
+message ListPendingDatasetVersionsResponse {
+  repeated DatasetVersion dataset_versions = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateDatasetVersionApproval`.
+message DelegateDatasetVersionApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  DelegateDatasetVersionApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateDatasetVersionApproval`.
+message DelegateDatasetVersionApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  DelegateDatasetVersionApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallDatasetVersion`.
+message RecallDatasetVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  RecallDatasetVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallDatasetVersion`.
+message RecallDatasetVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  RecallDatasetVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDatasetVersionApprovalStatus`.
+message GetDatasetVersionApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDatasetVersionApprovalStatus`.
+message GetDatasetVersionApprovalStatusResponse {
+  DatasetVersion dataset_version = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentDatasetVersionApproval`.
+message CommentDatasetVersionApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  CommentDatasetVersionApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentDatasetVersionApproval`.
+message CommentDatasetVersionApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  CommentDatasetVersionApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

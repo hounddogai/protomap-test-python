@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.labeling.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/labeling/v1/labeling.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Labeling.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/labeling/v1;labelingv1";
+option java_multiple_files = true;
+option java_outer_classname = "AnnotationWorkflowServiceProto";
+option java_package = "com.acme.labeling.v1";
+
+// Runs the long-lived workflow that takes an annotation from start to finish.
+service AnnotationWorkflowService {
+  // Starts an annotation.
+  rpc StartAnnotationWorkflow(StartAnnotationWorkflowRequest) returns (StartAnnotationWorkflowResponse);
+
+  // Advances an annotation.
+  rpc AdvanceAnnotationWorkflow(AdvanceAnnotationWorkflowRequest) returns (AdvanceAnnotationWorkflowResponse);
+
+  // Cancels an annotation.
+  rpc CancelAnnotationWorkflow(CancelAnnotationWorkflowRequest) returns (CancelAnnotationWorkflowResponse);
+
+  // Retrys an annotation.
+  rpc RetryAnnotationWorkflow(RetryAnnotationWorkflowRequest) returns (RetryAnnotationWorkflowResponse);
+
+  // Pauses an annotation.
+  rpc PauseAnnotationWorkflow(PauseAnnotationWorkflowRequest) returns (PauseAnnotationWorkflowResponse);
+
+  // Resumes an annotation.
+  rpc ResumeAnnotationWorkflow(ResumeAnnotationWorkflowRequest) returns (ResumeAnnotationWorkflowResponse);
+
+  // Returns an annotation.
+  rpc InspectAnnotationWorkflow(InspectAnnotationWorkflowRequest) returns (InspectAnnotationWorkflowResponse);
+
+  // Lists annotations a page at a time.
+  rpc ListAnnotationWorkflows(ListAnnotationWorkflowsRequest) returns (ListAnnotationWorkflowsResponse);
+
+  // Signals an annotation.
+  rpc SignalAnnotationWorkflow(SignalAnnotationWorkflowRequest) returns (SignalAnnotationWorkflowResponse);
+}
+
+// The request of `StartAnnotationWorkflow`.
+message StartAnnotationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  StartAnnotationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartAnnotationWorkflow`.
+message StartAnnotationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  StartAnnotationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceAnnotationWorkflow`.
+message AdvanceAnnotationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  AdvanceAnnotationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceAnnotationWorkflow`.
+message AdvanceAnnotationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  AdvanceAnnotationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelAnnotationWorkflow`.
+message CancelAnnotationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  CancelAnnotationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelAnnotationWorkflow`.
+message CancelAnnotationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  CancelAnnotationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryAnnotationWorkflow`.
+message RetryAnnotationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  RetryAnnotationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryAnnotationWorkflow`.
+message RetryAnnotationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  RetryAnnotationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseAnnotationWorkflow`.
+message PauseAnnotationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  PauseAnnotationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseAnnotationWorkflow`.
+message PauseAnnotationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  PauseAnnotationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeAnnotationWorkflow`.
+message ResumeAnnotationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  ResumeAnnotationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeAnnotationWorkflow`.
+message ResumeAnnotationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  ResumeAnnotationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectAnnotationWorkflow`.
+message InspectAnnotationWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectAnnotationWorkflow`.
+message InspectAnnotationWorkflowResponse {
+  Annotation annotation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListAnnotationWorkflows`.
+message ListAnnotationWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AnnotationStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListAnnotationWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListAnnotationWorkflows`.
+message ListAnnotationWorkflowsResponse {
+  repeated Annotation annotations = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalAnnotationWorkflow`.
+message SignalAnnotationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  SignalAnnotationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalAnnotationWorkflow`.
+message SignalAnnotationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  SignalAnnotationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

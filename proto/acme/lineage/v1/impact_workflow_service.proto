@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lineage.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/lineage/v1/lineage.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lineage.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lineage/v1;lineagev1";
+option java_multiple_files = true;
+option java_outer_classname = "ImpactWorkflowServiceProto";
+option java_package = "com.acme.lineage.v1";
+
+// Runs the long-lived workflow that takes an impact from start to finish.
+service ImpactWorkflowService {
+  // Starts an impact.
+  rpc StartImpactWorkflow(StartImpactWorkflowRequest) returns (StartImpactWorkflowResponse);
+
+  // Advances an impact.
+  rpc AdvanceImpactWorkflow(AdvanceImpactWorkflowRequest) returns (AdvanceImpactWorkflowResponse);
+
+  // Cancels an impact.
+  rpc CancelImpactWorkflow(CancelImpactWorkflowRequest) returns (CancelImpactWorkflowResponse);
+
+  // Retrys an impact.
+  rpc RetryImpactWorkflow(RetryImpactWorkflowRequest) returns (RetryImpactWorkflowResponse);
+
+  // Pauses an impact.
+  rpc PauseImpactWorkflow(PauseImpactWorkflowRequest) returns (PauseImpactWorkflowResponse);
+
+  // Returns an impact.
+  rpc InspectImpactWorkflow(InspectImpactWorkflowRequest) returns (InspectImpactWorkflowResponse);
+
+  // Lists impacts a page at a time.
+  rpc ListImpactWorkflows(ListImpactWorkflowsRequest) returns (ListImpactWorkflowsResponse);
+
+  // Signals an impact.
+  rpc SignalImpactWorkflow(SignalImpactWorkflowRequest) returns (SignalImpactWorkflowResponse);
+}
+
+// The request of `StartImpactWorkflow`.
+message StartImpactWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  StartImpactWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartImpactWorkflow`.
+message StartImpactWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  StartImpactWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceImpactWorkflow`.
+message AdvanceImpactWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  AdvanceImpactWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceImpactWorkflow`.
+message AdvanceImpactWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  AdvanceImpactWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelImpactWorkflow`.
+message CancelImpactWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  CancelImpactWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelImpactWorkflow`.
+message CancelImpactWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  CancelImpactWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryImpactWorkflow`.
+message RetryImpactWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  RetryImpactWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryImpactWorkflow`.
+message RetryImpactWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  RetryImpactWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseImpactWorkflow`.
+message PauseImpactWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  PauseImpactWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseImpactWorkflow`.
+message PauseImpactWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  PauseImpactWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectImpactWorkflow`.
+message InspectImpactWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectImpactWorkflow`.
+message InspectImpactWorkflowResponse {
+  Impact impact = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListImpactWorkflows`.
+message ListImpactWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ImpactStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListImpactWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListImpactWorkflows`.
+message ListImpactWorkflowsResponse {
+  repeated Impact impacts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalImpactWorkflow`.
+message SignalImpactWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  SignalImpactWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalImpactWorkflow`.
+message SignalImpactWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  SignalImpactWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

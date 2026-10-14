@@ -1,0 +1,292 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datasets.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/datasets/v1/datasets.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datasets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datasets/v1;datasetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DatasetVersionCalculationServiceProto";
+option java_package = "com.acme.datasets.v1";
+
+// Computes the figures of a dataset version, such as totals, taxes, and estimates.
+service DatasetVersionCalculationService {
+  // Calculates a dataset version.
+  rpc CalculateDatasetVersion(CalculateDatasetVersionRequest) returns (CalculateDatasetVersionResponse);
+
+  // Estimates a dataset version.
+  rpc EstimateDatasetVersion(EstimateDatasetVersionRequest) returns (EstimateDatasetVersionResponse);
+
+  // Quotes a dataset version.
+  rpc QuoteDatasetVersion(QuoteDatasetVersionRequest) returns (QuoteDatasetVersionResponse);
+
+  // Compares a dataset version.
+  rpc CompareDatasetVersionOptions(CompareDatasetVersionOptionsRequest) returns (CompareDatasetVersionOptionsResponse);
+
+  // Simulates a dataset version.
+  rpc SimulateDatasetVersion(SimulateDatasetVersionRequest) returns (SimulateDatasetVersionResponse);
+
+  // Explains a dataset version.
+  rpc ExplainDatasetVersionCalculation(ExplainDatasetVersionCalculationRequest) returns (ExplainDatasetVersionCalculationResponse);
+
+  // Returns a dataset version.
+  rpc GetDatasetVersionRates(GetDatasetVersionRatesRequest) returns (GetDatasetVersionRatesResponse);
+}
+
+// The request of `CalculateDatasetVersion`.
+message CalculateDatasetVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  CalculateDatasetVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateDatasetVersion`.
+message CalculateDatasetVersionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateDatasetVersionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  DatasetVersion dataset_version = 1;
+  CalculateDatasetVersionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateDatasetVersion`.
+message EstimateDatasetVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  EstimateDatasetVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateDatasetVersion`.
+message EstimateDatasetVersionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateDatasetVersionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  DatasetVersion dataset_version = 1;
+  EstimateDatasetVersionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteDatasetVersion`.
+message QuoteDatasetVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  QuoteDatasetVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteDatasetVersion`.
+message QuoteDatasetVersionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteDatasetVersionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  DatasetVersion dataset_version = 1;
+  QuoteDatasetVersionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareDatasetVersionOptions`.
+message CompareDatasetVersionOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  CompareDatasetVersionOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareDatasetVersionOptions`.
+message CompareDatasetVersionOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareDatasetVersionOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  DatasetVersion dataset_version = 1;
+  CompareDatasetVersionOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateDatasetVersion`.
+message SimulateDatasetVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  SimulateDatasetVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateDatasetVersion`.
+message SimulateDatasetVersionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateDatasetVersionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  DatasetVersion dataset_version = 1;
+  SimulateDatasetVersionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainDatasetVersionCalculation`.
+message ExplainDatasetVersionCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  ExplainDatasetVersionCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainDatasetVersionCalculation`.
+message ExplainDatasetVersionCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  ExplainDatasetVersionCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDatasetVersionRates`.
+message GetDatasetVersionRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDatasetVersionRates`.
+message GetDatasetVersionRatesResponse {
+  DatasetVersion dataset_version = 1;
+  acme.common.v1.OperationResult result = 2;
+}

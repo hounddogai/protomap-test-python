@@ -1,0 +1,229 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.labeling.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/labeling/v1/labeling.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Labeling.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/labeling/v1;labelingv1";
+option java_multiple_files = true;
+option java_outer_classname = "LabelSetSyncServiceProto";
+option java_package = "com.acme.labeling.v1";
+
+// Keeps label sets in step with the systems of record in other regions.
+service LabelSetSyncService {
+  // Syncs a label set.
+  rpc SyncLabelSets(SyncLabelSetsRequest) returns (SyncLabelSetsResponse);
+
+  // Pushs a label set.
+  rpc PushLabelSet(PushLabelSetRequest) returns (PushLabelSetResponse);
+
+  // Pulls a label set.
+  rpc PullLabelSets(PullLabelSetsRequest) returns (PullLabelSetsResponse);
+
+  // Exchanges changes of label sets with a peer.
+  rpc StreamLabelSetChanges(stream StreamLabelSetChangesRequest) returns (stream StreamLabelSetChangesResponse);
+
+  // Resolves a label set.
+  rpc ResolveLabelSetConflict(ResolveLabelSetConflictRequest) returns (ResolveLabelSetConflictResponse);
+
+  // Lists label sets a page at a time.
+  rpc ListLabelSetConflicts(ListLabelSetConflictsRequest) returns (ListLabelSetConflictsResponse);
+}
+
+// The request of `SyncLabelSets`.
+message SyncLabelSetsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  SyncLabelSetsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncLabelSets`.
+message SyncLabelSetsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  SyncLabelSetsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushLabelSet`.
+message PushLabelSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  PushLabelSetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushLabelSet`.
+message PushLabelSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  PushLabelSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PullLabelSets`.
+message PullLabelSetsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  PullLabelSetsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PullLabelSets`.
+message PullLabelSetsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  PullLabelSetsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamLabelSetChanges`.
+message StreamLabelSetChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    LabelSet change = 2;
+    StreamLabelSetChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamLabelSetChanges`.
+message StreamLabelSetChangesResponse {
+  LabelSet label_set = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolveLabelSetConflict`.
+message ResolveLabelSetConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  ResolveLabelSetConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolveLabelSetConflict`.
+message ResolveLabelSetConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  ResolveLabelSetConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListLabelSetConflicts`.
+message ListLabelSetConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LabelSetStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListLabelSetConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListLabelSetConflicts`.
+message ListLabelSetConflictsResponse {
+  repeated LabelSet label_sets = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

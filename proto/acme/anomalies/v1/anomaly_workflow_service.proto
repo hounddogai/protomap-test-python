@@ -1,0 +1,317 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.anomalies.v1;
+
+import "acme/anomalies/v1/anomalies.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Anomalies.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/anomalies/v1;anomaliesv1";
+option java_multiple_files = true;
+option java_outer_classname = "AnomalyWorkflowServiceProto";
+option java_package = "com.acme.anomalies.v1";
+
+// Runs the long-lived workflow that takes an anomaly from start to finish.
+service AnomalyWorkflowService {
+  // Starts an anomaly.
+  rpc StartAnomalyWorkflow(StartAnomalyWorkflowRequest) returns (StartAnomalyWorkflowResponse);
+
+  // Advances an anomaly.
+  rpc AdvanceAnomalyWorkflow(AdvanceAnomalyWorkflowRequest) returns (AdvanceAnomalyWorkflowResponse);
+
+  // Cancels an anomaly.
+  rpc CancelAnomalyWorkflow(CancelAnomalyWorkflowRequest) returns (CancelAnomalyWorkflowResponse);
+
+  // Retrys an anomaly.
+  rpc RetryAnomalyWorkflow(RetryAnomalyWorkflowRequest) returns (RetryAnomalyWorkflowResponse);
+
+  // Pauses an anomaly.
+  rpc PauseAnomalyWorkflow(PauseAnomalyWorkflowRequest) returns (PauseAnomalyWorkflowResponse);
+
+  // Resumes an anomaly.
+  rpc ResumeAnomalyWorkflow(ResumeAnomalyWorkflowRequest) returns (ResumeAnomalyWorkflowResponse);
+
+  // Lists anomalies a page at a time.
+  rpc ListAnomalyWorkflows(ListAnomalyWorkflowsRequest) returns (ListAnomalyWorkflowsResponse);
+
+  // Signals an anomaly.
+  rpc SignalAnomalyWorkflow(SignalAnomalyWorkflowRequest) returns (SignalAnomalyWorkflowResponse);
+}
+
+// The request of `StartAnomalyWorkflow`.
+message StartAnomalyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_id = 2;
+  Anomaly anomaly = 3;
+  StartAnomalyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartAnomalyWorkflow`.
+message StartAnomalyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Anomaly anomaly = 1;
+  StartAnomalyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceAnomalyWorkflow`.
+message AdvanceAnomalyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_id = 2;
+  Anomaly anomaly = 3;
+  AdvanceAnomalyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceAnomalyWorkflow`.
+message AdvanceAnomalyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Anomaly anomaly = 1;
+  AdvanceAnomalyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelAnomalyWorkflow`.
+message CancelAnomalyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_id = 2;
+  Anomaly anomaly = 3;
+  CancelAnomalyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelAnomalyWorkflow`.
+message CancelAnomalyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Anomaly anomaly = 1;
+  CancelAnomalyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryAnomalyWorkflow`.
+message RetryAnomalyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_id = 2;
+  Anomaly anomaly = 3;
+  RetryAnomalyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryAnomalyWorkflow`.
+message RetryAnomalyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Anomaly anomaly = 1;
+  RetryAnomalyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseAnomalyWorkflow`.
+message PauseAnomalyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_id = 2;
+  Anomaly anomaly = 3;
+  PauseAnomalyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseAnomalyWorkflow`.
+message PauseAnomalyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Anomaly anomaly = 1;
+  PauseAnomalyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeAnomalyWorkflow`.
+message ResumeAnomalyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_id = 2;
+  Anomaly anomaly = 3;
+  ResumeAnomalyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeAnomalyWorkflow`.
+message ResumeAnomalyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Anomaly anomaly = 1;
+  ResumeAnomalyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListAnomalyWorkflows`.
+message ListAnomalyWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AnomalyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListAnomalyWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListAnomalyWorkflows`.
+message ListAnomalyWorkflowsResponse {
+  repeated Anomaly anomalies = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalAnomalyWorkflow`.
+message SignalAnomalyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_id = 2;
+  Anomaly anomaly = 3;
+  SignalAnomalyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalAnomalyWorkflow`.
+message SignalAnomalyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Anomaly anomaly = 1;
+  SignalAnomalyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

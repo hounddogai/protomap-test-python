@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datahub.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/datahub/v1/datahub.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datahub.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datahub/v1;datahubv1";
+option java_multiple_files = true;
+option java_outer_classname = "WorkspaceWorkflowServiceProto";
+option java_package = "com.acme.datahub.v1";
+
+// Runs the long-lived workflow that takes a workspace from start to finish.
+service WorkspaceWorkflowService {
+  // Starts a workspace.
+  rpc StartWorkspaceWorkflow(StartWorkspaceWorkflowRequest) returns (StartWorkspaceWorkflowResponse);
+
+  // Advances a workspace.
+  rpc AdvanceWorkspaceWorkflow(AdvanceWorkspaceWorkflowRequest) returns (AdvanceWorkspaceWorkflowResponse);
+
+  // Cancels a workspace.
+  rpc CancelWorkspaceWorkflow(CancelWorkspaceWorkflowRequest) returns (CancelWorkspaceWorkflowResponse);
+
+  // Retrys a workspace.
+  rpc RetryWorkspaceWorkflow(RetryWorkspaceWorkflowRequest) returns (RetryWorkspaceWorkflowResponse);
+
+  // Pauses a workspace.
+  rpc PauseWorkspaceWorkflow(PauseWorkspaceWorkflowRequest) returns (PauseWorkspaceWorkflowResponse);
+
+  // Resumes a workspace.
+  rpc ResumeWorkspaceWorkflow(ResumeWorkspaceWorkflowRequest) returns (ResumeWorkspaceWorkflowResponse);
+
+  // Returns a workspace.
+  rpc InspectWorkspaceWorkflow(InspectWorkspaceWorkflowRequest) returns (InspectWorkspaceWorkflowResponse);
+
+  // Lists workspaces a page at a time.
+  rpc ListWorkspaceWorkflows(ListWorkspaceWorkflowsRequest) returns (ListWorkspaceWorkflowsResponse);
+
+  // Signals a workspace.
+  rpc SignalWorkspaceWorkflow(SignalWorkspaceWorkflowRequest) returns (SignalWorkspaceWorkflowResponse);
+}
+
+// The request of `StartWorkspaceWorkflow`.
+message StartWorkspaceWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  Workspace workspace = 3;
+  StartWorkspaceWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartWorkspaceWorkflow`.
+message StartWorkspaceWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Workspace workspace = 1;
+  StartWorkspaceWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceWorkspaceWorkflow`.
+message AdvanceWorkspaceWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  Workspace workspace = 3;
+  AdvanceWorkspaceWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceWorkspaceWorkflow`.
+message AdvanceWorkspaceWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Workspace workspace = 1;
+  AdvanceWorkspaceWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelWorkspaceWorkflow`.
+message CancelWorkspaceWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  Workspace workspace = 3;
+  CancelWorkspaceWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelWorkspaceWorkflow`.
+message CancelWorkspaceWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Workspace workspace = 1;
+  CancelWorkspaceWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryWorkspaceWorkflow`.
+message RetryWorkspaceWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  Workspace workspace = 3;
+  RetryWorkspaceWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryWorkspaceWorkflow`.
+message RetryWorkspaceWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Workspace workspace = 1;
+  RetryWorkspaceWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseWorkspaceWorkflow`.
+message PauseWorkspaceWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  Workspace workspace = 3;
+  PauseWorkspaceWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseWorkspaceWorkflow`.
+message PauseWorkspaceWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Workspace workspace = 1;
+  PauseWorkspaceWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeWorkspaceWorkflow`.
+message ResumeWorkspaceWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  Workspace workspace = 3;
+  ResumeWorkspaceWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeWorkspaceWorkflow`.
+message ResumeWorkspaceWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Workspace workspace = 1;
+  ResumeWorkspaceWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectWorkspaceWorkflow`.
+message InspectWorkspaceWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectWorkspaceWorkflow`.
+message InspectWorkspaceWorkflowResponse {
+  Workspace workspace = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListWorkspaceWorkflows`.
+message ListWorkspaceWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated WorkspaceStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListWorkspaceWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListWorkspaceWorkflows`.
+message ListWorkspaceWorkflowsResponse {
+  repeated Workspace workspaces = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalWorkspaceWorkflow`.
+message SignalWorkspaceWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  Workspace workspace = 3;
+  SignalWorkspaceWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalWorkspaceWorkflow`.
+message SignalWorkspaceWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Workspace workspace = 1;
+  SignalWorkspaceWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,241 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.modelregistry.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/modelregistry/v1/modelregistry.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Modelregistry.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/modelregistry/v1;modelregistryv1";
+option java_multiple_files = true;
+option java_outer_classname = "DeploymentWorkflowServiceProto";
+option java_package = "com.acme.modelregistry.v1";
+
+// Runs the long-lived workflow that takes a deployment from start to finish.
+service DeploymentWorkflowService {
+  // Starts a deployment.
+  rpc StartDeploymentWorkflow(StartDeploymentWorkflowRequest) returns (StartDeploymentWorkflowResponse);
+
+  // Advances a deployment.
+  rpc AdvanceDeploymentWorkflow(AdvanceDeploymentWorkflowRequest) returns (AdvanceDeploymentWorkflowResponse);
+
+  // Cancels a deployment.
+  rpc CancelDeploymentWorkflow(CancelDeploymentWorkflowRequest) returns (CancelDeploymentWorkflowResponse);
+
+  // Pauses a deployment.
+  rpc PauseDeploymentWorkflow(PauseDeploymentWorkflowRequest) returns (PauseDeploymentWorkflowResponse);
+
+  // Lists deployments a page at a time.
+  rpc ListDeploymentWorkflows(ListDeploymentWorkflowsRequest) returns (ListDeploymentWorkflowsResponse);
+
+  // Signals a deployment.
+  rpc SignalDeploymentWorkflow(SignalDeploymentWorkflowRequest) returns (SignalDeploymentWorkflowResponse);
+}
+
+// The request of `StartDeploymentWorkflow`.
+message StartDeploymentWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  StartDeploymentWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartDeploymentWorkflow`.
+message StartDeploymentWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  StartDeploymentWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceDeploymentWorkflow`.
+message AdvanceDeploymentWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  AdvanceDeploymentWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceDeploymentWorkflow`.
+message AdvanceDeploymentWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  AdvanceDeploymentWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelDeploymentWorkflow`.
+message CancelDeploymentWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  CancelDeploymentWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelDeploymentWorkflow`.
+message CancelDeploymentWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  CancelDeploymentWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseDeploymentWorkflow`.
+message PauseDeploymentWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  PauseDeploymentWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseDeploymentWorkflow`.
+message PauseDeploymentWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  PauseDeploymentWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListDeploymentWorkflows`.
+message ListDeploymentWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DeploymentStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListDeploymentWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListDeploymentWorkflows`.
+message ListDeploymentWorkflowsResponse {
+  repeated Deployment deployments = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalDeploymentWorkflow`.
+message SignalDeploymentWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  SignalDeploymentWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalDeploymentWorkflow`.
+message SignalDeploymentWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  SignalDeploymentWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

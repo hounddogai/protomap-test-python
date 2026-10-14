@@ -1,0 +1,228 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.modelregistry.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/modelregistry/v1/modelregistry.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Modelregistry.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/modelregistry/v1;modelregistryv1";
+option java_multiple_files = true;
+option java_outer_classname = "ModelVersionApprovalServiceProto";
+option java_package = "com.acme.modelregistry.v1";
+
+// Routes model versions through approval, with escalation and delegation.
+service ModelVersionApprovalService {
+  // Submits a model version.
+  rpc SubmitModelVersion(SubmitModelVersionRequest) returns (SubmitModelVersionResponse);
+
+  // Approves a model version.
+  rpc ApproveModelVersion(ApproveModelVersionRequest) returns (ApproveModelVersionResponse);
+
+  // Escalates a model version.
+  rpc EscalateModelVersion(EscalateModelVersionRequest) returns (EscalateModelVersionResponse);
+
+  // Delegates a model version.
+  rpc DelegateModelVersionApproval(DelegateModelVersionApprovalRequest) returns (DelegateModelVersionApprovalResponse);
+
+  // Recalls a model version.
+  rpc RecallModelVersion(RecallModelVersionRequest) returns (RecallModelVersionResponse);
+
+  // Returns a model version.
+  rpc GetModelVersionApprovalStatus(GetModelVersionApprovalStatusRequest) returns (GetModelVersionApprovalStatusResponse);
+}
+
+// The request of `SubmitModelVersion`.
+message SubmitModelVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  SubmitModelVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitModelVersion`.
+message SubmitModelVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  SubmitModelVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveModelVersion`.
+message ApproveModelVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  ApproveModelVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveModelVersion`.
+message ApproveModelVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  ApproveModelVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateModelVersion`.
+message EscalateModelVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  EscalateModelVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateModelVersion`.
+message EscalateModelVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  EscalateModelVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateModelVersionApproval`.
+message DelegateModelVersionApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  DelegateModelVersionApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateModelVersionApproval`.
+message DelegateModelVersionApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  DelegateModelVersionApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallModelVersion`.
+message RecallModelVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  RecallModelVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallModelVersion`.
+message RecallModelVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  RecallModelVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetModelVersionApprovalStatus`.
+message GetModelVersionApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetModelVersionApprovalStatus`.
+message GetModelVersionApprovalStatusResponse {
+  ModelVersion model_version = 1;
+  acme.common.v1.OperationResult result = 2;
+}

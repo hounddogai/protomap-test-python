@@ -1,0 +1,258 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lineage.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/lineage/v1/lineage.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lineage.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lineage/v1;lineagev1";
+option java_multiple_files = true;
+option java_outer_classname = "LineageEdgeLifecycleServiceProto";
+option java_package = "com.acme.lineage.v1";
+
+// Moves a lineage edge between the states of its lifecycle.
+service LineageEdgeLifecycleService {
+  // Activates a lineage edge.
+  rpc ActivateLineageEdge(ActivateLineageEdgeRequest) returns (ActivateLineageEdgeResponse);
+
+  // Suspends a lineage edge.
+  rpc SuspendLineageEdge(SuspendLineageEdgeRequest) returns (SuspendLineageEdgeResponse);
+
+  // Reinstates a lineage edge.
+  rpc ReinstateLineageEdge(ReinstateLineageEdgeRequest) returns (ReinstateLineageEdgeResponse);
+
+  // Renews a lineage edge.
+  rpc RenewLineageEdge(RenewLineageEdgeRequest) returns (RenewLineageEdgeResponse);
+
+  // Expires a lineage edge.
+  rpc ExpireLineageEdge(ExpireLineageEdgeRequest) returns (ExpireLineageEdgeResponse);
+
+  // Returns a lineage edge.
+  rpc GetLineageEdgeLifecycle(GetLineageEdgeLifecycleRequest) returns (GetLineageEdgeLifecycleResponse);
+
+  // Schedules a lineage edge.
+  rpc ScheduleLineageEdgeExpiry(ScheduleLineageEdgeExpiryRequest) returns (ScheduleLineageEdgeExpiryResponse);
+}
+
+// The request of `ActivateLineageEdge`.
+message ActivateLineageEdgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  ActivateLineageEdgeRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateLineageEdge`.
+message ActivateLineageEdgeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  ActivateLineageEdgeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendLineageEdge`.
+message SuspendLineageEdgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  SuspendLineageEdgeRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendLineageEdge`.
+message SuspendLineageEdgeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  SuspendLineageEdgeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateLineageEdge`.
+message ReinstateLineageEdgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  ReinstateLineageEdgeRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateLineageEdge`.
+message ReinstateLineageEdgeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  ReinstateLineageEdgeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewLineageEdge`.
+message RenewLineageEdgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  RenewLineageEdgeRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewLineageEdge`.
+message RenewLineageEdgeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  RenewLineageEdgeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireLineageEdge`.
+message ExpireLineageEdgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  ExpireLineageEdgeRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireLineageEdge`.
+message ExpireLineageEdgeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  ExpireLineageEdgeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLineageEdgeLifecycle`.
+message GetLineageEdgeLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLineageEdgeLifecycle`.
+message GetLineageEdgeLifecycleResponse {
+  LineageEdge lineage_edge = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleLineageEdgeExpiry`.
+message ScheduleLineageEdgeExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  ScheduleLineageEdgeExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleLineageEdgeExpiry`.
+message ScheduleLineageEdgeExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  ScheduleLineageEdgeExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

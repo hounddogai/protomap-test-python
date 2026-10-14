@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.labeling.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/labeling/v1/labeling.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Labeling.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/labeling/v1;labelingv1";
+option java_multiple_files = true;
+option java_outer_classname = "AnnotationApprovalServiceProto";
+option java_package = "com.acme.labeling.v1";
+
+// Routes annotations through approval, with escalation and delegation.
+service AnnotationApprovalService {
+  // Submits an annotation.
+  rpc SubmitAnnotation(SubmitAnnotationRequest) returns (SubmitAnnotationResponse);
+
+  // Approves an annotation.
+  rpc ApproveAnnotation(ApproveAnnotationRequest) returns (ApproveAnnotationResponse);
+
+  // Rejects an annotation.
+  rpc RejectAnnotation(RejectAnnotationRequest) returns (RejectAnnotationResponse);
+
+  // Escalates an annotation.
+  rpc EscalateAnnotation(EscalateAnnotationRequest) returns (EscalateAnnotationResponse);
+
+  // Lists annotations a page at a time.
+  rpc ListPendingAnnotations(ListPendingAnnotationsRequest) returns (ListPendingAnnotationsResponse);
+
+  // Recalls an annotation.
+  rpc RecallAnnotation(RecallAnnotationRequest) returns (RecallAnnotationResponse);
+
+  // Returns an annotation.
+  rpc GetAnnotationApprovalStatus(GetAnnotationApprovalStatusRequest) returns (GetAnnotationApprovalStatusResponse);
+
+  // Comments an annotation.
+  rpc CommentAnnotationApproval(CommentAnnotationApprovalRequest) returns (CommentAnnotationApprovalResponse);
+}
+
+// The request of `SubmitAnnotation`.
+message SubmitAnnotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  SubmitAnnotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitAnnotation`.
+message SubmitAnnotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  SubmitAnnotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveAnnotation`.
+message ApproveAnnotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  ApproveAnnotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveAnnotation`.
+message ApproveAnnotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  ApproveAnnotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectAnnotation`.
+message RejectAnnotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  RejectAnnotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectAnnotation`.
+message RejectAnnotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  RejectAnnotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateAnnotation`.
+message EscalateAnnotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  EscalateAnnotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateAnnotation`.
+message EscalateAnnotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  EscalateAnnotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingAnnotations`.
+message ListPendingAnnotationsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AnnotationStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingAnnotationsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingAnnotations`.
+message ListPendingAnnotationsResponse {
+  repeated Annotation annotations = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallAnnotation`.
+message RecallAnnotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  RecallAnnotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallAnnotation`.
+message RecallAnnotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  RecallAnnotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAnnotationApprovalStatus`.
+message GetAnnotationApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAnnotationApprovalStatus`.
+message GetAnnotationApprovalStatusResponse {
+  Annotation annotation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentAnnotationApproval`.
+message CommentAnnotationApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  CommentAnnotationApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentAnnotationApproval`.
+message CommentAnnotationApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  CommentAnnotationApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

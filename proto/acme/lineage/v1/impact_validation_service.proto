@@ -1,0 +1,260 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lineage.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/lineage/v1/lineage.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lineage.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lineage/v1;lineagev1";
+option java_multiple_files = true;
+option java_outer_classname = "ImpactValidationServiceProto";
+option java_package = "com.acme.lineage.v1";
+
+// Checks impacts against the rules before anything acts on them.
+service ImpactValidationService {
+  // Validates an impact.
+  rpc ValidateImpact(ValidateImpactRequest) returns (ValidateImpactResponse);
+
+  // Previews an impact.
+  rpc PreviewImpact(PreviewImpactRequest) returns (PreviewImpactResponse);
+
+  // Checks an impact.
+  rpc CheckImpactEligibility(CheckImpactEligibilityRequest) returns (CheckImpactEligibilityResponse);
+
+  // Normalizes an impact.
+  rpc NormalizeImpact(NormalizeImpactRequest) returns (NormalizeImpactResponse);
+
+  // Explains an impact.
+  rpc ExplainImpactDecision(ExplainImpactDecisionRequest) returns (ExplainImpactDecisionResponse);
+
+  // Lints an impact.
+  rpc LintImpacts(LintImpactsRequest) returns (LintImpactsResponse);
+
+  // Returns an impact.
+  rpc GetImpactRules(GetImpactRulesRequest) returns (GetImpactRulesResponse);
+}
+
+// The request of `ValidateImpact`.
+message ValidateImpactRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  ValidateImpactRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateImpact`.
+message ValidateImpactResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  ValidateImpactResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewImpact`.
+message PreviewImpactRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  PreviewImpactRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewImpact`.
+message PreviewImpactResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  PreviewImpactResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckImpactEligibility`.
+message CheckImpactEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  CheckImpactEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckImpactEligibility`.
+message CheckImpactEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  CheckImpactEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeImpact`.
+message NormalizeImpactRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  NormalizeImpactRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeImpact`.
+message NormalizeImpactResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  NormalizeImpactResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainImpactDecision`.
+message ExplainImpactDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  ExplainImpactDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainImpactDecision`.
+message ExplainImpactDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  ExplainImpactDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintImpacts`.
+message LintImpactsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  Impact impact = 3;
+  LintImpactsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintImpacts`.
+message LintImpactsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  LintImpactsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetImpactRules`.
+message GetImpactRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetImpactRules`.
+message GetImpactRulesResponse {
+  Impact impact = 1;
+  acme.common.v1.OperationResult result = 2;
+}

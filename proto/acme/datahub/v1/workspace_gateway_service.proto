@@ -1,0 +1,247 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datahub.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/datahub/v1/datahub.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datahub.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datahub/v1;datahubv1";
+option java_multiple_files = true;
+option java_outer_classname = "WorkspaceGatewayServiceProto";
+option java_package = "com.acme.datahub.v1";
+
+// The edge API that apps call for workspaces.
+service WorkspaceGatewayService {
+  // Fetchs a workspace.
+  rpc FetchWorkspaceView(FetchWorkspaceViewRequest) returns (FetchWorkspaceViewResponse);
+
+  // Composes a workspace.
+  rpc ComposeWorkspacePage(ComposeWorkspacePageRequest) returns (ComposeWorkspacePageResponse);
+
+  // Submits a workspace.
+  rpc SubmitWorkspaceForm(SubmitWorkspaceFormRequest) returns (SubmitWorkspaceFormResponse);
+
+  // Tracks a workspace.
+  rpc TrackWorkspace(TrackWorkspaceRequest) returns (TrackWorkspaceResponse);
+
+  // Streams the changes of workspaces as they happen.
+  rpc StreamWorkspaceUpdates(StreamWorkspaceUpdatesRequest) returns (stream StreamWorkspaceUpdatesResponse);
+
+  // Takes a stream of workspaces and answers once at the end.
+  rpc UploadWorkspaceAttachments(stream UploadWorkspaceAttachmentsRequest) returns (UploadWorkspaceAttachmentsResponse);
+
+  // Lists workspaces a page at a time.
+  rpc SearchWorkspaceCatalog(SearchWorkspaceCatalogRequest) returns (SearchWorkspaceCatalogResponse);
+
+  // Returns a workspace.
+  rpc GetWorkspaceSummary(GetWorkspaceSummaryRequest) returns (GetWorkspaceSummaryResponse);
+}
+
+// The request of `FetchWorkspaceView`.
+message FetchWorkspaceViewRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string device = 1;
+    string locale = 2;
+    acme.common.v1.GeoPoint location = 3;
+    map<string, string> client_hints = 4;
+    string session_id = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  Workspace workspace = 3;
+  FetchWorkspaceViewRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `FetchWorkspaceView`.
+message FetchWorkspaceViewResponse {
+  Workspace workspace = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ComposeWorkspacePage`.
+message ComposeWorkspacePageRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string device = 1;
+    string locale = 2;
+    acme.common.v1.GeoPoint location = 3;
+    map<string, string> client_hints = 4;
+    string session_id = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  Workspace workspace = 3;
+  ComposeWorkspacePageRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ComposeWorkspacePage`.
+message ComposeWorkspacePageResponse {
+  Workspace workspace = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `SubmitWorkspaceForm`.
+message SubmitWorkspaceFormRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string device = 1;
+    string locale = 2;
+    acme.common.v1.GeoPoint location = 3;
+    map<string, string> client_hints = 4;
+    string session_id = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  Workspace workspace = 3;
+  SubmitWorkspaceFormRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitWorkspaceForm`.
+message SubmitWorkspaceFormResponse {
+  Workspace workspace = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `TrackWorkspace`.
+message TrackWorkspaceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string device = 1;
+    string locale = 2;
+    acme.common.v1.GeoPoint location = 3;
+    map<string, string> client_hints = 4;
+    string session_id = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  Workspace workspace = 3;
+  TrackWorkspaceRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `TrackWorkspace`.
+message TrackWorkspaceResponse {
+  Workspace workspace = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `StreamWorkspaceUpdates`.
+message StreamWorkspaceUpdatesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated WorkspaceStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamWorkspaceUpdatesRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamWorkspaceUpdates`.
+message StreamWorkspaceUpdatesResponse {
+  Workspace workspace = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `UploadWorkspaceAttachments`.
+message UploadWorkspaceAttachmentsRequest {
+  // What a stream of records starts with.
+  message StreamHeader {
+    string source = 1;
+    string format = 2;
+    int64 total_records = 3;
+    acme.common.v1.ContactInfo submitted_by = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof chunk {
+    UploadWorkspaceAttachmentsRequest.StreamHeader header = 2;
+    Workspace record = 3;
+  }
+  int64 sequence = 4;
+}
+
+// The response of `UploadWorkspaceAttachments`.
+message UploadWorkspaceAttachmentsResponse {
+  // A record the import turned down.
+  message Rejection {
+    int64 sequence = 1;
+    string reason = 2;
+    string workspace_id = 3;
+  }
+
+  int64 accepted = 1;
+  int64 rejected = 2;
+  repeated UploadWorkspaceAttachmentsResponse.Rejection rejections = 3;
+  acme.common.v1.OperationResult result = 4;
+}
+
+// The request of `SearchWorkspaceCatalog`.
+message SearchWorkspaceCatalogRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated WorkspaceStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SearchWorkspaceCatalogRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SearchWorkspaceCatalog`.
+message SearchWorkspaceCatalogResponse {
+  repeated Workspace workspaces = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetWorkspaceSummary`.
+message GetWorkspaceSummaryRequest {
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetWorkspaceSummary`.
+message GetWorkspaceSummaryResponse {
+  Workspace workspace = 1;
+  acme.common.v1.OperationResult result = 2;
+}

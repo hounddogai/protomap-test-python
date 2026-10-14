@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lineage.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/lineage/v1/lineage.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lineage.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lineage/v1;lineagev1";
+option java_multiple_files = true;
+option java_outer_classname = "LineageEdgeWorkflowServiceProto";
+option java_package = "com.acme.lineage.v1";
+
+// Runs the long-lived workflow that takes a lineage edge from start to finish.
+service LineageEdgeWorkflowService {
+  // Starts a lineage edge.
+  rpc StartLineageEdgeWorkflow(StartLineageEdgeWorkflowRequest) returns (StartLineageEdgeWorkflowResponse);
+
+  // Advances a lineage edge.
+  rpc AdvanceLineageEdgeWorkflow(AdvanceLineageEdgeWorkflowRequest) returns (AdvanceLineageEdgeWorkflowResponse);
+
+  // Cancels a lineage edge.
+  rpc CancelLineageEdgeWorkflow(CancelLineageEdgeWorkflowRequest) returns (CancelLineageEdgeWorkflowResponse);
+
+  // Retrys a lineage edge.
+  rpc RetryLineageEdgeWorkflow(RetryLineageEdgeWorkflowRequest) returns (RetryLineageEdgeWorkflowResponse);
+
+  // Pauses a lineage edge.
+  rpc PauseLineageEdgeWorkflow(PauseLineageEdgeWorkflowRequest) returns (PauseLineageEdgeWorkflowResponse);
+
+  // Resumes a lineage edge.
+  rpc ResumeLineageEdgeWorkflow(ResumeLineageEdgeWorkflowRequest) returns (ResumeLineageEdgeWorkflowResponse);
+
+  // Returns a lineage edge.
+  rpc InspectLineageEdgeWorkflow(InspectLineageEdgeWorkflowRequest) returns (InspectLineageEdgeWorkflowResponse);
+
+  // Lists lineage edges a page at a time.
+  rpc ListLineageEdgeWorkflows(ListLineageEdgeWorkflowsRequest) returns (ListLineageEdgeWorkflowsResponse);
+
+  // Signals a lineage edge.
+  rpc SignalLineageEdgeWorkflow(SignalLineageEdgeWorkflowRequest) returns (SignalLineageEdgeWorkflowResponse);
+}
+
+// The request of `StartLineageEdgeWorkflow`.
+message StartLineageEdgeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  StartLineageEdgeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartLineageEdgeWorkflow`.
+message StartLineageEdgeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  StartLineageEdgeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceLineageEdgeWorkflow`.
+message AdvanceLineageEdgeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  AdvanceLineageEdgeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceLineageEdgeWorkflow`.
+message AdvanceLineageEdgeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  AdvanceLineageEdgeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelLineageEdgeWorkflow`.
+message CancelLineageEdgeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  CancelLineageEdgeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelLineageEdgeWorkflow`.
+message CancelLineageEdgeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  CancelLineageEdgeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryLineageEdgeWorkflow`.
+message RetryLineageEdgeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  RetryLineageEdgeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryLineageEdgeWorkflow`.
+message RetryLineageEdgeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  RetryLineageEdgeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseLineageEdgeWorkflow`.
+message PauseLineageEdgeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  PauseLineageEdgeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseLineageEdgeWorkflow`.
+message PauseLineageEdgeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  PauseLineageEdgeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeLineageEdgeWorkflow`.
+message ResumeLineageEdgeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  ResumeLineageEdgeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeLineageEdgeWorkflow`.
+message ResumeLineageEdgeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  ResumeLineageEdgeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectLineageEdgeWorkflow`.
+message InspectLineageEdgeWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectLineageEdgeWorkflow`.
+message InspectLineageEdgeWorkflowResponse {
+  LineageEdge lineage_edge = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListLineageEdgeWorkflows`.
+message ListLineageEdgeWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LineageEdgeStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListLineageEdgeWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListLineageEdgeWorkflows`.
+message ListLineageEdgeWorkflowsResponse {
+  repeated LineageEdge lineage_edges = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalLineageEdgeWorkflow`.
+message SignalLineageEdgeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  SignalLineageEdgeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalLineageEdgeWorkflow`.
+message SignalLineageEdgeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  SignalLineageEdgeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

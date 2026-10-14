@@ -1,0 +1,260 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.labeling.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/labeling/v1/labeling.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Labeling.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/labeling/v1;labelingv1";
+option java_multiple_files = true;
+option java_outer_classname = "LabelingTaskValidationServiceProto";
+option java_package = "com.acme.labeling.v1";
+
+// Checks labeling tasks against the rules before anything acts on them.
+service LabelingTaskValidationService {
+  // Validates a labeling task.
+  rpc ValidateLabelingTask(ValidateLabelingTaskRequest) returns (ValidateLabelingTaskResponse);
+
+  // Previews a labeling task.
+  rpc PreviewLabelingTask(PreviewLabelingTaskRequest) returns (PreviewLabelingTaskResponse);
+
+  // Checks a labeling task.
+  rpc CheckLabelingTaskEligibility(CheckLabelingTaskEligibilityRequest) returns (CheckLabelingTaskEligibilityResponse);
+
+  // Normalizes a labeling task.
+  rpc NormalizeLabelingTask(NormalizeLabelingTaskRequest) returns (NormalizeLabelingTaskResponse);
+
+  // Explains a labeling task.
+  rpc ExplainLabelingTaskDecision(ExplainLabelingTaskDecisionRequest) returns (ExplainLabelingTaskDecisionResponse);
+
+  // Lints a labeling task.
+  rpc LintLabelingTasks(LintLabelingTasksRequest) returns (LintLabelingTasksResponse);
+
+  // Returns a labeling task.
+  rpc GetLabelingTaskRules(GetLabelingTaskRulesRequest) returns (GetLabelingTaskRulesResponse);
+}
+
+// The request of `ValidateLabelingTask`.
+message ValidateLabelingTaskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  ValidateLabelingTaskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateLabelingTask`.
+message ValidateLabelingTaskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  ValidateLabelingTaskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewLabelingTask`.
+message PreviewLabelingTaskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  PreviewLabelingTaskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewLabelingTask`.
+message PreviewLabelingTaskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  PreviewLabelingTaskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckLabelingTaskEligibility`.
+message CheckLabelingTaskEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  CheckLabelingTaskEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckLabelingTaskEligibility`.
+message CheckLabelingTaskEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  CheckLabelingTaskEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeLabelingTask`.
+message NormalizeLabelingTaskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  NormalizeLabelingTaskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeLabelingTask`.
+message NormalizeLabelingTaskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  NormalizeLabelingTaskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainLabelingTaskDecision`.
+message ExplainLabelingTaskDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  ExplainLabelingTaskDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainLabelingTaskDecision`.
+message ExplainLabelingTaskDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  ExplainLabelingTaskDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintLabelingTasks`.
+message LintLabelingTasksRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  LintLabelingTasksRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintLabelingTasks`.
+message LintLabelingTasksResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  LintLabelingTasksResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLabelingTaskRules`.
+message GetLabelingTaskRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLabelingTaskRules`.
+message GetLabelingTaskRulesResponse {
+  LabelingTask labeling_task = 1;
+  acme.common.v1.OperationResult result = 2;
+}

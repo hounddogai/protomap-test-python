@@ -1,0 +1,247 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datahub.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/datahub/v1/datahub.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datahub.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datahub/v1;datahubv1";
+option java_multiple_files = true;
+option java_outer_classname = "NotebookNotificationServiceProto";
+option java_package = "com.acme.datahub.v1";
+
+// Tells the people who follow a notebook what changed.
+service NotebookNotificationService {
+  // Subscribes a notebook.
+  rpc SubscribeNotebookUpdates(SubscribeNotebookUpdatesRequest) returns (SubscribeNotebookUpdatesResponse);
+
+  // Unsubscribes a notebook.
+  rpc UnsubscribeNotebookUpdates(UnsubscribeNotebookUpdatesRequest) returns (UnsubscribeNotebookUpdatesResponse);
+
+  // Notifys a notebook.
+  rpc NotifyNotebookWatchers(NotifyNotebookWatchersRequest) returns (NotifyNotebookWatchersResponse);
+
+  // Lists notebooks a page at a time.
+  rpc ListNotebookSubscriptions(ListNotebookSubscriptionsRequest) returns (ListNotebookSubscriptionsResponse);
+
+  // Sends a notebook.
+  rpc SendNotebookTestNotice(SendNotebookTestNoticeRequest) returns (SendNotebookTestNoticeResponse);
+
+  // Returns a notebook.
+  rpc GetNotebookPreferences(GetNotebookPreferencesRequest) returns (GetNotebookPreferencesResponse);
+
+  // Streams the changes of notebooks as they happen.
+  rpc StreamNotebookNotices(StreamNotebookNoticesRequest) returns (stream StreamNotebookNoticesResponse);
+}
+
+// The request of `SubscribeNotebookUpdates`.
+message SubscribeNotebookUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string notebook_id = 2;
+  SubscribeNotebookUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SubscribeNotebookUpdates`.
+message SubscribeNotebookUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Notebook notebook = 1;
+  SubscribeNotebookUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnsubscribeNotebookUpdates`.
+message UnsubscribeNotebookUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string notebook_id = 2;
+  UnsubscribeNotebookUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnsubscribeNotebookUpdates`.
+message UnsubscribeNotebookUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Notebook notebook = 1;
+  UnsubscribeNotebookUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NotifyNotebookWatchers`.
+message NotifyNotebookWatchersRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string notebook_id = 2;
+  NotifyNotebookWatchersRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `NotifyNotebookWatchers`.
+message NotifyNotebookWatchersResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Notebook notebook = 1;
+  NotifyNotebookWatchersResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListNotebookSubscriptions`.
+message ListNotebookSubscriptionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated NotebookStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListNotebookSubscriptionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListNotebookSubscriptions`.
+message ListNotebookSubscriptionsResponse {
+  repeated Notebook notebooks = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SendNotebookTestNotice`.
+message SendNotebookTestNoticeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string notebook_id = 2;
+  SendNotebookTestNoticeRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SendNotebookTestNotice`.
+message SendNotebookTestNoticeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Notebook notebook = 1;
+  SendNotebookTestNoticeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetNotebookPreferences`.
+message GetNotebookPreferencesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string notebook_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetNotebookPreferences`.
+message GetNotebookPreferencesResponse {
+  Notebook notebook = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `StreamNotebookNotices`.
+message StreamNotebookNoticesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated NotebookStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamNotebookNoticesRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamNotebookNotices`.
+message StreamNotebookNoticesResponse {
+  Notebook notebook = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}

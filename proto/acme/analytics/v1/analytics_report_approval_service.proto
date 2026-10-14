@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.analytics.v1;
+
+import "acme/analytics/v1/analytics.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Analytics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/analytics/v1;analyticsv1";
+option java_multiple_files = true;
+option java_outer_classname = "AnalyticsReportApprovalServiceProto";
+option java_package = "com.acme.analytics.v1";
+
+// Routes analytics reports through approval, with escalation and delegation.
+service AnalyticsReportApprovalService {
+  // Submits an analytics report.
+  rpc SubmitAnalyticsReport(SubmitAnalyticsReportRequest) returns (SubmitAnalyticsReportResponse);
+
+  // Approves an analytics report.
+  rpc ApproveAnalyticsReport(ApproveAnalyticsReportRequest) returns (ApproveAnalyticsReportResponse);
+
+  // Rejects an analytics report.
+  rpc RejectAnalyticsReport(RejectAnalyticsReportRequest) returns (RejectAnalyticsReportResponse);
+
+  // Escalates an analytics report.
+  rpc EscalateAnalyticsReport(EscalateAnalyticsReportRequest) returns (EscalateAnalyticsReportResponse);
+
+  // Lists analytics reports a page at a time.
+  rpc ListPendingAnalyticsReports(ListPendingAnalyticsReportsRequest) returns (ListPendingAnalyticsReportsResponse);
+
+  // Delegates an analytics report.
+  rpc DelegateAnalyticsReportApproval(DelegateAnalyticsReportApprovalRequest) returns (DelegateAnalyticsReportApprovalResponse);
+
+  // Recalls an analytics report.
+  rpc RecallAnalyticsReport(RecallAnalyticsReportRequest) returns (RecallAnalyticsReportResponse);
+
+  // Returns an analytics report.
+  rpc GetAnalyticsReportApprovalStatus(GetAnalyticsReportApprovalStatusRequest) returns (GetAnalyticsReportApprovalStatusResponse);
+
+  // Comments an analytics report.
+  rpc CommentAnalyticsReportApproval(CommentAnalyticsReportApprovalRequest) returns (CommentAnalyticsReportApprovalResponse);
+}
+
+// The request of `SubmitAnalyticsReport`.
+message SubmitAnalyticsReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  AnalyticsReport analytics_report = 3;
+  SubmitAnalyticsReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitAnalyticsReport`.
+message SubmitAnalyticsReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  SubmitAnalyticsReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveAnalyticsReport`.
+message ApproveAnalyticsReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  AnalyticsReport analytics_report = 3;
+  ApproveAnalyticsReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveAnalyticsReport`.
+message ApproveAnalyticsReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  ApproveAnalyticsReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectAnalyticsReport`.
+message RejectAnalyticsReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  AnalyticsReport analytics_report = 3;
+  RejectAnalyticsReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectAnalyticsReport`.
+message RejectAnalyticsReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  RejectAnalyticsReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateAnalyticsReport`.
+message EscalateAnalyticsReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  AnalyticsReport analytics_report = 3;
+  EscalateAnalyticsReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateAnalyticsReport`.
+message EscalateAnalyticsReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  EscalateAnalyticsReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingAnalyticsReports`.
+message ListPendingAnalyticsReportsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AnalyticsReportStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingAnalyticsReportsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingAnalyticsReports`.
+message ListPendingAnalyticsReportsResponse {
+  repeated AnalyticsReport analytics_reports = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateAnalyticsReportApproval`.
+message DelegateAnalyticsReportApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  AnalyticsReport analytics_report = 3;
+  DelegateAnalyticsReportApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateAnalyticsReportApproval`.
+message DelegateAnalyticsReportApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  DelegateAnalyticsReportApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallAnalyticsReport`.
+message RecallAnalyticsReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  AnalyticsReport analytics_report = 3;
+  RecallAnalyticsReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallAnalyticsReport`.
+message RecallAnalyticsReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  RecallAnalyticsReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAnalyticsReportApprovalStatus`.
+message GetAnalyticsReportApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAnalyticsReportApprovalStatus`.
+message GetAnalyticsReportApprovalStatusResponse {
+  AnalyticsReport analytics_report = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentAnalyticsReportApproval`.
+message CommentAnalyticsReportApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  AnalyticsReport analytics_report = 3;
+  CommentAnalyticsReportApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentAnalyticsReportApproval`.
+message CommentAnalyticsReportApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  CommentAnalyticsReportApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

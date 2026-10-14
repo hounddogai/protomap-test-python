@@ -1,0 +1,288 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.labeling.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/labeling/v1/labeling.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Labeling.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/labeling/v1;labelingv1";
+option java_multiple_files = true;
+option java_outer_classname = "AnnotationValidationServiceProto";
+option java_package = "com.acme.labeling.v1";
+
+// Checks annotations against the rules before anything acts on them.
+service AnnotationValidationService {
+  // Validates an annotation.
+  rpc ValidateAnnotation(ValidateAnnotationRequest) returns (ValidateAnnotationResponse);
+
+  // Previews an annotation.
+  rpc PreviewAnnotation(PreviewAnnotationRequest) returns (PreviewAnnotationResponse);
+
+  // Checks an annotation.
+  rpc CheckAnnotationEligibility(CheckAnnotationEligibilityRequest) returns (CheckAnnotationEligibilityResponse);
+
+  // Normalizes an annotation.
+  rpc NormalizeAnnotation(NormalizeAnnotationRequest) returns (NormalizeAnnotationResponse);
+
+  // Explains an annotation.
+  rpc ExplainAnnotationDecision(ExplainAnnotationDecisionRequest) returns (ExplainAnnotationDecisionResponse);
+
+  // Scores an annotation.
+  rpc ScoreAnnotation(ScoreAnnotationRequest) returns (ScoreAnnotationResponse);
+
+  // Lints an annotation.
+  rpc LintAnnotations(LintAnnotationsRequest) returns (LintAnnotationsResponse);
+}
+
+// The request of `ValidateAnnotation`.
+message ValidateAnnotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  ValidateAnnotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateAnnotation`.
+message ValidateAnnotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  ValidateAnnotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewAnnotation`.
+message PreviewAnnotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  PreviewAnnotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewAnnotation`.
+message PreviewAnnotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  PreviewAnnotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckAnnotationEligibility`.
+message CheckAnnotationEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  CheckAnnotationEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckAnnotationEligibility`.
+message CheckAnnotationEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  CheckAnnotationEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeAnnotation`.
+message NormalizeAnnotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  NormalizeAnnotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeAnnotation`.
+message NormalizeAnnotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  NormalizeAnnotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainAnnotationDecision`.
+message ExplainAnnotationDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  ExplainAnnotationDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainAnnotationDecision`.
+message ExplainAnnotationDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  ExplainAnnotationDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreAnnotation`.
+message ScoreAnnotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  ScoreAnnotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreAnnotation`.
+message ScoreAnnotationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreAnnotationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Annotation annotation = 1;
+  ScoreAnnotationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintAnnotations`.
+message LintAnnotationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  LintAnnotationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintAnnotations`.
+message LintAnnotationsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  LintAnnotationsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.pipelines.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/pipelines/v1/pipelines.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Pipelines.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/pipelines/v1;pipelinesv1";
+option java_multiple_files = true;
+option java_outer_classname = "PipelineRunValidationServiceProto";
+option java_package = "com.acme.pipelines.v1";
+
+// Checks pipeline runs against the rules before anything acts on them.
+service PipelineRunValidationService {
+  // Validates a pipeline run.
+  rpc ValidatePipelineRun(ValidatePipelineRunRequest) returns (ValidatePipelineRunResponse);
+
+  // Previews a pipeline run.
+  rpc PreviewPipelineRun(PreviewPipelineRunRequest) returns (PreviewPipelineRunResponse);
+
+  // Checks a pipeline run.
+  rpc CheckPipelineRunEligibility(CheckPipelineRunEligibilityRequest) returns (CheckPipelineRunEligibilityResponse);
+
+  // Normalizes a pipeline run.
+  rpc NormalizePipelineRun(NormalizePipelineRunRequest) returns (NormalizePipelineRunResponse);
+
+  // Explains a pipeline run.
+  rpc ExplainPipelineRunDecision(ExplainPipelineRunDecisionRequest) returns (ExplainPipelineRunDecisionResponse);
+
+  // Scores a pipeline run.
+  rpc ScorePipelineRun(ScorePipelineRunRequest) returns (ScorePipelineRunResponse);
+
+  // Lints a pipeline run.
+  rpc LintPipelineRuns(LintPipelineRunsRequest) returns (LintPipelineRunsResponse);
+
+  // Returns a pipeline run.
+  rpc GetPipelineRunRules(GetPipelineRunRulesRequest) returns (GetPipelineRunRulesResponse);
+}
+
+// The request of `ValidatePipelineRun`.
+message ValidatePipelineRunRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  PipelineRun pipeline_run = 3;
+  ValidatePipelineRunRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidatePipelineRun`.
+message ValidatePipelineRunResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineRun pipeline_run = 1;
+  ValidatePipelineRunResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewPipelineRun`.
+message PreviewPipelineRunRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  PipelineRun pipeline_run = 3;
+  PreviewPipelineRunRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewPipelineRun`.
+message PreviewPipelineRunResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineRun pipeline_run = 1;
+  PreviewPipelineRunResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckPipelineRunEligibility`.
+message CheckPipelineRunEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  PipelineRun pipeline_run = 3;
+  CheckPipelineRunEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckPipelineRunEligibility`.
+message CheckPipelineRunEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineRun pipeline_run = 1;
+  CheckPipelineRunEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizePipelineRun`.
+message NormalizePipelineRunRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  PipelineRun pipeline_run = 3;
+  NormalizePipelineRunRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizePipelineRun`.
+message NormalizePipelineRunResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineRun pipeline_run = 1;
+  NormalizePipelineRunResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainPipelineRunDecision`.
+message ExplainPipelineRunDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  PipelineRun pipeline_run = 3;
+  ExplainPipelineRunDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainPipelineRunDecision`.
+message ExplainPipelineRunDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineRun pipeline_run = 1;
+  ExplainPipelineRunDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScorePipelineRun`.
+message ScorePipelineRunRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  PipelineRun pipeline_run = 3;
+  ScorePipelineRunRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScorePipelineRun`.
+message ScorePipelineRunResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScorePipelineRunResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PipelineRun pipeline_run = 1;
+  ScorePipelineRunResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintPipelineRuns`.
+message LintPipelineRunsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  PipelineRun pipeline_run = 3;
+  LintPipelineRunsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintPipelineRuns`.
+message LintPipelineRunsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineRun pipeline_run = 1;
+  LintPipelineRunsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPipelineRunRules`.
+message GetPipelineRunRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPipelineRunRules`.
+message GetPipelineRunRulesResponse {
+  PipelineRun pipeline_run = 1;
+  acme.common.v1.OperationResult result = 2;
+}

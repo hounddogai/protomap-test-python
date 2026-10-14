@@ -1,0 +1,15 @@
+"""Install the anomalies team's partner hooks at package import."""
+
+from __future__ import annotations
+
+from acme_data.domains.anomalies import adapters
+from acme_data.domains.anomalies import hooks
+
+
+hooks.anomaly_feedback_approval_reject_anomaly_feedback1 = adapters.anomaly_feedback_approval_reject_anomaly_feedback1
+hooks.anomaly_feedback_validation_preview_anomaly_feedback1 = adapters.anomaly_feedback_validation_preview_anomaly_feedback1
+hooks.anomaly_feedback_workflow_retry_anomaly_feedback_workflow1 = adapters.anomaly_feedback_workflow_retry_anomaly_feedback_workflow1
+hooks.anomaly_query_summarize_anomalies0 = adapters.anomaly_query_summarize_anomalies0
+hooks.detector_approval_approve_detector3 = adapters.detector_approval_approve_detector3
+hooks.detector_approval_submit_detector2 = adapters.detector_approval_submit_detector2
+hooks.detector_validation_validate_detector1 = adapters.detector_validation_validate_detector1

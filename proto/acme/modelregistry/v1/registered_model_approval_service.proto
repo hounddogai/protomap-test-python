@@ -1,0 +1,257 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.modelregistry.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/modelregistry/v1/modelregistry.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Modelregistry.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/modelregistry/v1;modelregistryv1";
+option java_multiple_files = true;
+option java_outer_classname = "RegisteredModelApprovalServiceProto";
+option java_package = "com.acme.modelregistry.v1";
+
+// Routes registered models through approval, with escalation and delegation.
+service RegisteredModelApprovalService {
+  // Submits a registered model.
+  rpc SubmitRegisteredModel(SubmitRegisteredModelRequest) returns (SubmitRegisteredModelResponse);
+
+  // Approves a registered model.
+  rpc ApproveRegisteredModel(ApproveRegisteredModelRequest) returns (ApproveRegisteredModelResponse);
+
+  // Rejects a registered model.
+  rpc RejectRegisteredModel(RejectRegisteredModelRequest) returns (RejectRegisteredModelResponse);
+
+  // Lists registered models a page at a time.
+  rpc ListPendingRegisteredModels(ListPendingRegisteredModelsRequest) returns (ListPendingRegisteredModelsResponse);
+
+  // Recalls a registered model.
+  rpc RecallRegisteredModel(RecallRegisteredModelRequest) returns (RecallRegisteredModelResponse);
+
+  // Returns a registered model.
+  rpc GetRegisteredModelApprovalStatus(GetRegisteredModelApprovalStatusRequest) returns (GetRegisteredModelApprovalStatusResponse);
+
+  // Comments a registered model.
+  rpc CommentRegisteredModelApproval(CommentRegisteredModelApprovalRequest) returns (CommentRegisteredModelApprovalResponse);
+}
+
+// The request of `SubmitRegisteredModel`.
+message SubmitRegisteredModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  SubmitRegisteredModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitRegisteredModel`.
+message SubmitRegisteredModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  SubmitRegisteredModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveRegisteredModel`.
+message ApproveRegisteredModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  ApproveRegisteredModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveRegisteredModel`.
+message ApproveRegisteredModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  ApproveRegisteredModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectRegisteredModel`.
+message RejectRegisteredModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  RejectRegisteredModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectRegisteredModel`.
+message RejectRegisteredModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  RejectRegisteredModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingRegisteredModels`.
+message ListPendingRegisteredModelsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RegisteredModelStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingRegisteredModelsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingRegisteredModels`.
+message ListPendingRegisteredModelsResponse {
+  repeated RegisteredModel registered_models = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallRegisteredModel`.
+message RecallRegisteredModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  RecallRegisteredModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallRegisteredModel`.
+message RecallRegisteredModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  RecallRegisteredModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRegisteredModelApprovalStatus`.
+message GetRegisteredModelApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRegisteredModelApprovalStatus`.
+message GetRegisteredModelApprovalStatusResponse {
+  RegisteredModel registered_model = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentRegisteredModelApproval`.
+message CommentRegisteredModelApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  CommentRegisteredModelApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentRegisteredModelApproval`.
+message CommentRegisteredModelApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  CommentRegisteredModelApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

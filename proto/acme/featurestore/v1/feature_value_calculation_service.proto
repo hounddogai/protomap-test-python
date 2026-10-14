@@ -1,0 +1,292 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featurestore.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/featurestore/v1/featurestore.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featurestore.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featurestore/v1;featurestorev1";
+option java_multiple_files = true;
+option java_outer_classname = "FeatureValueCalculationServiceProto";
+option java_package = "com.acme.featurestore.v1";
+
+// Computes the figures of a feature value, such as totals, taxes, and estimates.
+service FeatureValueCalculationService {
+  // Calculates a feature value.
+  rpc CalculateFeatureValue(CalculateFeatureValueRequest) returns (CalculateFeatureValueResponse);
+
+  // Estimates a feature value.
+  rpc EstimateFeatureValue(EstimateFeatureValueRequest) returns (EstimateFeatureValueResponse);
+
+  // Quotes a feature value.
+  rpc QuoteFeatureValue(QuoteFeatureValueRequest) returns (QuoteFeatureValueResponse);
+
+  // Recalculates a feature value.
+  rpc RecalculateFeatureValues(RecalculateFeatureValuesRequest) returns (RecalculateFeatureValuesResponse);
+
+  // Simulates a feature value.
+  rpc SimulateFeatureValue(SimulateFeatureValueRequest) returns (SimulateFeatureValueResponse);
+
+  // Explains a feature value.
+  rpc ExplainFeatureValueCalculation(ExplainFeatureValueCalculationRequest) returns (ExplainFeatureValueCalculationResponse);
+
+  // Returns a feature value.
+  rpc GetFeatureValueRates(GetFeatureValueRatesRequest) returns (GetFeatureValueRatesResponse);
+}
+
+// The request of `CalculateFeatureValue`.
+message CalculateFeatureValueRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  FeatureValue feature_value = 3;
+  CalculateFeatureValueRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateFeatureValue`.
+message CalculateFeatureValueResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateFeatureValueResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FeatureValue feature_value = 1;
+  CalculateFeatureValueResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateFeatureValue`.
+message EstimateFeatureValueRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  FeatureValue feature_value = 3;
+  EstimateFeatureValueRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateFeatureValue`.
+message EstimateFeatureValueResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateFeatureValueResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FeatureValue feature_value = 1;
+  EstimateFeatureValueResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteFeatureValue`.
+message QuoteFeatureValueRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  FeatureValue feature_value = 3;
+  QuoteFeatureValueRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteFeatureValue`.
+message QuoteFeatureValueResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteFeatureValueResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FeatureValue feature_value = 1;
+  QuoteFeatureValueResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateFeatureValues`.
+message RecalculateFeatureValuesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  FeatureValue feature_value = 3;
+  RecalculateFeatureValuesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateFeatureValues`.
+message RecalculateFeatureValuesResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateFeatureValuesResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FeatureValue feature_value = 1;
+  RecalculateFeatureValuesResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateFeatureValue`.
+message SimulateFeatureValueRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  FeatureValue feature_value = 3;
+  SimulateFeatureValueRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateFeatureValue`.
+message SimulateFeatureValueResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateFeatureValueResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FeatureValue feature_value = 1;
+  SimulateFeatureValueResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainFeatureValueCalculation`.
+message ExplainFeatureValueCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  FeatureValue feature_value = 3;
+  ExplainFeatureValueCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainFeatureValueCalculation`.
+message ExplainFeatureValueCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureValue feature_value = 1;
+  ExplainFeatureValueCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFeatureValueRates`.
+message GetFeatureValueRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string feature_value_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFeatureValueRates`.
+message GetFeatureValueRatesResponse {
+  FeatureValue feature_value = 1;
+  acme.common.v1.OperationResult result = 2;
+}

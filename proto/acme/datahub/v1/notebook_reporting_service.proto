@@ -1,0 +1,243 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datahub.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/datahub/v1/datahub.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datahub.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datahub/v1;datahubv1";
+option java_multiple_files = true;
+option java_outer_classname = "NotebookReportingServiceProto";
+option java_package = "com.acme.datahub.v1";
+
+// Builds and schedules reports about notebooks.
+service NotebookReportingService {
+  // Generates a notebook.
+  rpc GenerateNotebookReport(GenerateNotebookReportRequest) returns (GenerateNotebookReportResponse);
+
+  // Returns a notebook.
+  rpc FetchNotebookReport(FetchNotebookReportRequest) returns (FetchNotebookReportResponse);
+
+  // Schedules a notebook.
+  rpc ScheduleNotebookReport(ScheduleNotebookReportRequest) returns (ScheduleNotebookReportResponse);
+
+  // Streams the changes of notebooks as they happen.
+  rpc StreamNotebookMetrics(StreamNotebookMetricsRequest) returns (stream StreamNotebookMetricsResponse);
+
+  // Lists notebooks a page at a time.
+  rpc ListNotebookReports(ListNotebookReportsRequest) returns (ListNotebookReportsResponse);
+
+  // Shares a notebook.
+  rpc ShareNotebookReport(ShareNotebookReportRequest) returns (ShareNotebookReportResponse);
+
+  // Counts notebooks by status.
+  rpc CountNotebookTotals(CountNotebookTotalsRequest) returns (CountNotebookTotalsResponse);
+
+  // Deletes a notebook.
+  rpc DeleteNotebookReport(DeleteNotebookReportRequest) returns (DeleteNotebookReportResponse);
+}
+
+// The request of `GenerateNotebookReport`.
+message GenerateNotebookReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string notebook_id = 2;
+  GenerateNotebookReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `GenerateNotebookReport`.
+message GenerateNotebookReportResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `FetchNotebookReport`.
+message FetchNotebookReportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string notebook_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `FetchNotebookReport`.
+message FetchNotebookReportResponse {
+  Notebook notebook = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleNotebookReport`.
+message ScheduleNotebookReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string notebook_id = 2;
+  ScheduleNotebookReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ScheduleNotebookReport`.
+message ScheduleNotebookReportResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `StreamNotebookMetrics`.
+message StreamNotebookMetricsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated NotebookStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamNotebookMetricsRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamNotebookMetrics`.
+message StreamNotebookMetricsResponse {
+  Notebook notebook = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ListNotebookReports`.
+message ListNotebookReportsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated NotebookStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListNotebookReportsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListNotebookReports`.
+message ListNotebookReportsResponse {
+  repeated Notebook notebooks = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ShareNotebookReport`.
+message ShareNotebookReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string notebook_id = 2;
+  ShareNotebookReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ShareNotebookReport`.
+message ShareNotebookReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Notebook notebook = 1;
+  ShareNotebookReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountNotebookTotals`.
+message CountNotebookTotalsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated NotebookStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountNotebookTotalsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountNotebookTotals`.
+message CountNotebookTotalsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DeleteNotebookReport`.
+message DeleteNotebookReportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string notebook_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `DeleteNotebookReport`.
+message DeleteNotebookReportResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datasets.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/datasets/v1/datasets.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datasets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datasets/v1;datasetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DatasetWorkflowServiceProto";
+option java_package = "com.acme.datasets.v1";
+
+// Runs the long-lived workflow that takes a dataset from start to finish.
+service DatasetWorkflowService {
+  // Starts a dataset.
+  rpc StartDatasetWorkflow(StartDatasetWorkflowRequest) returns (StartDatasetWorkflowResponse);
+
+  // Advances a dataset.
+  rpc AdvanceDatasetWorkflow(AdvanceDatasetWorkflowRequest) returns (AdvanceDatasetWorkflowResponse);
+
+  // Cancels a dataset.
+  rpc CancelDatasetWorkflow(CancelDatasetWorkflowRequest) returns (CancelDatasetWorkflowResponse);
+
+  // Pauses a dataset.
+  rpc PauseDatasetWorkflow(PauseDatasetWorkflowRequest) returns (PauseDatasetWorkflowResponse);
+
+  // Resumes a dataset.
+  rpc ResumeDatasetWorkflow(ResumeDatasetWorkflowRequest) returns (ResumeDatasetWorkflowResponse);
+
+  // Returns a dataset.
+  rpc InspectDatasetWorkflow(InspectDatasetWorkflowRequest) returns (InspectDatasetWorkflowResponse);
+
+  // Lists datasets a page at a time.
+  rpc ListDatasetWorkflows(ListDatasetWorkflowsRequest) returns (ListDatasetWorkflowsResponse);
+
+  // Signals a dataset.
+  rpc SignalDatasetWorkflow(SignalDatasetWorkflowRequest) returns (SignalDatasetWorkflowResponse);
+}
+
+// The request of `StartDatasetWorkflow`.
+message StartDatasetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_id = 2;
+  Dataset dataset = 3;
+  StartDatasetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartDatasetWorkflow`.
+message StartDatasetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dataset dataset = 1;
+  StartDatasetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceDatasetWorkflow`.
+message AdvanceDatasetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_id = 2;
+  Dataset dataset = 3;
+  AdvanceDatasetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceDatasetWorkflow`.
+message AdvanceDatasetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dataset dataset = 1;
+  AdvanceDatasetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelDatasetWorkflow`.
+message CancelDatasetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_id = 2;
+  Dataset dataset = 3;
+  CancelDatasetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelDatasetWorkflow`.
+message CancelDatasetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dataset dataset = 1;
+  CancelDatasetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseDatasetWorkflow`.
+message PauseDatasetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_id = 2;
+  Dataset dataset = 3;
+  PauseDatasetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseDatasetWorkflow`.
+message PauseDatasetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dataset dataset = 1;
+  PauseDatasetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeDatasetWorkflow`.
+message ResumeDatasetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_id = 2;
+  Dataset dataset = 3;
+  ResumeDatasetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeDatasetWorkflow`.
+message ResumeDatasetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dataset dataset = 1;
+  ResumeDatasetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectDatasetWorkflow`.
+message InspectDatasetWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string dataset_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectDatasetWorkflow`.
+message InspectDatasetWorkflowResponse {
+  Dataset dataset = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListDatasetWorkflows`.
+message ListDatasetWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DatasetStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListDatasetWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListDatasetWorkflows`.
+message ListDatasetWorkflowsResponse {
+  repeated Dataset datasets = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalDatasetWorkflow`.
+message SignalDatasetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_id = 2;
+  Dataset dataset = 3;
+  SignalDatasetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalDatasetWorkflow`.
+message SignalDatasetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dataset dataset = 1;
+  SignalDatasetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

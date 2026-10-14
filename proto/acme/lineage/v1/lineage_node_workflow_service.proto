@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lineage.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/lineage/v1/lineage.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lineage.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lineage/v1;lineagev1";
+option java_multiple_files = true;
+option java_outer_classname = "LineageNodeWorkflowServiceProto";
+option java_package = "com.acme.lineage.v1";
+
+// Runs the long-lived workflow that takes a lineage node from start to finish.
+service LineageNodeWorkflowService {
+  // Starts a lineage node.
+  rpc StartLineageNodeWorkflow(StartLineageNodeWorkflowRequest) returns (StartLineageNodeWorkflowResponse);
+
+  // Advances a lineage node.
+  rpc AdvanceLineageNodeWorkflow(AdvanceLineageNodeWorkflowRequest) returns (AdvanceLineageNodeWorkflowResponse);
+
+  // Cancels a lineage node.
+  rpc CancelLineageNodeWorkflow(CancelLineageNodeWorkflowRequest) returns (CancelLineageNodeWorkflowResponse);
+
+  // Retrys a lineage node.
+  rpc RetryLineageNodeWorkflow(RetryLineageNodeWorkflowRequest) returns (RetryLineageNodeWorkflowResponse);
+
+  // Pauses a lineage node.
+  rpc PauseLineageNodeWorkflow(PauseLineageNodeWorkflowRequest) returns (PauseLineageNodeWorkflowResponse);
+
+  // Resumes a lineage node.
+  rpc ResumeLineageNodeWorkflow(ResumeLineageNodeWorkflowRequest) returns (ResumeLineageNodeWorkflowResponse);
+
+  // Returns a lineage node.
+  rpc InspectLineageNodeWorkflow(InspectLineageNodeWorkflowRequest) returns (InspectLineageNodeWorkflowResponse);
+
+  // Lists lineage nodes a page at a time.
+  rpc ListLineageNodeWorkflows(ListLineageNodeWorkflowsRequest) returns (ListLineageNodeWorkflowsResponse);
+}
+
+// The request of `StartLineageNodeWorkflow`.
+message StartLineageNodeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  StartLineageNodeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartLineageNodeWorkflow`.
+message StartLineageNodeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  StartLineageNodeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceLineageNodeWorkflow`.
+message AdvanceLineageNodeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  AdvanceLineageNodeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceLineageNodeWorkflow`.
+message AdvanceLineageNodeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  AdvanceLineageNodeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelLineageNodeWorkflow`.
+message CancelLineageNodeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  CancelLineageNodeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelLineageNodeWorkflow`.
+message CancelLineageNodeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  CancelLineageNodeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryLineageNodeWorkflow`.
+message RetryLineageNodeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  RetryLineageNodeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryLineageNodeWorkflow`.
+message RetryLineageNodeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  RetryLineageNodeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseLineageNodeWorkflow`.
+message PauseLineageNodeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  PauseLineageNodeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseLineageNodeWorkflow`.
+message PauseLineageNodeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  PauseLineageNodeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeLineageNodeWorkflow`.
+message ResumeLineageNodeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  ResumeLineageNodeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeLineageNodeWorkflow`.
+message ResumeLineageNodeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  ResumeLineageNodeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectLineageNodeWorkflow`.
+message InspectLineageNodeWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectLineageNodeWorkflow`.
+message InspectLineageNodeWorkflowResponse {
+  LineageNode lineage_node = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListLineageNodeWorkflows`.
+message ListLineageNodeWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LineageNodeStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListLineageNodeWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListLineageNodeWorkflows`.
+message ListLineageNodeWorkflowsResponse {
+  repeated LineageNode lineage_nodes = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

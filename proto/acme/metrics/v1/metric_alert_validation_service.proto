@@ -1,0 +1,268 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.metrics.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/metrics/v1/metrics.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Metrics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/metrics/v1;metricsv1";
+option java_multiple_files = true;
+option java_outer_classname = "MetricAlertValidationServiceProto";
+option java_package = "com.acme.metrics.v1";
+
+// Checks metric alerts against the rules before anything acts on them.
+service MetricAlertValidationService {
+  // Validates a metric alert.
+  rpc ValidateMetricAlert(ValidateMetricAlertRequest) returns (ValidateMetricAlertResponse);
+
+  // Previews a metric alert.
+  rpc PreviewMetricAlert(PreviewMetricAlertRequest) returns (PreviewMetricAlertResponse);
+
+  // Normalizes a metric alert.
+  rpc NormalizeMetricAlert(NormalizeMetricAlertRequest) returns (NormalizeMetricAlertResponse);
+
+  // Explains a metric alert.
+  rpc ExplainMetricAlertDecision(ExplainMetricAlertDecisionRequest) returns (ExplainMetricAlertDecisionResponse);
+
+  // Scores a metric alert.
+  rpc ScoreMetricAlert(ScoreMetricAlertRequest) returns (ScoreMetricAlertResponse);
+
+  // Lints a metric alert.
+  rpc LintMetricAlerts(LintMetricAlertsRequest) returns (LintMetricAlertsResponse);
+
+  // Returns a metric alert.
+  rpc GetMetricAlertRules(GetMetricAlertRulesRequest) returns (GetMetricAlertRulesResponse);
+}
+
+// The request of `ValidateMetricAlert`.
+message ValidateMetricAlertRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  MetricAlert metric_alert = 3;
+  ValidateMetricAlertRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateMetricAlert`.
+message ValidateMetricAlertResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  ValidateMetricAlertResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewMetricAlert`.
+message PreviewMetricAlertRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  MetricAlert metric_alert = 3;
+  PreviewMetricAlertRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewMetricAlert`.
+message PreviewMetricAlertResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  PreviewMetricAlertResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeMetricAlert`.
+message NormalizeMetricAlertRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  MetricAlert metric_alert = 3;
+  NormalizeMetricAlertRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeMetricAlert`.
+message NormalizeMetricAlertResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  NormalizeMetricAlertResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainMetricAlertDecision`.
+message ExplainMetricAlertDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  MetricAlert metric_alert = 3;
+  ExplainMetricAlertDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainMetricAlertDecision`.
+message ExplainMetricAlertDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  ExplainMetricAlertDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreMetricAlert`.
+message ScoreMetricAlertRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  MetricAlert metric_alert = 3;
+  ScoreMetricAlertRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreMetricAlert`.
+message ScoreMetricAlertResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreMetricAlertResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  MetricAlert metric_alert = 1;
+  ScoreMetricAlertResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintMetricAlerts`.
+message LintMetricAlertsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  MetricAlert metric_alert = 3;
+  LintMetricAlertsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintMetricAlerts`.
+message LintMetricAlertsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  LintMetricAlertsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetMetricAlertRules`.
+message GetMetricAlertRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetMetricAlertRules`.
+message GetMetricAlertRulesResponse {
+  MetricAlert metric_alert = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,317 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featurestore.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/featurestore/v1/featurestore.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featurestore.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featurestore/v1;featurestorev1";
+option java_multiple_files = true;
+option java_outer_classname = "FeatureViewWorkflowServiceProto";
+option java_package = "com.acme.featurestore.v1";
+
+// Runs the long-lived workflow that takes a feature view from start to finish.
+service FeatureViewWorkflowService {
+  // Starts a feature view.
+  rpc StartFeatureViewWorkflow(StartFeatureViewWorkflowRequest) returns (StartFeatureViewWorkflowResponse);
+
+  // Advances a feature view.
+  rpc AdvanceFeatureViewWorkflow(AdvanceFeatureViewWorkflowRequest) returns (AdvanceFeatureViewWorkflowResponse);
+
+  // Cancels a feature view.
+  rpc CancelFeatureViewWorkflow(CancelFeatureViewWorkflowRequest) returns (CancelFeatureViewWorkflowResponse);
+
+  // Retrys a feature view.
+  rpc RetryFeatureViewWorkflow(RetryFeatureViewWorkflowRequest) returns (RetryFeatureViewWorkflowResponse);
+
+  // Pauses a feature view.
+  rpc PauseFeatureViewWorkflow(PauseFeatureViewWorkflowRequest) returns (PauseFeatureViewWorkflowResponse);
+
+  // Resumes a feature view.
+  rpc ResumeFeatureViewWorkflow(ResumeFeatureViewWorkflowRequest) returns (ResumeFeatureViewWorkflowResponse);
+
+  // Lists feature views a page at a time.
+  rpc ListFeatureViewWorkflows(ListFeatureViewWorkflowsRequest) returns (ListFeatureViewWorkflowsResponse);
+
+  // Signals a feature view.
+  rpc SignalFeatureViewWorkflow(SignalFeatureViewWorkflowRequest) returns (SignalFeatureViewWorkflowResponse);
+}
+
+// The request of `StartFeatureViewWorkflow`.
+message StartFeatureViewWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_view_id = 2;
+  FeatureView feature_view = 3;
+  StartFeatureViewWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartFeatureViewWorkflow`.
+message StartFeatureViewWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureView feature_view = 1;
+  StartFeatureViewWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceFeatureViewWorkflow`.
+message AdvanceFeatureViewWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_view_id = 2;
+  FeatureView feature_view = 3;
+  AdvanceFeatureViewWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceFeatureViewWorkflow`.
+message AdvanceFeatureViewWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureView feature_view = 1;
+  AdvanceFeatureViewWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelFeatureViewWorkflow`.
+message CancelFeatureViewWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_view_id = 2;
+  FeatureView feature_view = 3;
+  CancelFeatureViewWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelFeatureViewWorkflow`.
+message CancelFeatureViewWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureView feature_view = 1;
+  CancelFeatureViewWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryFeatureViewWorkflow`.
+message RetryFeatureViewWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_view_id = 2;
+  FeatureView feature_view = 3;
+  RetryFeatureViewWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryFeatureViewWorkflow`.
+message RetryFeatureViewWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureView feature_view = 1;
+  RetryFeatureViewWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseFeatureViewWorkflow`.
+message PauseFeatureViewWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_view_id = 2;
+  FeatureView feature_view = 3;
+  PauseFeatureViewWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseFeatureViewWorkflow`.
+message PauseFeatureViewWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureView feature_view = 1;
+  PauseFeatureViewWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeFeatureViewWorkflow`.
+message ResumeFeatureViewWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_view_id = 2;
+  FeatureView feature_view = 3;
+  ResumeFeatureViewWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeFeatureViewWorkflow`.
+message ResumeFeatureViewWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureView feature_view = 1;
+  ResumeFeatureViewWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListFeatureViewWorkflows`.
+message ListFeatureViewWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FeatureViewStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListFeatureViewWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListFeatureViewWorkflows`.
+message ListFeatureViewWorkflowsResponse {
+  repeated FeatureView feature_views = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalFeatureViewWorkflow`.
+message SignalFeatureViewWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_view_id = 2;
+  FeatureView feature_view = 3;
+  SignalFeatureViewWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalFeatureViewWorkflow`.
+message SignalFeatureViewWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureView feature_view = 1;
+  SignalFeatureViewWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

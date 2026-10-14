@@ -1,0 +1,275 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.metrics.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/metrics/v1/metrics.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Metrics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/metrics/v1;metricsv1";
+option java_multiple_files = true;
+option java_outer_classname = "MetricSeriesAdminServiceProto";
+option java_package = "com.acme.metrics.v1";
+
+// Operator actions on metric serieses that support staff run by hand.
+service MetricSeriesAdminService {
+  // Archives a metric series.
+  rpc ArchiveMetricSeries(ArchiveMetricSeriesRequest) returns (ArchiveMetricSeriesResponse);
+
+  // Restores a metric series.
+  rpc RestoreMetricSeries(RestoreMetricSeriesRequest) returns (RestoreMetricSeriesResponse);
+
+  // Deletes a metric series.
+  rpc PurgeMetricSeries(PurgeMetricSeriesRequest) returns (PurgeMetricSeriesResponse);
+
+  // Reassigns a metric series.
+  rpc ReassignMetricSeries(ReassignMetricSeriesRequest) returns (ReassignMetricSeriesResponse);
+
+  // Locks a metric series.
+  rpc LockMetricSeries(LockMetricSeriesRequest) returns (LockMetricSeriesResponse);
+
+  // Unlocks a metric series.
+  rpc UnlockMetricSeries(UnlockMetricSeriesRequest) returns (UnlockMetricSeriesResponse);
+
+  // Repairs a metric series.
+  rpc RepairMetricSeries(RepairMetricSeriesRequest) returns (RepairMetricSeriesResponse);
+
+  // Returns a metric series.
+  rpc InspectMetricSeries(InspectMetricSeriesRequest) returns (InspectMetricSeriesResponse);
+}
+
+// The request of `ArchiveMetricSeries`.
+message ArchiveMetricSeriesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  ArchiveMetricSeriesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ArchiveMetricSeries`.
+message ArchiveMetricSeriesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricSeries metric_series = 1;
+  ArchiveMetricSeriesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RestoreMetricSeries`.
+message RestoreMetricSeriesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  RestoreMetricSeriesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RestoreMetricSeries`.
+message RestoreMetricSeriesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricSeries metric_series = 1;
+  RestoreMetricSeriesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PurgeMetricSeries`.
+message PurgeMetricSeriesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PurgeMetricSeries`.
+message PurgeMetricSeriesResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}
+
+// The request of `ReassignMetricSeries`.
+message ReassignMetricSeriesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.identity.v1.UserRef assignee = 1;
+    string queue = 2;
+    int32 capacity = 3;
+    string assignee_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  ReassignMetricSeriesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReassignMetricSeries`.
+message ReassignMetricSeriesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricSeries metric_series = 1;
+  ReassignMetricSeriesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LockMetricSeries`.
+message LockMetricSeriesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  LockMetricSeriesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `LockMetricSeries`.
+message LockMetricSeriesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricSeries metric_series = 1;
+  LockMetricSeriesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnlockMetricSeries`.
+message UnlockMetricSeriesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  UnlockMetricSeriesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnlockMetricSeries`.
+message UnlockMetricSeriesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricSeries metric_series = 1;
+  UnlockMetricSeriesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RepairMetricSeries`.
+message RepairMetricSeriesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  MetricSeries metric_series = 3;
+  RepairMetricSeriesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RepairMetricSeries`.
+message RepairMetricSeriesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricSeries metric_series = 1;
+  RepairMetricSeriesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectMetricSeries`.
+message InspectMetricSeriesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectMetricSeries`.
+message InspectMetricSeriesResponse {
+  MetricSeries metric_series = 1;
+  acme.common.v1.OperationResult result = 2;
+}

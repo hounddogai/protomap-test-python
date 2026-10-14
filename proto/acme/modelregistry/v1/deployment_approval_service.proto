@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.modelregistry.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/modelregistry/v1/modelregistry.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Modelregistry.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/modelregistry/v1;modelregistryv1";
+option java_multiple_files = true;
+option java_outer_classname = "DeploymentApprovalServiceProto";
+option java_package = "com.acme.modelregistry.v1";
+
+// Routes deployments through approval, with escalation and delegation.
+service DeploymentApprovalService {
+  // Submits a deployment.
+  rpc SubmitDeployment(SubmitDeploymentRequest) returns (SubmitDeploymentResponse);
+
+  // Approves a deployment.
+  rpc ApproveDeployment(ApproveDeploymentRequest) returns (ApproveDeploymentResponse);
+
+  // Rejects a deployment.
+  rpc RejectDeployment(RejectDeploymentRequest) returns (RejectDeploymentResponse);
+
+  // Escalates a deployment.
+  rpc EscalateDeployment(EscalateDeploymentRequest) returns (EscalateDeploymentResponse);
+
+  // Lists deployments a page at a time.
+  rpc ListPendingDeployments(ListPendingDeploymentsRequest) returns (ListPendingDeploymentsResponse);
+
+  // Delegates a deployment.
+  rpc DelegateDeploymentApproval(DelegateDeploymentApprovalRequest) returns (DelegateDeploymentApprovalResponse);
+
+  // Returns a deployment.
+  rpc GetDeploymentApprovalStatus(GetDeploymentApprovalStatusRequest) returns (GetDeploymentApprovalStatusResponse);
+
+  // Comments a deployment.
+  rpc CommentDeploymentApproval(CommentDeploymentApprovalRequest) returns (CommentDeploymentApprovalResponse);
+}
+
+// The request of `SubmitDeployment`.
+message SubmitDeploymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  SubmitDeploymentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitDeployment`.
+message SubmitDeploymentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  SubmitDeploymentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveDeployment`.
+message ApproveDeploymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  ApproveDeploymentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveDeployment`.
+message ApproveDeploymentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  ApproveDeploymentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectDeployment`.
+message RejectDeploymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  RejectDeploymentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectDeployment`.
+message RejectDeploymentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  RejectDeploymentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateDeployment`.
+message EscalateDeploymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  EscalateDeploymentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateDeployment`.
+message EscalateDeploymentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  EscalateDeploymentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingDeployments`.
+message ListPendingDeploymentsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DeploymentStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingDeploymentsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingDeployments`.
+message ListPendingDeploymentsResponse {
+  repeated Deployment deployments = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateDeploymentApproval`.
+message DelegateDeploymentApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  DelegateDeploymentApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateDeploymentApproval`.
+message DelegateDeploymentApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  DelegateDeploymentApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDeploymentApprovalStatus`.
+message GetDeploymentApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDeploymentApprovalStatus`.
+message GetDeploymentApprovalStatusResponse {
+  Deployment deployment = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentDeploymentApproval`.
+message CommentDeploymentApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  CommentDeploymentApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentDeploymentApproval`.
+message CommentDeploymentApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Deployment deployment = 1;
+  CommentDeploymentApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

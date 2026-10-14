@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lineage.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/lineage/v1/lineage.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lineage.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lineage/v1;lineagev1";
+option java_multiple_files = true;
+option java_outer_classname = "LineageEdgeApprovalServiceProto";
+option java_package = "com.acme.lineage.v1";
+
+// Routes lineage edges through approval, with escalation and delegation.
+service LineageEdgeApprovalService {
+  // Submits a lineage edge.
+  rpc SubmitLineageEdge(SubmitLineageEdgeRequest) returns (SubmitLineageEdgeResponse);
+
+  // Approves a lineage edge.
+  rpc ApproveLineageEdge(ApproveLineageEdgeRequest) returns (ApproveLineageEdgeResponse);
+
+  // Rejects a lineage edge.
+  rpc RejectLineageEdge(RejectLineageEdgeRequest) returns (RejectLineageEdgeResponse);
+
+  // Escalates a lineage edge.
+  rpc EscalateLineageEdge(EscalateLineageEdgeRequest) returns (EscalateLineageEdgeResponse);
+
+  // Lists lineage edges a page at a time.
+  rpc ListPendingLineageEdges(ListPendingLineageEdgesRequest) returns (ListPendingLineageEdgesResponse);
+
+  // Delegates a lineage edge.
+  rpc DelegateLineageEdgeApproval(DelegateLineageEdgeApprovalRequest) returns (DelegateLineageEdgeApprovalResponse);
+
+  // Recalls a lineage edge.
+  rpc RecallLineageEdge(RecallLineageEdgeRequest) returns (RecallLineageEdgeResponse);
+
+  // Returns a lineage edge.
+  rpc GetLineageEdgeApprovalStatus(GetLineageEdgeApprovalStatusRequest) returns (GetLineageEdgeApprovalStatusResponse);
+
+  // Comments a lineage edge.
+  rpc CommentLineageEdgeApproval(CommentLineageEdgeApprovalRequest) returns (CommentLineageEdgeApprovalResponse);
+}
+
+// The request of `SubmitLineageEdge`.
+message SubmitLineageEdgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  SubmitLineageEdgeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitLineageEdge`.
+message SubmitLineageEdgeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  SubmitLineageEdgeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveLineageEdge`.
+message ApproveLineageEdgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  ApproveLineageEdgeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveLineageEdge`.
+message ApproveLineageEdgeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  ApproveLineageEdgeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectLineageEdge`.
+message RejectLineageEdgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  RejectLineageEdgeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectLineageEdge`.
+message RejectLineageEdgeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  RejectLineageEdgeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateLineageEdge`.
+message EscalateLineageEdgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  EscalateLineageEdgeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateLineageEdge`.
+message EscalateLineageEdgeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  EscalateLineageEdgeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingLineageEdges`.
+message ListPendingLineageEdgesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LineageEdgeStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingLineageEdgesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingLineageEdges`.
+message ListPendingLineageEdgesResponse {
+  repeated LineageEdge lineage_edges = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateLineageEdgeApproval`.
+message DelegateLineageEdgeApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  DelegateLineageEdgeApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateLineageEdgeApproval`.
+message DelegateLineageEdgeApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  DelegateLineageEdgeApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallLineageEdge`.
+message RecallLineageEdgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  RecallLineageEdgeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallLineageEdge`.
+message RecallLineageEdgeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  RecallLineageEdgeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLineageEdgeApprovalStatus`.
+message GetLineageEdgeApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLineageEdgeApprovalStatus`.
+message GetLineageEdgeApprovalStatusResponse {
+  LineageEdge lineage_edge = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentLineageEdgeApproval`.
+message CommentLineageEdgeApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  CommentLineageEdgeApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentLineageEdgeApproval`.
+message CommentLineageEdgeApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  CommentLineageEdgeApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,247 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.metrics.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/metrics/v1/metrics.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Metrics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/metrics/v1;metricsv1";
+option java_multiple_files = true;
+option java_outer_classname = "MetricAlertNotificationServiceProto";
+option java_package = "com.acme.metrics.v1";
+
+// Tells the people who follow a metric alert what changed.
+service MetricAlertNotificationService {
+  // Subscribes a metric alert.
+  rpc SubscribeMetricAlertUpdates(SubscribeMetricAlertUpdatesRequest) returns (SubscribeMetricAlertUpdatesResponse);
+
+  // Unsubscribes a metric alert.
+  rpc UnsubscribeMetricAlertUpdates(UnsubscribeMetricAlertUpdatesRequest) returns (UnsubscribeMetricAlertUpdatesResponse);
+
+  // Notifys a metric alert.
+  rpc NotifyMetricAlertWatchers(NotifyMetricAlertWatchersRequest) returns (NotifyMetricAlertWatchersResponse);
+
+  // Lists metric alerts a page at a time.
+  rpc ListMetricAlertSubscriptions(ListMetricAlertSubscriptionsRequest) returns (ListMetricAlertSubscriptionsResponse);
+
+  // Sends a metric alert.
+  rpc SendMetricAlertTestNotice(SendMetricAlertTestNoticeRequest) returns (SendMetricAlertTestNoticeResponse);
+
+  // Returns a metric alert.
+  rpc GetMetricAlertPreferences(GetMetricAlertPreferencesRequest) returns (GetMetricAlertPreferencesResponse);
+
+  // Streams the changes of metric alerts as they happen.
+  rpc StreamMetricAlertNotices(StreamMetricAlertNoticesRequest) returns (stream StreamMetricAlertNoticesResponse);
+}
+
+// The request of `SubscribeMetricAlertUpdates`.
+message SubscribeMetricAlertUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  SubscribeMetricAlertUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SubscribeMetricAlertUpdates`.
+message SubscribeMetricAlertUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  SubscribeMetricAlertUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnsubscribeMetricAlertUpdates`.
+message UnsubscribeMetricAlertUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  UnsubscribeMetricAlertUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnsubscribeMetricAlertUpdates`.
+message UnsubscribeMetricAlertUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  UnsubscribeMetricAlertUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NotifyMetricAlertWatchers`.
+message NotifyMetricAlertWatchersRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  NotifyMetricAlertWatchersRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `NotifyMetricAlertWatchers`.
+message NotifyMetricAlertWatchersResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  NotifyMetricAlertWatchersResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListMetricAlertSubscriptions`.
+message ListMetricAlertSubscriptionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated MetricAlertStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListMetricAlertSubscriptionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListMetricAlertSubscriptions`.
+message ListMetricAlertSubscriptionsResponse {
+  repeated MetricAlert metric_alerts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SendMetricAlertTestNotice`.
+message SendMetricAlertTestNoticeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  SendMetricAlertTestNoticeRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SendMetricAlertTestNotice`.
+message SendMetricAlertTestNoticeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  SendMetricAlertTestNoticeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetMetricAlertPreferences`.
+message GetMetricAlertPreferencesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetMetricAlertPreferences`.
+message GetMetricAlertPreferencesResponse {
+  MetricAlert metric_alert = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `StreamMetricAlertNotices`.
+message StreamMetricAlertNoticesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated MetricAlertStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamMetricAlertNoticesRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamMetricAlertNotices`.
+message StreamMetricAlertNoticesResponse {
+  MetricAlert metric_alert = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}

@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datahub.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/datahub/v1/datahub.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datahub.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datahub/v1;datahubv1";
+option java_multiple_files = true;
+option java_outer_classname = "DataShareWorkflowServiceProto";
+option java_package = "com.acme.datahub.v1";
+
+// Runs the long-lived workflow that takes a data share from start to finish.
+service DataShareWorkflowService {
+  // Starts a data share.
+  rpc StartDataShareWorkflow(StartDataShareWorkflowRequest) returns (StartDataShareWorkflowResponse);
+
+  // Advances a data share.
+  rpc AdvanceDataShareWorkflow(AdvanceDataShareWorkflowRequest) returns (AdvanceDataShareWorkflowResponse);
+
+  // Cancels a data share.
+  rpc CancelDataShareWorkflow(CancelDataShareWorkflowRequest) returns (CancelDataShareWorkflowResponse);
+
+  // Retrys a data share.
+  rpc RetryDataShareWorkflow(RetryDataShareWorkflowRequest) returns (RetryDataShareWorkflowResponse);
+
+  // Pauses a data share.
+  rpc PauseDataShareWorkflow(PauseDataShareWorkflowRequest) returns (PauseDataShareWorkflowResponse);
+
+  // Resumes a data share.
+  rpc ResumeDataShareWorkflow(ResumeDataShareWorkflowRequest) returns (ResumeDataShareWorkflowResponse);
+
+  // Returns a data share.
+  rpc InspectDataShareWorkflow(InspectDataShareWorkflowRequest) returns (InspectDataShareWorkflowResponse);
+
+  // Lists data shares a page at a time.
+  rpc ListDataShareWorkflows(ListDataShareWorkflowsRequest) returns (ListDataShareWorkflowsResponse);
+
+  // Signals a data share.
+  rpc SignalDataShareWorkflow(SignalDataShareWorkflowRequest) returns (SignalDataShareWorkflowResponse);
+}
+
+// The request of `StartDataShareWorkflow`.
+message StartDataShareWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  StartDataShareWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartDataShareWorkflow`.
+message StartDataShareWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  StartDataShareWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceDataShareWorkflow`.
+message AdvanceDataShareWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  AdvanceDataShareWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceDataShareWorkflow`.
+message AdvanceDataShareWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  AdvanceDataShareWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelDataShareWorkflow`.
+message CancelDataShareWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  CancelDataShareWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelDataShareWorkflow`.
+message CancelDataShareWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  CancelDataShareWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryDataShareWorkflow`.
+message RetryDataShareWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  RetryDataShareWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryDataShareWorkflow`.
+message RetryDataShareWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  RetryDataShareWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseDataShareWorkflow`.
+message PauseDataShareWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  PauseDataShareWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseDataShareWorkflow`.
+message PauseDataShareWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  PauseDataShareWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeDataShareWorkflow`.
+message ResumeDataShareWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  ResumeDataShareWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeDataShareWorkflow`.
+message ResumeDataShareWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  ResumeDataShareWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectDataShareWorkflow`.
+message InspectDataShareWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectDataShareWorkflow`.
+message InspectDataShareWorkflowResponse {
+  DataShare data_share = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListDataShareWorkflows`.
+message ListDataShareWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DataShareStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListDataShareWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListDataShareWorkflows`.
+message ListDataShareWorkflowsResponse {
+  repeated DataShare data_shares = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalDataShareWorkflow`.
+message SignalDataShareWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  SignalDataShareWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalDataShareWorkflow`.
+message SignalDataShareWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  SignalDataShareWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

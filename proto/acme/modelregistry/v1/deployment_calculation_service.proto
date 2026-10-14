@@ -1,0 +1,253 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.modelregistry.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/modelregistry/v1/modelregistry.proto";
+import "google/protobuf/field_mask.proto";
+
+option csharp_namespace = "Acme.Modelregistry.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/modelregistry/v1;modelregistryv1";
+option java_multiple_files = true;
+option java_outer_classname = "DeploymentCalculationServiceProto";
+option java_package = "com.acme.modelregistry.v1";
+
+// Computes the figures of a deployment, such as totals, taxes, and estimates.
+service DeploymentCalculationService {
+  // Calculates a deployment.
+  rpc CalculateDeployment(CalculateDeploymentRequest) returns (CalculateDeploymentResponse);
+
+  // Estimates a deployment.
+  rpc EstimateDeployment(EstimateDeploymentRequest) returns (EstimateDeploymentResponse);
+
+  // Quotes a deployment.
+  rpc QuoteDeployment(QuoteDeploymentRequest) returns (QuoteDeploymentResponse);
+
+  // Compares a deployment.
+  rpc CompareDeploymentOptions(CompareDeploymentOptionsRequest) returns (CompareDeploymentOptionsResponse);
+
+  // Recalculates a deployment.
+  rpc RecalculateDeployments(RecalculateDeploymentsRequest) returns (RecalculateDeploymentsResponse);
+
+  // Returns a deployment.
+  rpc GetDeploymentRates(GetDeploymentRatesRequest) returns (GetDeploymentRatesResponse);
+}
+
+// The request of `CalculateDeployment`.
+message CalculateDeploymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  CalculateDeploymentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateDeployment`.
+message CalculateDeploymentResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateDeploymentResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Deployment deployment = 1;
+  CalculateDeploymentResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateDeployment`.
+message EstimateDeploymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  EstimateDeploymentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateDeployment`.
+message EstimateDeploymentResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateDeploymentResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Deployment deployment = 1;
+  EstimateDeploymentResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteDeployment`.
+message QuoteDeploymentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  QuoteDeploymentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteDeployment`.
+message QuoteDeploymentResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteDeploymentResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Deployment deployment = 1;
+  QuoteDeploymentResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareDeploymentOptions`.
+message CompareDeploymentOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  CompareDeploymentOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareDeploymentOptions`.
+message CompareDeploymentOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareDeploymentOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Deployment deployment = 1;
+  CompareDeploymentOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateDeployments`.
+message RecalculateDeploymentsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  Deployment deployment = 3;
+  RecalculateDeploymentsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateDeployments`.
+message RecalculateDeploymentsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateDeploymentsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Deployment deployment = 1;
+  RecalculateDeploymentsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDeploymentRates`.
+message GetDeploymentRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string deployment_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDeploymentRates`.
+message GetDeploymentRatesResponse {
+  Deployment deployment = 1;
+  acme.common.v1.OperationResult result = 2;
+}

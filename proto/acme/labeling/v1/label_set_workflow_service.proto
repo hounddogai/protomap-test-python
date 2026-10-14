@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.labeling.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/labeling/v1/labeling.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Labeling.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/labeling/v1;labelingv1";
+option java_multiple_files = true;
+option java_outer_classname = "LabelSetWorkflowServiceProto";
+option java_package = "com.acme.labeling.v1";
+
+// Runs the long-lived workflow that takes a label set from start to finish.
+service LabelSetWorkflowService {
+  // Starts a label set.
+  rpc StartLabelSetWorkflow(StartLabelSetWorkflowRequest) returns (StartLabelSetWorkflowResponse);
+
+  // Advances a label set.
+  rpc AdvanceLabelSetWorkflow(AdvanceLabelSetWorkflowRequest) returns (AdvanceLabelSetWorkflowResponse);
+
+  // Cancels a label set.
+  rpc CancelLabelSetWorkflow(CancelLabelSetWorkflowRequest) returns (CancelLabelSetWorkflowResponse);
+
+  // Retrys a label set.
+  rpc RetryLabelSetWorkflow(RetryLabelSetWorkflowRequest) returns (RetryLabelSetWorkflowResponse);
+
+  // Pauses a label set.
+  rpc PauseLabelSetWorkflow(PauseLabelSetWorkflowRequest) returns (PauseLabelSetWorkflowResponse);
+
+  // Resumes a label set.
+  rpc ResumeLabelSetWorkflow(ResumeLabelSetWorkflowRequest) returns (ResumeLabelSetWorkflowResponse);
+
+  // Returns a label set.
+  rpc InspectLabelSetWorkflow(InspectLabelSetWorkflowRequest) returns (InspectLabelSetWorkflowResponse);
+
+  // Lists label sets a page at a time.
+  rpc ListLabelSetWorkflows(ListLabelSetWorkflowsRequest) returns (ListLabelSetWorkflowsResponse);
+
+  // Signals a label set.
+  rpc SignalLabelSetWorkflow(SignalLabelSetWorkflowRequest) returns (SignalLabelSetWorkflowResponse);
+}
+
+// The request of `StartLabelSetWorkflow`.
+message StartLabelSetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  StartLabelSetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartLabelSetWorkflow`.
+message StartLabelSetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  StartLabelSetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceLabelSetWorkflow`.
+message AdvanceLabelSetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  AdvanceLabelSetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceLabelSetWorkflow`.
+message AdvanceLabelSetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  AdvanceLabelSetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelLabelSetWorkflow`.
+message CancelLabelSetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  CancelLabelSetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelLabelSetWorkflow`.
+message CancelLabelSetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  CancelLabelSetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryLabelSetWorkflow`.
+message RetryLabelSetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  RetryLabelSetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryLabelSetWorkflow`.
+message RetryLabelSetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  RetryLabelSetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseLabelSetWorkflow`.
+message PauseLabelSetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  PauseLabelSetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseLabelSetWorkflow`.
+message PauseLabelSetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  PauseLabelSetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeLabelSetWorkflow`.
+message ResumeLabelSetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  ResumeLabelSetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeLabelSetWorkflow`.
+message ResumeLabelSetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  ResumeLabelSetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectLabelSetWorkflow`.
+message InspectLabelSetWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectLabelSetWorkflow`.
+message InspectLabelSetWorkflowResponse {
+  LabelSet label_set = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListLabelSetWorkflows`.
+message ListLabelSetWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LabelSetStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListLabelSetWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListLabelSetWorkflows`.
+message ListLabelSetWorkflowsResponse {
+  repeated LabelSet label_sets = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalLabelSetWorkflow`.
+message SignalLabelSetWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  SignalLabelSetWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalLabelSetWorkflow`.
+message SignalLabelSetWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  SignalLabelSetWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

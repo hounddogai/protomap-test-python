@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.labeling.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/labeling/v1/labeling.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Labeling.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/labeling/v1;labelingv1";
+option java_multiple_files = true;
+option java_outer_classname = "LabelingTaskApprovalServiceProto";
+option java_package = "com.acme.labeling.v1";
+
+// Routes labeling tasks through approval, with escalation and delegation.
+service LabelingTaskApprovalService {
+  // Submits a labeling task.
+  rpc SubmitLabelingTask(SubmitLabelingTaskRequest) returns (SubmitLabelingTaskResponse);
+
+  // Approves a labeling task.
+  rpc ApproveLabelingTask(ApproveLabelingTaskRequest) returns (ApproveLabelingTaskResponse);
+
+  // Rejects a labeling task.
+  rpc RejectLabelingTask(RejectLabelingTaskRequest) returns (RejectLabelingTaskResponse);
+
+  // Escalates a labeling task.
+  rpc EscalateLabelingTask(EscalateLabelingTaskRequest) returns (EscalateLabelingTaskResponse);
+
+  // Lists labeling tasks a page at a time.
+  rpc ListPendingLabelingTasks(ListPendingLabelingTasksRequest) returns (ListPendingLabelingTasksResponse);
+
+  // Delegates a labeling task.
+  rpc DelegateLabelingTaskApproval(DelegateLabelingTaskApprovalRequest) returns (DelegateLabelingTaskApprovalResponse);
+
+  // Recalls a labeling task.
+  rpc RecallLabelingTask(RecallLabelingTaskRequest) returns (RecallLabelingTaskResponse);
+
+  // Returns a labeling task.
+  rpc GetLabelingTaskApprovalStatus(GetLabelingTaskApprovalStatusRequest) returns (GetLabelingTaskApprovalStatusResponse);
+
+  // Comments a labeling task.
+  rpc CommentLabelingTaskApproval(CommentLabelingTaskApprovalRequest) returns (CommentLabelingTaskApprovalResponse);
+}
+
+// The request of `SubmitLabelingTask`.
+message SubmitLabelingTaskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  SubmitLabelingTaskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitLabelingTask`.
+message SubmitLabelingTaskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  SubmitLabelingTaskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveLabelingTask`.
+message ApproveLabelingTaskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  ApproveLabelingTaskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveLabelingTask`.
+message ApproveLabelingTaskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  ApproveLabelingTaskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectLabelingTask`.
+message RejectLabelingTaskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  RejectLabelingTaskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectLabelingTask`.
+message RejectLabelingTaskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  RejectLabelingTaskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateLabelingTask`.
+message EscalateLabelingTaskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  EscalateLabelingTaskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateLabelingTask`.
+message EscalateLabelingTaskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  EscalateLabelingTaskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingLabelingTasks`.
+message ListPendingLabelingTasksRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LabelingTaskStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingLabelingTasksRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingLabelingTasks`.
+message ListPendingLabelingTasksResponse {
+  repeated LabelingTask labeling_tasks = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateLabelingTaskApproval`.
+message DelegateLabelingTaskApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  DelegateLabelingTaskApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateLabelingTaskApproval`.
+message DelegateLabelingTaskApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  DelegateLabelingTaskApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallLabelingTask`.
+message RecallLabelingTaskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  RecallLabelingTaskRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallLabelingTask`.
+message RecallLabelingTaskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  RecallLabelingTaskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLabelingTaskApprovalStatus`.
+message GetLabelingTaskApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLabelingTaskApprovalStatus`.
+message GetLabelingTaskApprovalStatusResponse {
+  LabelingTask labeling_task = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentLabelingTaskApproval`.
+message CommentLabelingTaskApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  CommentLabelingTaskApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentLabelingTaskApproval`.
+message CommentLabelingTaskApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  CommentLabelingTaskApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

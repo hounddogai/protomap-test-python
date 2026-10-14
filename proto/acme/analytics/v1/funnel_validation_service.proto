@@ -1,0 +1,231 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.analytics.v1;
+
+import "acme/analytics/v1/analytics.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Analytics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/analytics/v1;analyticsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FunnelValidationServiceProto";
+option java_package = "com.acme.analytics.v1";
+
+// Checks funnels against the rules before anything acts on them.
+service FunnelValidationService {
+  // Validates a funnel.
+  rpc ValidateFunnel(ValidateFunnelRequest) returns (ValidateFunnelResponse);
+
+  // Previews a funnel.
+  rpc PreviewFunnel(PreviewFunnelRequest) returns (PreviewFunnelResponse);
+
+  // Checks a funnel.
+  rpc CheckFunnelEligibility(CheckFunnelEligibilityRequest) returns (CheckFunnelEligibilityResponse);
+
+  // Normalizes a funnel.
+  rpc NormalizeFunnel(NormalizeFunnelRequest) returns (NormalizeFunnelResponse);
+
+  // Scores a funnel.
+  rpc ScoreFunnel(ScoreFunnelRequest) returns (ScoreFunnelResponse);
+
+  // Returns a funnel.
+  rpc GetFunnelRules(GetFunnelRulesRequest) returns (GetFunnelRulesResponse);
+}
+
+// The request of `ValidateFunnel`.
+message ValidateFunnelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  ValidateFunnelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateFunnel`.
+message ValidateFunnelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Funnel funnel = 1;
+  ValidateFunnelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewFunnel`.
+message PreviewFunnelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  PreviewFunnelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewFunnel`.
+message PreviewFunnelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Funnel funnel = 1;
+  PreviewFunnelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckFunnelEligibility`.
+message CheckFunnelEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  CheckFunnelEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckFunnelEligibility`.
+message CheckFunnelEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Funnel funnel = 1;
+  CheckFunnelEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeFunnel`.
+message NormalizeFunnelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  NormalizeFunnelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeFunnel`.
+message NormalizeFunnelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Funnel funnel = 1;
+  NormalizeFunnelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreFunnel`.
+message ScoreFunnelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  ScoreFunnelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreFunnel`.
+message ScoreFunnelResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreFunnelResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Funnel funnel = 1;
+  ScoreFunnelResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFunnelRules`.
+message GetFunnelRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFunnelRules`.
+message GetFunnelRulesResponse {
+  Funnel funnel = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,16 @@
+"""Install the datasets team's partner hooks at package import."""
+
+from __future__ import annotations
+
+from acme_data.domains.datasets import adapters
+from acme_data.domains.datasets import hooks
+
+
+hooks.data_schema_calculation_quote_data_schema1 = adapters.data_schema_calculation_quote_data_schema1
+hooks.data_schema_workflow_start_data_schema_workflow0 = adapters.data_schema_workflow_start_data_schema_workflow0
+hooks.dataset_approval_reject_dataset1 = adapters.dataset_approval_reject_dataset1
+hooks.dataset_batch_get_datasets1 = adapters.dataset_batch_get_datasets1
+hooks.dataset_validation_check_dataset_eligibility3 = adapters.dataset_validation_check_dataset_eligibility3
+hooks.dataset_validation_validate_dataset1 = adapters.dataset_validation_validate_dataset1
+hooks.dataset_version_calculation_simulate_dataset_version2 = adapters.dataset_version_calculation_simulate_dataset_version2
+hooks.dataset_version_validation_lint_dataset_versions0 = adapters.dataset_version_validation_lint_dataset_versions0

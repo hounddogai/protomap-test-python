@@ -1,0 +1,275 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.metrics.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/metrics/v1/metrics.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Metrics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/metrics/v1;metricsv1";
+option java_multiple_files = true;
+option java_outer_classname = "MetricAlertAdminServiceProto";
+option java_package = "com.acme.metrics.v1";
+
+// Operator actions on metric alerts that support staff run by hand.
+service MetricAlertAdminService {
+  // Archives a metric alert.
+  rpc ArchiveMetricAlert(ArchiveMetricAlertRequest) returns (ArchiveMetricAlertResponse);
+
+  // Restores a metric alert.
+  rpc RestoreMetricAlert(RestoreMetricAlertRequest) returns (RestoreMetricAlertResponse);
+
+  // Deletes a metric alert.
+  rpc PurgeMetricAlert(PurgeMetricAlertRequest) returns (PurgeMetricAlertResponse);
+
+  // Locks a metric alert.
+  rpc LockMetricAlert(LockMetricAlertRequest) returns (LockMetricAlertResponse);
+
+  // Unlocks a metric alert.
+  rpc UnlockMetricAlert(UnlockMetricAlertRequest) returns (UnlockMetricAlertResponse);
+
+  // Transfers a metric alert.
+  rpc TransferMetricAlert(TransferMetricAlertRequest) returns (TransferMetricAlertResponse);
+
+  // Repairs a metric alert.
+  rpc RepairMetricAlert(RepairMetricAlertRequest) returns (RepairMetricAlertResponse);
+
+  // Returns a metric alert.
+  rpc InspectMetricAlert(InspectMetricAlertRequest) returns (InspectMetricAlertResponse);
+}
+
+// The request of `ArchiveMetricAlert`.
+message ArchiveMetricAlertRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  ArchiveMetricAlertRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ArchiveMetricAlert`.
+message ArchiveMetricAlertResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  ArchiveMetricAlertResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RestoreMetricAlert`.
+message RestoreMetricAlertRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  RestoreMetricAlertRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RestoreMetricAlert`.
+message RestoreMetricAlertResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  RestoreMetricAlertResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PurgeMetricAlert`.
+message PurgeMetricAlertRequest {
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PurgeMetricAlert`.
+message PurgeMetricAlertResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}
+
+// The request of `LockMetricAlert`.
+message LockMetricAlertRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  LockMetricAlertRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `LockMetricAlert`.
+message LockMetricAlertResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  LockMetricAlertResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnlockMetricAlert`.
+message UnlockMetricAlertRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  UnlockMetricAlertRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnlockMetricAlert`.
+message UnlockMetricAlertResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  UnlockMetricAlertResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TransferMetricAlert`.
+message TransferMetricAlertRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  TransferMetricAlertRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TransferMetricAlert`.
+message TransferMetricAlertResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  TransferMetricAlertResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RepairMetricAlert`.
+message RepairMetricAlertRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  MetricAlert metric_alert = 3;
+  RepairMetricAlertRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RepairMetricAlert`.
+message RepairMetricAlertResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricAlert metric_alert = 1;
+  RepairMetricAlertResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectMetricAlert`.
+message InspectMetricAlertRequest {
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectMetricAlert`.
+message InspectMetricAlertResponse {
+  MetricAlert metric_alert = 1;
+  acme.common.v1.OperationResult result = 2;
+}

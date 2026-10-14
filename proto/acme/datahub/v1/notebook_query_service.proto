@@ -1,0 +1,214 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datahub.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/datahub/v1/datahub.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datahub.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datahub/v1;datahubv1";
+option java_multiple_files = true;
+option java_outer_classname = "NotebookQueryServiceProto";
+option java_package = "com.acme.datahub.v1";
+
+// Answers read-only questions about notebooks, for screens and reports.
+service NotebookQueryService {
+  // Returns a notebook.
+  rpc LookupNotebook(LookupNotebookRequest) returns (LookupNotebookResponse);
+
+  // Lists notebooks a page at a time.
+  rpc BrowseNotebooks(BrowseNotebooksRequest) returns (BrowseNotebooksResponse);
+
+  // Lists notebooks a page at a time.
+  rpc FindNotebooks(FindNotebooksRequest) returns (FindNotebooksResponse);
+
+  // Counts notebooks by status.
+  rpc CountNotebooks(CountNotebooksRequest) returns (CountNotebooksResponse);
+
+  // Returns several notebooks at once.
+  rpc ResolveNotebooks(ResolveNotebooksRequest) returns (ResolveNotebooksResponse);
+
+  // Streams every matching notebook.
+  rpc ExportNotebooks(ExportNotebooksRequest) returns (stream ExportNotebooksResponse);
+
+  // Lists notebooks a page at a time.
+  rpc SuggestNotebooks(SuggestNotebooksRequest) returns (SuggestNotebooksResponse);
+
+  // Returns a notebook.
+  rpc PeekNotebook(PeekNotebookRequest) returns (PeekNotebookResponse);
+}
+
+// The request of `LookupNotebook`.
+message LookupNotebookRequest {
+  acme.common.v1.RequestContext context = 1;
+  string notebook_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupNotebook`.
+message LookupNotebookResponse {
+  Notebook notebook = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseNotebooks`.
+message BrowseNotebooksRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated NotebookStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseNotebooksRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseNotebooks`.
+message BrowseNotebooksResponse {
+  repeated Notebook notebooks = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindNotebooks`.
+message FindNotebooksRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated NotebookStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindNotebooksRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindNotebooks`.
+message FindNotebooksResponse {
+  repeated Notebook notebooks = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountNotebooks`.
+message CountNotebooksRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated NotebookStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountNotebooksRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountNotebooks`.
+message CountNotebooksResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResolveNotebooks`.
+message ResolveNotebooksRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string notebook_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `ResolveNotebooks`.
+message ResolveNotebooksResponse {
+  repeated Notebook notebooks = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExportNotebooks`.
+message ExportNotebooksRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated NotebookStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  ExportNotebooksRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `ExportNotebooks`.
+message ExportNotebooksResponse {
+  Notebook notebook = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestNotebooks`.
+message SuggestNotebooksRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated NotebookStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestNotebooksRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestNotebooks`.
+message SuggestNotebooksResponse {
+  repeated Notebook notebooks = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PeekNotebook`.
+message PeekNotebookRequest {
+  acme.common.v1.RequestContext context = 1;
+  string notebook_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekNotebook`.
+message PeekNotebookResponse {
+  Notebook notebook = 1;
+  acme.common.v1.OperationResult result = 2;
+}

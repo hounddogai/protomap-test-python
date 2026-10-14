@@ -1,0 +1,243 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lineage.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/lineage/v1/lineage.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lineage.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lineage/v1;lineagev1";
+option java_multiple_files = true;
+option java_outer_classname = "LineageEdgeReportingServiceProto";
+option java_package = "com.acme.lineage.v1";
+
+// Builds and schedules reports about lineage edges.
+service LineageEdgeReportingService {
+  // Generates a lineage edge.
+  rpc GenerateLineageEdgeReport(GenerateLineageEdgeReportRequest) returns (GenerateLineageEdgeReportResponse);
+
+  // Returns a lineage edge.
+  rpc FetchLineageEdgeReport(FetchLineageEdgeReportRequest) returns (FetchLineageEdgeReportResponse);
+
+  // Schedules a lineage edge.
+  rpc ScheduleLineageEdgeReport(ScheduleLineageEdgeReportRequest) returns (ScheduleLineageEdgeReportResponse);
+
+  // Streams the changes of lineage edges as they happen.
+  rpc StreamLineageEdgeMetrics(StreamLineageEdgeMetricsRequest) returns (stream StreamLineageEdgeMetricsResponse);
+
+  // Lists lineage edges a page at a time.
+  rpc ListLineageEdgeReports(ListLineageEdgeReportsRequest) returns (ListLineageEdgeReportsResponse);
+
+  // Shares a lineage edge.
+  rpc ShareLineageEdgeReport(ShareLineageEdgeReportRequest) returns (ShareLineageEdgeReportResponse);
+
+  // Counts lineage edges by status.
+  rpc CountLineageEdgeTotals(CountLineageEdgeTotalsRequest) returns (CountLineageEdgeTotalsResponse);
+
+  // Deletes a lineage edge.
+  rpc DeleteLineageEdgeReport(DeleteLineageEdgeReportRequest) returns (DeleteLineageEdgeReportResponse);
+}
+
+// The request of `GenerateLineageEdgeReport`.
+message GenerateLineageEdgeReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  GenerateLineageEdgeReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `GenerateLineageEdgeReport`.
+message GenerateLineageEdgeReportResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `FetchLineageEdgeReport`.
+message FetchLineageEdgeReportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `FetchLineageEdgeReport`.
+message FetchLineageEdgeReportResponse {
+  LineageEdge lineage_edge = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleLineageEdgeReport`.
+message ScheduleLineageEdgeReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  ScheduleLineageEdgeReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ScheduleLineageEdgeReport`.
+message ScheduleLineageEdgeReportResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `StreamLineageEdgeMetrics`.
+message StreamLineageEdgeMetricsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LineageEdgeStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamLineageEdgeMetricsRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamLineageEdgeMetrics`.
+message StreamLineageEdgeMetricsResponse {
+  LineageEdge lineage_edge = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ListLineageEdgeReports`.
+message ListLineageEdgeReportsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LineageEdgeStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListLineageEdgeReportsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListLineageEdgeReports`.
+message ListLineageEdgeReportsResponse {
+  repeated LineageEdge lineage_edges = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ShareLineageEdgeReport`.
+message ShareLineageEdgeReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  ShareLineageEdgeReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ShareLineageEdgeReport`.
+message ShareLineageEdgeReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  ShareLineageEdgeReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountLineageEdgeTotals`.
+message CountLineageEdgeTotalsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LineageEdgeStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountLineageEdgeTotalsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountLineageEdgeTotals`.
+message CountLineageEdgeTotalsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DeleteLineageEdgeReport`.
+message DeleteLineageEdgeReportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `DeleteLineageEdgeReport`.
+message DeleteLineageEdgeReportResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

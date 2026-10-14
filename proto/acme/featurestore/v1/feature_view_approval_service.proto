@@ -1,0 +1,287 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featurestore.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/featurestore/v1/featurestore.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featurestore.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featurestore/v1;featurestorev1";
+option java_multiple_files = true;
+option java_outer_classname = "FeatureViewApprovalServiceProto";
+option java_package = "com.acme.featurestore.v1";
+
+// Routes feature views through approval, with escalation and delegation.
+service FeatureViewApprovalService {
+  // Submits a feature view.
+  rpc SubmitFeatureView(SubmitFeatureViewRequest) returns (SubmitFeatureViewResponse);
+
+  // Approves a feature view.
+  rpc ApproveFeatureView(ApproveFeatureViewRequest) returns (ApproveFeatureViewResponse);
+
+  // Rejects a feature view.
+  rpc RejectFeatureView(RejectFeatureViewRequest) returns (RejectFeatureViewResponse);
+
+  // Escalates a feature view.
+  rpc EscalateFeatureView(EscalateFeatureViewRequest) returns (EscalateFeatureViewResponse);
+
+  // Delegates a feature view.
+  rpc DelegateFeatureViewApproval(DelegateFeatureViewApprovalRequest) returns (DelegateFeatureViewApprovalResponse);
+
+  // Recalls a feature view.
+  rpc RecallFeatureView(RecallFeatureViewRequest) returns (RecallFeatureViewResponse);
+
+  // Comments a feature view.
+  rpc CommentFeatureViewApproval(CommentFeatureViewApprovalRequest) returns (CommentFeatureViewApprovalResponse);
+}
+
+// The request of `SubmitFeatureView`.
+message SubmitFeatureViewRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_view_id = 2;
+  FeatureView feature_view = 3;
+  SubmitFeatureViewRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitFeatureView`.
+message SubmitFeatureViewResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureView feature_view = 1;
+  SubmitFeatureViewResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveFeatureView`.
+message ApproveFeatureViewRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_view_id = 2;
+  FeatureView feature_view = 3;
+  ApproveFeatureViewRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveFeatureView`.
+message ApproveFeatureViewResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureView feature_view = 1;
+  ApproveFeatureViewResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectFeatureView`.
+message RejectFeatureViewRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_view_id = 2;
+  FeatureView feature_view = 3;
+  RejectFeatureViewRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectFeatureView`.
+message RejectFeatureViewResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureView feature_view = 1;
+  RejectFeatureViewResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateFeatureView`.
+message EscalateFeatureViewRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_view_id = 2;
+  FeatureView feature_view = 3;
+  EscalateFeatureViewRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateFeatureView`.
+message EscalateFeatureViewResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureView feature_view = 1;
+  EscalateFeatureViewResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateFeatureViewApproval`.
+message DelegateFeatureViewApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_view_id = 2;
+  FeatureView feature_view = 3;
+  DelegateFeatureViewApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateFeatureViewApproval`.
+message DelegateFeatureViewApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureView feature_view = 1;
+  DelegateFeatureViewApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallFeatureView`.
+message RecallFeatureViewRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_view_id = 2;
+  FeatureView feature_view = 3;
+  RecallFeatureViewRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallFeatureView`.
+message RecallFeatureViewResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureView feature_view = 1;
+  RecallFeatureViewResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CommentFeatureViewApproval`.
+message CommentFeatureViewApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_view_id = 2;
+  FeatureView feature_view = 3;
+  CommentFeatureViewApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentFeatureViewApproval`.
+message CommentFeatureViewApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureView feature_view = 1;
+  CommentFeatureViewApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

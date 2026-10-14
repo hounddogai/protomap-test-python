@@ -1,0 +1,288 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.anomalies.v1;
+
+import "acme/anomalies/v1/anomalies.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Anomalies.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/anomalies/v1;anomaliesv1";
+option java_multiple_files = true;
+option java_outer_classname = "DetectorValidationServiceProto";
+option java_package = "com.acme.anomalies.v1";
+
+// Checks detectors against the rules before anything acts on them.
+service DetectorValidationService {
+  // Validates a detector.
+  rpc ValidateDetector(ValidateDetectorRequest) returns (ValidateDetectorResponse);
+
+  // Previews a detector.
+  rpc PreviewDetector(PreviewDetectorRequest) returns (PreviewDetectorResponse);
+
+  // Checks a detector.
+  rpc CheckDetectorEligibility(CheckDetectorEligibilityRequest) returns (CheckDetectorEligibilityResponse);
+
+  // Normalizes a detector.
+  rpc NormalizeDetector(NormalizeDetectorRequest) returns (NormalizeDetectorResponse);
+
+  // Explains a detector.
+  rpc ExplainDetectorDecision(ExplainDetectorDecisionRequest) returns (ExplainDetectorDecisionResponse);
+
+  // Scores a detector.
+  rpc ScoreDetector(ScoreDetectorRequest) returns (ScoreDetectorResponse);
+
+  // Lints a detector.
+  rpc LintDetectors(LintDetectorsRequest) returns (LintDetectorsResponse);
+}
+
+// The request of `ValidateDetector`.
+message ValidateDetectorRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  Detector detector = 3;
+  ValidateDetectorRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateDetector`.
+message ValidateDetectorResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Detector detector = 1;
+  ValidateDetectorResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewDetector`.
+message PreviewDetectorRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  Detector detector = 3;
+  PreviewDetectorRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewDetector`.
+message PreviewDetectorResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Detector detector = 1;
+  PreviewDetectorResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckDetectorEligibility`.
+message CheckDetectorEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  Detector detector = 3;
+  CheckDetectorEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckDetectorEligibility`.
+message CheckDetectorEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Detector detector = 1;
+  CheckDetectorEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeDetector`.
+message NormalizeDetectorRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  Detector detector = 3;
+  NormalizeDetectorRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeDetector`.
+message NormalizeDetectorResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Detector detector = 1;
+  NormalizeDetectorResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainDetectorDecision`.
+message ExplainDetectorDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  Detector detector = 3;
+  ExplainDetectorDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainDetectorDecision`.
+message ExplainDetectorDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Detector detector = 1;
+  ExplainDetectorDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreDetector`.
+message ScoreDetectorRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  Detector detector = 3;
+  ScoreDetectorRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreDetector`.
+message ScoreDetectorResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreDetectorResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Detector detector = 1;
+  ScoreDetectorResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintDetectors`.
+message LintDetectorsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string detector_id = 2;
+  Detector detector = 3;
+  LintDetectorsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintDetectors`.
+message LintDetectorsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Detector detector = 1;
+  LintDetectorsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

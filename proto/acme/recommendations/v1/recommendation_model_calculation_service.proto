@@ -1,0 +1,279 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.recommendations.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/recommendations/v1/recommendations.proto";
+
+option csharp_namespace = "Acme.Recommendations.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/recommendations/v1;recommendationsv1";
+option java_multiple_files = true;
+option java_outer_classname = "RecommendationModelCalculationServiceProto";
+option java_package = "com.acme.recommendations.v1";
+
+// Computes the figures of a recommendation model, such as totals, taxes, and estimates.
+service RecommendationModelCalculationService {
+  // Calculates a recommendation model.
+  rpc CalculateRecommendationModel(CalculateRecommendationModelRequest) returns (CalculateRecommendationModelResponse);
+
+  // Estimates a recommendation model.
+  rpc EstimateRecommendationModel(EstimateRecommendationModelRequest) returns (EstimateRecommendationModelResponse);
+
+  // Quotes a recommendation model.
+  rpc QuoteRecommendationModel(QuoteRecommendationModelRequest) returns (QuoteRecommendationModelResponse);
+
+  // Compares a recommendation model.
+  rpc CompareRecommendationModelOptions(CompareRecommendationModelOptionsRequest) returns (CompareRecommendationModelOptionsResponse);
+
+  // Recalculates a recommendation model.
+  rpc RecalculateRecommendationModels(RecalculateRecommendationModelsRequest) returns (RecalculateRecommendationModelsResponse);
+
+  // Simulates a recommendation model.
+  rpc SimulateRecommendationModel(SimulateRecommendationModelRequest) returns (SimulateRecommendationModelResponse);
+}
+
+// The request of `CalculateRecommendationModel`.
+message CalculateRecommendationModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  CalculateRecommendationModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateRecommendationModel`.
+message CalculateRecommendationModelResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateRecommendationModelResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  CalculateRecommendationModelResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateRecommendationModel`.
+message EstimateRecommendationModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  EstimateRecommendationModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateRecommendationModel`.
+message EstimateRecommendationModelResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateRecommendationModelResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  EstimateRecommendationModelResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteRecommendationModel`.
+message QuoteRecommendationModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  QuoteRecommendationModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteRecommendationModel`.
+message QuoteRecommendationModelResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteRecommendationModelResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  QuoteRecommendationModelResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareRecommendationModelOptions`.
+message CompareRecommendationModelOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  CompareRecommendationModelOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareRecommendationModelOptions`.
+message CompareRecommendationModelOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareRecommendationModelOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  CompareRecommendationModelOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateRecommendationModels`.
+message RecalculateRecommendationModelsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  RecalculateRecommendationModelsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateRecommendationModels`.
+message RecalculateRecommendationModelsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateRecommendationModelsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  RecalculateRecommendationModelsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateRecommendationModel`.
+message SimulateRecommendationModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  SimulateRecommendationModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateRecommendationModel`.
+message SimulateRecommendationModelResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateRecommendationModelResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  SimulateRecommendationModelResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}

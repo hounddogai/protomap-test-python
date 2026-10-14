@@ -1,0 +1,241 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.forecasting.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/forecasting/v1/forecasting.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Forecasting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/forecasting/v1;forecastingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ForecastModelWorkflowServiceProto";
+option java_package = "com.acme.forecasting.v1";
+
+// Runs the long-lived workflow that takes a forecast model from start to finish.
+service ForecastModelWorkflowService {
+  // Starts a forecast model.
+  rpc StartForecastModelWorkflow(StartForecastModelWorkflowRequest) returns (StartForecastModelWorkflowResponse);
+
+  // Advances a forecast model.
+  rpc AdvanceForecastModelWorkflow(AdvanceForecastModelWorkflowRequest) returns (AdvanceForecastModelWorkflowResponse);
+
+  // Cancels a forecast model.
+  rpc CancelForecastModelWorkflow(CancelForecastModelWorkflowRequest) returns (CancelForecastModelWorkflowResponse);
+
+  // Retrys a forecast model.
+  rpc RetryForecastModelWorkflow(RetryForecastModelWorkflowRequest) returns (RetryForecastModelWorkflowResponse);
+
+  // Lists forecast models a page at a time.
+  rpc ListForecastModelWorkflows(ListForecastModelWorkflowsRequest) returns (ListForecastModelWorkflowsResponse);
+
+  // Signals a forecast model.
+  rpc SignalForecastModelWorkflow(SignalForecastModelWorkflowRequest) returns (SignalForecastModelWorkflowResponse);
+}
+
+// The request of `StartForecastModelWorkflow`.
+message StartForecastModelWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_model_id = 2;
+  ForecastModel forecast_model = 3;
+  StartForecastModelWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartForecastModelWorkflow`.
+message StartForecastModelWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ForecastModel forecast_model = 1;
+  StartForecastModelWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceForecastModelWorkflow`.
+message AdvanceForecastModelWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_model_id = 2;
+  ForecastModel forecast_model = 3;
+  AdvanceForecastModelWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceForecastModelWorkflow`.
+message AdvanceForecastModelWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ForecastModel forecast_model = 1;
+  AdvanceForecastModelWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelForecastModelWorkflow`.
+message CancelForecastModelWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_model_id = 2;
+  ForecastModel forecast_model = 3;
+  CancelForecastModelWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelForecastModelWorkflow`.
+message CancelForecastModelWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ForecastModel forecast_model = 1;
+  CancelForecastModelWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryForecastModelWorkflow`.
+message RetryForecastModelWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_model_id = 2;
+  ForecastModel forecast_model = 3;
+  RetryForecastModelWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryForecastModelWorkflow`.
+message RetryForecastModelWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ForecastModel forecast_model = 1;
+  RetryForecastModelWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListForecastModelWorkflows`.
+message ListForecastModelWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ForecastModelStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListForecastModelWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListForecastModelWorkflows`.
+message ListForecastModelWorkflowsResponse {
+  repeated ForecastModel forecast_models = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalForecastModelWorkflow`.
+message SignalForecastModelWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_model_id = 2;
+  ForecastModel forecast_model = 3;
+  SignalForecastModelWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalForecastModelWorkflow`.
+message SignalForecastModelWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ForecastModel forecast_model = 1;
+  SignalForecastModelWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

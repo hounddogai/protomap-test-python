@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.modelregistry.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/modelregistry/v1/modelregistry.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Modelregistry.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/modelregistry/v1;modelregistryv1";
+option java_multiple_files = true;
+option java_outer_classname = "RegisteredModelLifecycleServiceProto";
+option java_package = "com.acme.modelregistry.v1";
+
+// Moves a registered model between the states of its lifecycle.
+service RegisteredModelLifecycleService {
+  // Activates a registered model.
+  rpc ActivateRegisteredModel(ActivateRegisteredModelRequest) returns (ActivateRegisteredModelResponse);
+
+  // Suspends a registered model.
+  rpc SuspendRegisteredModel(SuspendRegisteredModelRequest) returns (SuspendRegisteredModelResponse);
+
+  // Reinstates a registered model.
+  rpc ReinstateRegisteredModel(ReinstateRegisteredModelRequest) returns (ReinstateRegisteredModelResponse);
+
+  // Terminates a registered model.
+  rpc TerminateRegisteredModel(TerminateRegisteredModelRequest) returns (TerminateRegisteredModelResponse);
+
+  // Renews a registered model.
+  rpc RenewRegisteredModel(RenewRegisteredModelRequest) returns (RenewRegisteredModelResponse);
+
+  // Expires a registered model.
+  rpc ExpireRegisteredModel(ExpireRegisteredModelRequest) returns (ExpireRegisteredModelResponse);
+
+  // Returns a registered model.
+  rpc GetRegisteredModelLifecycle(GetRegisteredModelLifecycleRequest) returns (GetRegisteredModelLifecycleResponse);
+
+  // Schedules a registered model.
+  rpc ScheduleRegisteredModelExpiry(ScheduleRegisteredModelExpiryRequest) returns (ScheduleRegisteredModelExpiryResponse);
+}
+
+// The request of `ActivateRegisteredModel`.
+message ActivateRegisteredModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  ActivateRegisteredModelRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateRegisteredModel`.
+message ActivateRegisteredModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  ActivateRegisteredModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendRegisteredModel`.
+message SuspendRegisteredModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  SuspendRegisteredModelRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendRegisteredModel`.
+message SuspendRegisteredModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  SuspendRegisteredModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateRegisteredModel`.
+message ReinstateRegisteredModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  ReinstateRegisteredModelRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateRegisteredModel`.
+message ReinstateRegisteredModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  ReinstateRegisteredModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateRegisteredModel`.
+message TerminateRegisteredModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  TerminateRegisteredModelRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateRegisteredModel`.
+message TerminateRegisteredModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  TerminateRegisteredModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewRegisteredModel`.
+message RenewRegisteredModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RenewRegisteredModelRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewRegisteredModel`.
+message RenewRegisteredModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  RenewRegisteredModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireRegisteredModel`.
+message ExpireRegisteredModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  ExpireRegisteredModelRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireRegisteredModel`.
+message ExpireRegisteredModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  ExpireRegisteredModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRegisteredModelLifecycle`.
+message GetRegisteredModelLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRegisteredModelLifecycle`.
+message GetRegisteredModelLifecycleResponse {
+  RegisteredModel registered_model = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleRegisteredModelExpiry`.
+message ScheduleRegisteredModelExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  ScheduleRegisteredModelExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleRegisteredModelExpiry`.
+message ScheduleRegisteredModelExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  ScheduleRegisteredModelExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

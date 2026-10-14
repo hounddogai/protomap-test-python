@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.analytics.v1;
+
+import "acme/analytics/v1/analytics.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Analytics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/analytics/v1;analyticsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FunnelApprovalServiceProto";
+option java_package = "com.acme.analytics.v1";
+
+// Routes funnels through approval, with escalation and delegation.
+service FunnelApprovalService {
+  // Submits a funnel.
+  rpc SubmitFunnel(SubmitFunnelRequest) returns (SubmitFunnelResponse);
+
+  // Approves a funnel.
+  rpc ApproveFunnel(ApproveFunnelRequest) returns (ApproveFunnelResponse);
+
+  // Rejects a funnel.
+  rpc RejectFunnel(RejectFunnelRequest) returns (RejectFunnelResponse);
+
+  // Escalates a funnel.
+  rpc EscalateFunnel(EscalateFunnelRequest) returns (EscalateFunnelResponse);
+
+  // Lists funnels a page at a time.
+  rpc ListPendingFunnels(ListPendingFunnelsRequest) returns (ListPendingFunnelsResponse);
+
+  // Delegates a funnel.
+  rpc DelegateFunnelApproval(DelegateFunnelApprovalRequest) returns (DelegateFunnelApprovalResponse);
+
+  // Recalls a funnel.
+  rpc RecallFunnel(RecallFunnelRequest) returns (RecallFunnelResponse);
+
+  // Returns a funnel.
+  rpc GetFunnelApprovalStatus(GetFunnelApprovalStatusRequest) returns (GetFunnelApprovalStatusResponse);
+
+  // Comments a funnel.
+  rpc CommentFunnelApproval(CommentFunnelApprovalRequest) returns (CommentFunnelApprovalResponse);
+}
+
+// The request of `SubmitFunnel`.
+message SubmitFunnelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  SubmitFunnelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitFunnel`.
+message SubmitFunnelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Funnel funnel = 1;
+  SubmitFunnelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveFunnel`.
+message ApproveFunnelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  ApproveFunnelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveFunnel`.
+message ApproveFunnelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Funnel funnel = 1;
+  ApproveFunnelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectFunnel`.
+message RejectFunnelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  RejectFunnelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectFunnel`.
+message RejectFunnelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Funnel funnel = 1;
+  RejectFunnelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateFunnel`.
+message EscalateFunnelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  EscalateFunnelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateFunnel`.
+message EscalateFunnelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Funnel funnel = 1;
+  EscalateFunnelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingFunnels`.
+message ListPendingFunnelsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FunnelStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingFunnelsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingFunnels`.
+message ListPendingFunnelsResponse {
+  repeated Funnel funnels = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateFunnelApproval`.
+message DelegateFunnelApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  DelegateFunnelApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateFunnelApproval`.
+message DelegateFunnelApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Funnel funnel = 1;
+  DelegateFunnelApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallFunnel`.
+message RecallFunnelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  RecallFunnelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallFunnel`.
+message RecallFunnelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Funnel funnel = 1;
+  RecallFunnelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFunnelApprovalStatus`.
+message GetFunnelApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFunnelApprovalStatus`.
+message GetFunnelApprovalStatusResponse {
+  Funnel funnel = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentFunnelApproval`.
+message CommentFunnelApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  CommentFunnelApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentFunnelApproval`.
+message CommentFunnelApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Funnel funnel = 1;
+  CommentFunnelApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

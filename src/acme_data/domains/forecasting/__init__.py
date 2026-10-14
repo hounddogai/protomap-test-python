@@ -1,0 +1,16 @@
+"""Install the forecasting team's partner hooks at package import."""
+
+from __future__ import annotations
+
+from acme_data.domains.forecasting import adapters
+from acme_data.domains.forecasting import hooks
+
+
+hooks.demand_forecast_create_demand_forecast1 = adapters.demand_forecast_create_demand_forecast1
+hooks.demand_forecast_query_export_demand_forecasts0 = adapters.demand_forecast_query_export_demand_forecasts0
+hooks.forecast_model_approval_escalate_forecast_model2 = adapters.forecast_model_approval_escalate_forecast_model2
+hooks.forecast_model_query_summarize_forecast_models0 = adapters.forecast_model_query_summarize_forecast_models0
+hooks.scenario_approval_comment_scenario_approval2 = adapters.scenario_approval_comment_scenario_approval2
+hooks.scenario_calculation_estimate_scenario0 = adapters.scenario_calculation_estimate_scenario0
+hooks.scenario_validation_normalize_scenario0 = adapters.scenario_validation_normalize_scenario0
+hooks.scenario_workflow_pause_scenario_workflow1 = adapters.scenario_workflow_pause_scenario_workflow1

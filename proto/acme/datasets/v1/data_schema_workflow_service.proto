@@ -1,0 +1,229 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datasets.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/datasets/v1/datasets.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datasets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datasets/v1;datasetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DataSchemaWorkflowServiceProto";
+option java_package = "com.acme.datasets.v1";
+
+// Runs the long-lived workflow that takes a data schema from start to finish.
+service DataSchemaWorkflowService {
+  // Starts a data schema.
+  rpc StartDataSchemaWorkflow(StartDataSchemaWorkflowRequest) returns (StartDataSchemaWorkflowResponse);
+
+  // Advances a data schema.
+  rpc AdvanceDataSchemaWorkflow(AdvanceDataSchemaWorkflowRequest) returns (AdvanceDataSchemaWorkflowResponse);
+
+  // Cancels a data schema.
+  rpc CancelDataSchemaWorkflow(CancelDataSchemaWorkflowRequest) returns (CancelDataSchemaWorkflowResponse);
+
+  // Retrys a data schema.
+  rpc RetryDataSchemaWorkflow(RetryDataSchemaWorkflowRequest) returns (RetryDataSchemaWorkflowResponse);
+
+  // Resumes a data schema.
+  rpc ResumeDataSchemaWorkflow(ResumeDataSchemaWorkflowRequest) returns (ResumeDataSchemaWorkflowResponse);
+
+  // Returns a data schema.
+  rpc InspectDataSchemaWorkflow(InspectDataSchemaWorkflowRequest) returns (InspectDataSchemaWorkflowResponse);
+}
+
+// The request of `StartDataSchemaWorkflow`.
+message StartDataSchemaWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  StartDataSchemaWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartDataSchemaWorkflow`.
+message StartDataSchemaWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  StartDataSchemaWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceDataSchemaWorkflow`.
+message AdvanceDataSchemaWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  AdvanceDataSchemaWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceDataSchemaWorkflow`.
+message AdvanceDataSchemaWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  AdvanceDataSchemaWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelDataSchemaWorkflow`.
+message CancelDataSchemaWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  CancelDataSchemaWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelDataSchemaWorkflow`.
+message CancelDataSchemaWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  CancelDataSchemaWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryDataSchemaWorkflow`.
+message RetryDataSchemaWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  RetryDataSchemaWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryDataSchemaWorkflow`.
+message RetryDataSchemaWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  RetryDataSchemaWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeDataSchemaWorkflow`.
+message ResumeDataSchemaWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  ResumeDataSchemaWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeDataSchemaWorkflow`.
+message ResumeDataSchemaWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  ResumeDataSchemaWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectDataSchemaWorkflow`.
+message InspectDataSchemaWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectDataSchemaWorkflow`.
+message InspectDataSchemaWorkflowResponse {
+  DataSchema data_schema = 1;
+  acme.common.v1.OperationResult result = 2;
+}

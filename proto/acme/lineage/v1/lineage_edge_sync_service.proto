@@ -1,0 +1,229 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lineage.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/lineage/v1/lineage.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lineage.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lineage/v1;lineagev1";
+option java_multiple_files = true;
+option java_outer_classname = "LineageEdgeSyncServiceProto";
+option java_package = "com.acme.lineage.v1";
+
+// Keeps lineage edges in step with the systems of record in other regions.
+service LineageEdgeSyncService {
+  // Syncs a lineage edge.
+  rpc SyncLineageEdges(SyncLineageEdgesRequest) returns (SyncLineageEdgesResponse);
+
+  // Pushs a lineage edge.
+  rpc PushLineageEdge(PushLineageEdgeRequest) returns (PushLineageEdgeResponse);
+
+  // Reconciles a lineage edge.
+  rpc ReconcileLineageEdges(ReconcileLineageEdgesRequest) returns (ReconcileLineageEdgesResponse);
+
+  // Exchanges changes of lineage edges with a peer.
+  rpc StreamLineageEdgeChanges(stream StreamLineageEdgeChangesRequest) returns (stream StreamLineageEdgeChangesResponse);
+
+  // Resolves a lineage edge.
+  rpc ResolveLineageEdgeConflict(ResolveLineageEdgeConflictRequest) returns (ResolveLineageEdgeConflictResponse);
+
+  // Lists lineage edges a page at a time.
+  rpc ListLineageEdgeConflicts(ListLineageEdgeConflictsRequest) returns (ListLineageEdgeConflictsResponse);
+}
+
+// The request of `SyncLineageEdges`.
+message SyncLineageEdgesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  SyncLineageEdgesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncLineageEdges`.
+message SyncLineageEdgesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  SyncLineageEdgesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushLineageEdge`.
+message PushLineageEdgeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  PushLineageEdgeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushLineageEdge`.
+message PushLineageEdgeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  PushLineageEdgeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReconcileLineageEdges`.
+message ReconcileLineageEdgesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  ReconcileLineageEdgesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ReconcileLineageEdges`.
+message ReconcileLineageEdgesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  ReconcileLineageEdgesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamLineageEdgeChanges`.
+message StreamLineageEdgeChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    LineageEdge change = 2;
+    StreamLineageEdgeChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamLineageEdgeChanges`.
+message StreamLineageEdgeChangesResponse {
+  LineageEdge lineage_edge = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolveLineageEdgeConflict`.
+message ResolveLineageEdgeConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  ResolveLineageEdgeConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolveLineageEdgeConflict`.
+message ResolveLineageEdgeConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  ResolveLineageEdgeConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListLineageEdgeConflicts`.
+message ListLineageEdgeConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LineageEdgeStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListLineageEdgeConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListLineageEdgeConflicts`.
+message ListLineageEdgeConflictsResponse {
+  repeated LineageEdge lineage_edges = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,292 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.analytics.v1;
+
+import "acme/analytics/v1/analytics.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Analytics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/analytics/v1;analyticsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FunnelCalculationServiceProto";
+option java_package = "com.acme.analytics.v1";
+
+// Computes the figures of a funnel, such as totals, taxes, and estimates.
+service FunnelCalculationService {
+  // Calculates a funnel.
+  rpc CalculateFunnel(CalculateFunnelRequest) returns (CalculateFunnelResponse);
+
+  // Estimates a funnel.
+  rpc EstimateFunnel(EstimateFunnelRequest) returns (EstimateFunnelResponse);
+
+  // Quotes a funnel.
+  rpc QuoteFunnel(QuoteFunnelRequest) returns (QuoteFunnelResponse);
+
+  // Compares a funnel.
+  rpc CompareFunnelOptions(CompareFunnelOptionsRequest) returns (CompareFunnelOptionsResponse);
+
+  // Simulates a funnel.
+  rpc SimulateFunnel(SimulateFunnelRequest) returns (SimulateFunnelResponse);
+
+  // Explains a funnel.
+  rpc ExplainFunnelCalculation(ExplainFunnelCalculationRequest) returns (ExplainFunnelCalculationResponse);
+
+  // Returns a funnel.
+  rpc GetFunnelRates(GetFunnelRatesRequest) returns (GetFunnelRatesResponse);
+}
+
+// The request of `CalculateFunnel`.
+message CalculateFunnelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  CalculateFunnelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateFunnel`.
+message CalculateFunnelResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateFunnelResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Funnel funnel = 1;
+  CalculateFunnelResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateFunnel`.
+message EstimateFunnelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  EstimateFunnelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateFunnel`.
+message EstimateFunnelResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateFunnelResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Funnel funnel = 1;
+  EstimateFunnelResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteFunnel`.
+message QuoteFunnelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  QuoteFunnelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteFunnel`.
+message QuoteFunnelResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteFunnelResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Funnel funnel = 1;
+  QuoteFunnelResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareFunnelOptions`.
+message CompareFunnelOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  CompareFunnelOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareFunnelOptions`.
+message CompareFunnelOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareFunnelOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Funnel funnel = 1;
+  CompareFunnelOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateFunnel`.
+message SimulateFunnelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  SimulateFunnelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateFunnel`.
+message SimulateFunnelResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateFunnelResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Funnel funnel = 1;
+  SimulateFunnelResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainFunnelCalculation`.
+message ExplainFunnelCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  Funnel funnel = 3;
+  ExplainFunnelCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainFunnelCalculation`.
+message ExplainFunnelCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Funnel funnel = 1;
+  ExplainFunnelCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFunnelRates`.
+message GetFunnelRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFunnelRates`.
+message GetFunnelRatesResponse {
+  Funnel funnel = 1;
+  acme.common.v1.OperationResult result = 2;
+}

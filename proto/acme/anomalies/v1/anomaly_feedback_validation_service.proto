@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.anomalies.v1;
+
+import "acme/anomalies/v1/anomalies.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Anomalies.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/anomalies/v1;anomaliesv1";
+option java_multiple_files = true;
+option java_outer_classname = "AnomalyFeedbackValidationServiceProto";
+option java_package = "com.acme.anomalies.v1";
+
+// Checks anomaly feedbacks against the rules before anything acts on them.
+service AnomalyFeedbackValidationService {
+  // Validates an anomaly feedback.
+  rpc ValidateAnomalyFeedback(ValidateAnomalyFeedbackRequest) returns (ValidateAnomalyFeedbackResponse);
+
+  // Previews an anomaly feedback.
+  rpc PreviewAnomalyFeedback(PreviewAnomalyFeedbackRequest) returns (PreviewAnomalyFeedbackResponse);
+
+  // Checks an anomaly feedback.
+  rpc CheckAnomalyFeedbackEligibility(CheckAnomalyFeedbackEligibilityRequest) returns (CheckAnomalyFeedbackEligibilityResponse);
+
+  // Normalizes an anomaly feedback.
+  rpc NormalizeAnomalyFeedback(NormalizeAnomalyFeedbackRequest) returns (NormalizeAnomalyFeedbackResponse);
+
+  // Explains an anomaly feedback.
+  rpc ExplainAnomalyFeedbackDecision(ExplainAnomalyFeedbackDecisionRequest) returns (ExplainAnomalyFeedbackDecisionResponse);
+
+  // Scores an anomaly feedback.
+  rpc ScoreAnomalyFeedback(ScoreAnomalyFeedbackRequest) returns (ScoreAnomalyFeedbackResponse);
+
+  // Lints an anomaly feedback.
+  rpc LintAnomalyFeedbacks(LintAnomalyFeedbacksRequest) returns (LintAnomalyFeedbacksResponse);
+
+  // Returns an anomaly feedback.
+  rpc GetAnomalyFeedbackRules(GetAnomalyFeedbackRulesRequest) returns (GetAnomalyFeedbackRulesResponse);
+}
+
+// The request of `ValidateAnomalyFeedback`.
+message ValidateAnomalyFeedbackRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  AnomalyFeedback anomaly_feedback = 3;
+  ValidateAnomalyFeedbackRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateAnomalyFeedback`.
+message ValidateAnomalyFeedbackResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnomalyFeedback anomaly_feedback = 1;
+  ValidateAnomalyFeedbackResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewAnomalyFeedback`.
+message PreviewAnomalyFeedbackRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  AnomalyFeedback anomaly_feedback = 3;
+  PreviewAnomalyFeedbackRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewAnomalyFeedback`.
+message PreviewAnomalyFeedbackResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnomalyFeedback anomaly_feedback = 1;
+  PreviewAnomalyFeedbackResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckAnomalyFeedbackEligibility`.
+message CheckAnomalyFeedbackEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  AnomalyFeedback anomaly_feedback = 3;
+  CheckAnomalyFeedbackEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckAnomalyFeedbackEligibility`.
+message CheckAnomalyFeedbackEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnomalyFeedback anomaly_feedback = 1;
+  CheckAnomalyFeedbackEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeAnomalyFeedback`.
+message NormalizeAnomalyFeedbackRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  AnomalyFeedback anomaly_feedback = 3;
+  NormalizeAnomalyFeedbackRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeAnomalyFeedback`.
+message NormalizeAnomalyFeedbackResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnomalyFeedback anomaly_feedback = 1;
+  NormalizeAnomalyFeedbackResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainAnomalyFeedbackDecision`.
+message ExplainAnomalyFeedbackDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  AnomalyFeedback anomaly_feedback = 3;
+  ExplainAnomalyFeedbackDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainAnomalyFeedbackDecision`.
+message ExplainAnomalyFeedbackDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnomalyFeedback anomaly_feedback = 1;
+  ExplainAnomalyFeedbackDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreAnomalyFeedback`.
+message ScoreAnomalyFeedbackRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  AnomalyFeedback anomaly_feedback = 3;
+  ScoreAnomalyFeedbackRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreAnomalyFeedback`.
+message ScoreAnomalyFeedbackResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreAnomalyFeedbackResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  AnomalyFeedback anomaly_feedback = 1;
+  ScoreAnomalyFeedbackResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintAnomalyFeedbacks`.
+message LintAnomalyFeedbacksRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  AnomalyFeedback anomaly_feedback = 3;
+  LintAnomalyFeedbacksRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintAnomalyFeedbacks`.
+message LintAnomalyFeedbacksResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnomalyFeedback anomaly_feedback = 1;
+  LintAnomalyFeedbacksResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAnomalyFeedbackRules`.
+message GetAnomalyFeedbackRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAnomalyFeedbackRules`.
+message GetAnomalyFeedbackRulesResponse {
+  AnomalyFeedback anomaly_feedback = 1;
+  acme.common.v1.OperationResult result = 2;
+}

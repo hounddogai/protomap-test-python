@@ -1,0 +1,253 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.pipelines.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/pipelines/v1/pipelines.proto";
+import "google/protobuf/field_mask.proto";
+
+option csharp_namespace = "Acme.Pipelines.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/pipelines/v1;pipelinesv1";
+option java_multiple_files = true;
+option java_outer_classname = "PipelineStepCalculationServiceProto";
+option java_package = "com.acme.pipelines.v1";
+
+// Computes the figures of a pipeline step, such as totals, taxes, and estimates.
+service PipelineStepCalculationService {
+  // Calculates a pipeline step.
+  rpc CalculatePipelineStep(CalculatePipelineStepRequest) returns (CalculatePipelineStepResponse);
+
+  // Estimates a pipeline step.
+  rpc EstimatePipelineStep(EstimatePipelineStepRequest) returns (EstimatePipelineStepResponse);
+
+  // Quotes a pipeline step.
+  rpc QuotePipelineStep(QuotePipelineStepRequest) returns (QuotePipelineStepResponse);
+
+  // Compares a pipeline step.
+  rpc ComparePipelineStepOptions(ComparePipelineStepOptionsRequest) returns (ComparePipelineStepOptionsResponse);
+
+  // Simulates a pipeline step.
+  rpc SimulatePipelineStep(SimulatePipelineStepRequest) returns (SimulatePipelineStepResponse);
+
+  // Returns a pipeline step.
+  rpc GetPipelineStepRates(GetPipelineStepRatesRequest) returns (GetPipelineStepRatesResponse);
+}
+
+// The request of `CalculatePipelineStep`.
+message CalculatePipelineStepRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  PipelineStep pipeline_step = 3;
+  CalculatePipelineStepRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculatePipelineStep`.
+message CalculatePipelineStepResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculatePipelineStepResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PipelineStep pipeline_step = 1;
+  CalculatePipelineStepResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimatePipelineStep`.
+message EstimatePipelineStepRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  PipelineStep pipeline_step = 3;
+  EstimatePipelineStepRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimatePipelineStep`.
+message EstimatePipelineStepResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimatePipelineStepResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PipelineStep pipeline_step = 1;
+  EstimatePipelineStepResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuotePipelineStep`.
+message QuotePipelineStepRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  PipelineStep pipeline_step = 3;
+  QuotePipelineStepRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuotePipelineStep`.
+message QuotePipelineStepResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuotePipelineStepResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PipelineStep pipeline_step = 1;
+  QuotePipelineStepResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ComparePipelineStepOptions`.
+message ComparePipelineStepOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  PipelineStep pipeline_step = 3;
+  ComparePipelineStepOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ComparePipelineStepOptions`.
+message ComparePipelineStepOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ComparePipelineStepOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PipelineStep pipeline_step = 1;
+  ComparePipelineStepOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulatePipelineStep`.
+message SimulatePipelineStepRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  PipelineStep pipeline_step = 3;
+  SimulatePipelineStepRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulatePipelineStep`.
+message SimulatePipelineStepResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulatePipelineStepResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PipelineStep pipeline_step = 1;
+  SimulatePipelineStepResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPipelineStepRates`.
+message GetPipelineStepRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPipelineStepRates`.
+message GetPipelineStepRatesResponse {
+  PipelineStep pipeline_step = 1;
+  acme.common.v1.OperationResult result = 2;
+}

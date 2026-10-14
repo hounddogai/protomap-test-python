@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.analytics.v1;
+
+import "acme/analytics/v1/analytics.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Analytics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/analytics/v1;analyticsv1";
+option java_multiple_files = true;
+option java_outer_classname = "CohortWorkflowServiceProto";
+option java_package = "com.acme.analytics.v1";
+
+// Runs the long-lived workflow that takes a cohort from start to finish.
+service CohortWorkflowService {
+  // Starts a cohort.
+  rpc StartCohortWorkflow(StartCohortWorkflowRequest) returns (StartCohortWorkflowResponse);
+
+  // Advances a cohort.
+  rpc AdvanceCohortWorkflow(AdvanceCohortWorkflowRequest) returns (AdvanceCohortWorkflowResponse);
+
+  // Cancels a cohort.
+  rpc CancelCohortWorkflow(CancelCohortWorkflowRequest) returns (CancelCohortWorkflowResponse);
+
+  // Retrys a cohort.
+  rpc RetryCohortWorkflow(RetryCohortWorkflowRequest) returns (RetryCohortWorkflowResponse);
+
+  // Pauses a cohort.
+  rpc PauseCohortWorkflow(PauseCohortWorkflowRequest) returns (PauseCohortWorkflowResponse);
+
+  // Resumes a cohort.
+  rpc ResumeCohortWorkflow(ResumeCohortWorkflowRequest) returns (ResumeCohortWorkflowResponse);
+
+  // Returns a cohort.
+  rpc InspectCohortWorkflow(InspectCohortWorkflowRequest) returns (InspectCohortWorkflowResponse);
+
+  // Lists cohorts a page at a time.
+  rpc ListCohortWorkflows(ListCohortWorkflowsRequest) returns (ListCohortWorkflowsResponse);
+
+  // Signals a cohort.
+  rpc SignalCohortWorkflow(SignalCohortWorkflowRequest) returns (SignalCohortWorkflowResponse);
+}
+
+// The request of `StartCohortWorkflow`.
+message StartCohortWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  Cohort cohort = 3;
+  StartCohortWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartCohortWorkflow`.
+message StartCohortWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Cohort cohort = 1;
+  StartCohortWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceCohortWorkflow`.
+message AdvanceCohortWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  Cohort cohort = 3;
+  AdvanceCohortWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceCohortWorkflow`.
+message AdvanceCohortWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Cohort cohort = 1;
+  AdvanceCohortWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelCohortWorkflow`.
+message CancelCohortWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  Cohort cohort = 3;
+  CancelCohortWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelCohortWorkflow`.
+message CancelCohortWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Cohort cohort = 1;
+  CancelCohortWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryCohortWorkflow`.
+message RetryCohortWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  Cohort cohort = 3;
+  RetryCohortWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryCohortWorkflow`.
+message RetryCohortWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Cohort cohort = 1;
+  RetryCohortWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseCohortWorkflow`.
+message PauseCohortWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  Cohort cohort = 3;
+  PauseCohortWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseCohortWorkflow`.
+message PauseCohortWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Cohort cohort = 1;
+  PauseCohortWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeCohortWorkflow`.
+message ResumeCohortWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  Cohort cohort = 3;
+  ResumeCohortWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeCohortWorkflow`.
+message ResumeCohortWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Cohort cohort = 1;
+  ResumeCohortWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectCohortWorkflow`.
+message InspectCohortWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectCohortWorkflow`.
+message InspectCohortWorkflowResponse {
+  Cohort cohort = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListCohortWorkflows`.
+message ListCohortWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated CohortStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListCohortWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListCohortWorkflows`.
+message ListCohortWorkflowsResponse {
+  repeated Cohort cohorts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalCohortWorkflow`.
+message SignalCohortWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  Cohort cohort = 3;
+  SignalCohortWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalCohortWorkflow`.
+message SignalCohortWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Cohort cohort = 1;
+  SignalCohortWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

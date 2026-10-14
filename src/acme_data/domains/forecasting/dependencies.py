@@ -1,0 +1,303 @@
+"""Explicit dependencies of the forecasting services."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+from acme.anomalies.v1 import (
+    anomaly_feedback_calculation_service_pb2_grpc as anomalies_v1_anomaly_feedback_calculation_service_pb2_grpc,
+)
+from acme.anomalies.v1 import anomaly_query_service_pb2_grpc as anomalies_v1_anomaly_query_service_pb2_grpc
+from acme.appointments.v1 import (
+    appointment_query_service_pb2_grpc as appointments_v1_appointment_query_service_pb2_grpc,
+)
+from acme.audit.v1 import audit_event_validation_service_pb2_grpc as audit_v1_audit_event_validation_service_pb2_grpc
+from acme.authorization.v1 import access_policy_service_pb2_grpc as authorization_v1_access_policy_service_pb2_grpc
+from acme.authorization.v1 import (
+    access_policy_validation_service_pb2_grpc as authorization_v1_access_policy_validation_service_pb2_grpc,
+)
+from acme.careplans.v1 import care_plan_query_service_pb2_grpc as careplans_v1_care_plan_query_service_pb2_grpc
+from acme.certificates.v1 import (
+    certificate_calculation_service_pb2_grpc as certificates_v1_certificate_calculation_service_pb2_grpc,
+)
+from acme.datasets.v1 import dataset_service_pb2_grpc as datasets_v1_dataset_service_pb2_grpc
+from acme.datasets.v1 import (
+    dataset_version_validation_service_pb2_grpc as datasets_v1_dataset_version_validation_service_pb2_grpc,
+)
+from acme.documents.v1 import document_query_service_pb2_grpc as documents_v1_document_query_service_pb2_grpc
+from acme.documents.v1 import document_service_pb2_grpc as documents_v1_document_service_pb2_grpc
+from acme.documents.v1 import document_validation_service_pb2_grpc as documents_v1_document_validation_service_pb2_grpc
+from acme.featureflags.v1 import (
+    feature_flag_query_service_pb2_grpc as featureflags_v1_feature_flag_query_service_pb2_grpc,
+)
+from acme.featureflags.v1 import feature_flag_service_pb2_grpc as featureflags_v1_feature_flag_service_pb2_grpc
+from acme.featurestore.v1 import entity_approval_service_pb2_grpc as featurestore_v1_entity_approval_service_pb2_grpc
+from acme.featurestore.v1 import (
+    entity_validation_service_pb2_grpc as featurestore_v1_entity_validation_service_pb2_grpc,
+)
+from acme.featurestore.v1 import entity_workflow_service_pb2_grpc as featurestore_v1_entity_workflow_service_pb2_grpc
+from acme.featurestore.v1 import (
+    feature_value_validation_service_pb2_grpc as featurestore_v1_feature_value_validation_service_pb2_grpc,
+)
+from acme.featurestore.v1 import (
+    feature_view_query_service_pb2_grpc as featurestore_v1_feature_view_query_service_pb2_grpc,
+)
+from acme.featurestore.v1 import (
+    feature_view_reporting_service_pb2_grpc as featurestore_v1_feature_view_reporting_service_pb2_grpc,
+)
+from acme.forecasting.v1 import (
+    demand_forecast_approval_service_pb2_grpc as forecasting_v1_demand_forecast_approval_service_pb2_grpc,
+)
+from acme.forecasting.v1 import (
+    demand_forecast_query_service_pb2_grpc as forecasting_v1_demand_forecast_query_service_pb2_grpc,
+)
+from acme.forecasting.v1 import demand_forecast_service_pb2_grpc as forecasting_v1_demand_forecast_service_pb2_grpc
+from acme.forecasting.v1 import (
+    demand_forecast_validation_service_pb2_grpc as forecasting_v1_demand_forecast_validation_service_pb2_grpc,
+)
+from acme.forecasting.v1 import (
+    demand_forecast_workflow_service_pb2_grpc as forecasting_v1_demand_forecast_workflow_service_pb2_grpc,
+)
+from acme.forecasting.v1 import (
+    forecast_model_approval_service_pb2_grpc as forecasting_v1_forecast_model_approval_service_pb2_grpc,
+)
+from acme.forecasting.v1 import (
+    forecast_model_query_service_pb2_grpc as forecasting_v1_forecast_model_query_service_pb2_grpc,
+)
+from acme.forecasting.v1 import (
+    forecast_model_validation_service_pb2_grpc as forecasting_v1_forecast_model_validation_service_pb2_grpc,
+)
+from acme.forecasting.v1 import scenario_approval_service_pb2_grpc as forecasting_v1_scenario_approval_service_pb2_grpc
+from acme.forecasting.v1 import (
+    scenario_calculation_service_pb2_grpc as forecasting_v1_scenario_calculation_service_pb2_grpc,
+)
+from acme.forecasting.v1 import (
+    scenario_validation_service_pb2_grpc as forecasting_v1_scenario_validation_service_pb2_grpc,
+)
+from acme.identity.v1 import user_query_service_pb2_grpc as identity_v1_user_query_service_pb2_grpc
+from acme.identity.v1 import user_service_pb2_grpc as identity_v1_user_service_pb2_grpc
+from acme.identity.v1 import user_validation_service_pb2_grpc as identity_v1_user_validation_service_pb2_grpc
+from acme.labeling.v1 import (
+    annotation_validation_service_pb2_grpc as labeling_v1_annotation_validation_service_pb2_grpc,
+)
+from acme.labeling.v1 import annotation_workflow_service_pb2_grpc as labeling_v1_annotation_workflow_service_pb2_grpc
+from acme.labeling.v1 import label_set_validation_service_pb2_grpc as labeling_v1_label_set_validation_service_pb2_grpc
+from acme.labeling.v1 import (
+    labeling_task_calculation_service_pb2_grpc as labeling_v1_labeling_task_calculation_service_pb2_grpc,
+)
+from acme.labeling.v1 import labeling_task_query_service_pb2_grpc as labeling_v1_labeling_task_query_service_pb2_grpc
+from acme.labeling.v1 import (
+    labeling_task_validation_service_pb2_grpc as labeling_v1_labeling_task_validation_service_pb2_grpc,
+)
+from acme.labeling.v1 import (
+    labeling_task_workflow_service_pb2_grpc as labeling_v1_labeling_task_workflow_service_pb2_grpc,
+)
+from acme.ledger.v1 import ledger_account_query_service_pb2_grpc as ledger_v1_ledger_account_query_service_pb2_grpc
+from acme.ledger.v1 import (
+    ledger_account_validation_service_pb2_grpc as ledger_v1_ledger_account_validation_service_pb2_grpc,
+)
+from acme.lineage.v1 import impact_calculation_service_pb2_grpc as lineage_v1_impact_calculation_service_pb2_grpc
+from acme.lineage.v1 import impact_workflow_service_pb2_grpc as lineage_v1_impact_workflow_service_pb2_grpc
+from acme.lineage.v1 import lineage_node_service_pb2_grpc as lineage_v1_lineage_node_service_pb2_grpc
+from acme.lineage.v1 import lineage_node_sync_service_pb2_grpc as lineage_v1_lineage_node_sync_service_pb2_grpc
+from acme.metrics.v1 import (
+    dashboard_notification_service_pb2_grpc as metrics_v1_dashboard_notification_service_pb2_grpc,
+)
+from acme.metrics.v1 import dashboard_sync_service_pb2_grpc as metrics_v1_dashboard_sync_service_pb2_grpc
+from acme.metrics.v1 import dashboard_validation_service_pb2_grpc as metrics_v1_dashboard_validation_service_pb2_grpc
+from acme.metrics.v1 import metric_alert_export_service_pb2_grpc as metrics_v1_metric_alert_export_service_pb2_grpc
+from acme.metrics.v1 import metric_alert_history_service_pb2_grpc as metrics_v1_metric_alert_history_service_pb2_grpc
+from acme.metrics.v1 import metric_alert_query_service_pb2_grpc as metrics_v1_metric_alert_query_service_pb2_grpc
+from acme.metrics.v1 import metric_series_export_service_pb2_grpc as metrics_v1_metric_series_export_service_pb2_grpc
+from acme.metrics.v1 import metric_series_history_service_pb2_grpc as metrics_v1_metric_series_history_service_pb2_grpc
+from acme.metrics.v1 import (
+    metric_series_notification_service_pb2_grpc as metrics_v1_metric_series_notification_service_pb2_grpc,
+)
+from acme.metrics.v1 import metric_series_query_service_pb2_grpc as metrics_v1_metric_series_query_service_pb2_grpc
+from acme.metrics.v1 import (
+    metric_series_validation_service_pb2_grpc as metrics_v1_metric_series_validation_service_pb2_grpc,
+)
+from acme.modelregistry.v1 import (
+    deployment_approval_service_pb2_grpc as modelregistry_v1_deployment_approval_service_pb2_grpc,
+)
+from acme.modelregistry.v1 import deployment_sync_service_pb2_grpc as modelregistry_v1_deployment_sync_service_pb2_grpc
+from acme.modelregistry.v1 import (
+    deployment_validation_service_pb2_grpc as modelregistry_v1_deployment_validation_service_pb2_grpc,
+)
+from acme.modelregistry.v1 import (
+    model_version_lifecycle_service_pb2_grpc as modelregistry_v1_model_version_lifecycle_service_pb2_grpc,
+)
+from acme.modelregistry.v1 import (
+    model_version_validation_service_pb2_grpc as modelregistry_v1_model_version_validation_service_pb2_grpc,
+)
+from acme.modelregistry.v1 import (
+    registered_model_query_service_pb2_grpc as modelregistry_v1_registered_model_query_service_pb2_grpc,
+)
+from acme.modelregistry.v1 import (
+    registered_model_workflow_service_pb2_grpc as modelregistry_v1_registered_model_workflow_service_pb2_grpc,
+)
+from acme.notifications.v1 import (
+    notification_query_service_pb2_grpc as notifications_v1_notification_query_service_pb2_grpc,
+)
+from acme.notifications.v1 import notification_service_pb2_grpc as notifications_v1_notification_service_pb2_grpc
+from acme.notifications.v1 import (
+    notification_validation_service_pb2_grpc as notifications_v1_notification_validation_service_pb2_grpc,
+)
+from acme.patients.v1 import patient_query_service_pb2_grpc as patients_v1_patient_query_service_pb2_grpc
+from acme.pipelines.v1 import pipeline_reporting_service_pb2_grpc as pipelines_v1_pipeline_reporting_service_pb2_grpc
+from acme.pipelines.v1 import (
+    pipeline_run_calculation_service_pb2_grpc as pipelines_v1_pipeline_run_calculation_service_pb2_grpc,
+)
+from acme.pipelines.v1 import (
+    pipeline_run_validation_service_pb2_grpc as pipelines_v1_pipeline_run_validation_service_pb2_grpc,
+)
+from acme.pipelines.v1 import (
+    pipeline_step_calculation_service_pb2_grpc as pipelines_v1_pipeline_step_calculation_service_pb2_grpc,
+)
+from acme.pipelines.v1 import (
+    pipeline_step_export_service_pb2_grpc as pipelines_v1_pipeline_step_export_service_pb2_grpc,
+)
+from acme.pipelines.v1 import (
+    pipeline_step_import_service_pb2_grpc as pipelines_v1_pipeline_step_import_service_pb2_grpc,
+)
+from acme.pipelines.v1 import (
+    pipeline_step_validation_service_pb2_grpc as pipelines_v1_pipeline_step_validation_service_pb2_grpc,
+)
+from acme.pipelines.v1 import pipeline_workflow_service_pb2_grpc as pipelines_v1_pipeline_workflow_service_pb2_grpc
+from acme.ratelimiting.v1 import rate_limit_query_service_pb2_grpc as ratelimiting_v1_rate_limit_query_service_pb2_grpc
+from acme.recommendations.v1 import (
+    interaction_approval_service_pb2_grpc as recommendations_v1_interaction_approval_service_pb2_grpc,
+)
+from acme.recommendations.v1 import (
+    recommendation_model_calculation_service_pb2_grpc as recommendations_v1_recommendation_model_calculation_service_pb2_grpc,
+)
+from acme.recommendations.v1 import (
+    recommendation_model_workflow_service_pb2_grpc as recommendations_v1_recommendation_model_workflow_service_pb2_grpc,
+)
+from acme.recommendations.v1 import (
+    recommendation_set_query_service_pb2_grpc as recommendations_v1_recommendation_set_query_service_pb2_grpc,
+)
+from acme.routing.v1 import route_service_pb2_grpc as routing_v1_route_service_pb2_grpc
+from acme.search.v1 import search_index_service_pb2_grpc as search_v1_search_index_service_pb2_grpc
+from acme.search.v1 import (
+    search_index_validation_service_pb2_grpc as search_v1_search_index_validation_service_pb2_grpc,
+)
+from acme.shows.v1 import show_calculation_service_pb2_grpc as shows_v1_show_calculation_service_pb2_grpc
+from acme.shows.v1 import show_query_service_pb2_grpc as shows_v1_show_query_service_pb2_grpc
+from acme.suppliers.v1 import supplier_service_pb2_grpc as suppliers_v1_supplier_service_pb2_grpc
+from acme.tours.v1 import tour_query_service_pb2_grpc as tours_v1_tour_query_service_pb2_grpc
+from acme.venues.v1 import venue_query_service_pb2_grpc as venues_v1_venue_query_service_pb2_grpc
+from acme.venues.v1 import venue_service_pb2_grpc as venues_v1_venue_service_pb2_grpc
+from acme.venues.v1 import venue_validation_service_pb2_grpc as venues_v1_venue_validation_service_pb2_grpc
+from acme.webhooks.v1 import webhook_endpoint_service_pb2_grpc as webhooks_v1_webhook_endpoint_service_pb2_grpc
+
+from acme_data.domains.forecasting.repository import DomainRepository
+from acme_data.platform.config import Settings
+from acme_data.platform.events import EventBus
+
+
+@dataclass(slots=True)
+class Clients:
+    anomalies_anomaly_feedback_calculation: anomalies_v1_anomaly_feedback_calculation_service_pb2_grpc.AnomalyFeedbackCalculationServiceStub
+    anomalies_anomaly_query: anomalies_v1_anomaly_query_service_pb2_grpc.AnomalyQueryServiceStub
+    appointments_appointment_query: appointments_v1_appointment_query_service_pb2_grpc.AppointmentQueryServiceStub
+    audit_audit_event_validation: audit_v1_audit_event_validation_service_pb2_grpc.AuditEventValidationServiceStub
+    authorization_access_policy: authorization_v1_access_policy_service_pb2_grpc.AccessPolicyServiceStub
+    authorization_access_policy_validation: authorization_v1_access_policy_validation_service_pb2_grpc.AccessPolicyValidationServiceStub
+    careplans_care_plan_query: careplans_v1_care_plan_query_service_pb2_grpc.CarePlanQueryServiceStub
+    certificates_certificate_calculation: certificates_v1_certificate_calculation_service_pb2_grpc.CertificateCalculationServiceStub
+    datasets_dataset: datasets_v1_dataset_service_pb2_grpc.DatasetServiceStub
+    datasets_dataset_version_validation: datasets_v1_dataset_version_validation_service_pb2_grpc.DatasetVersionValidationServiceStub
+    documents_document_query: documents_v1_document_query_service_pb2_grpc.DocumentQueryServiceStub
+    documents_document: documents_v1_document_service_pb2_grpc.DocumentServiceStub
+    documents_document_validation: documents_v1_document_validation_service_pb2_grpc.DocumentValidationServiceStub
+    featureflags_feature_flag_query: featureflags_v1_feature_flag_query_service_pb2_grpc.FeatureFlagQueryServiceStub
+    featureflags_feature_flag: featureflags_v1_feature_flag_service_pb2_grpc.FeatureFlagServiceStub
+    featurestore_entity_approval: featurestore_v1_entity_approval_service_pb2_grpc.EntityApprovalServiceStub
+    featurestore_entity_validation: featurestore_v1_entity_validation_service_pb2_grpc.EntityValidationServiceStub
+    featurestore_entity_workflow: featurestore_v1_entity_workflow_service_pb2_grpc.EntityWorkflowServiceStub
+    featurestore_feature_value_validation: featurestore_v1_feature_value_validation_service_pb2_grpc.FeatureValueValidationServiceStub
+    featurestore_feature_view_query: featurestore_v1_feature_view_query_service_pb2_grpc.FeatureViewQueryServiceStub
+    featurestore_feature_view_reporting: featurestore_v1_feature_view_reporting_service_pb2_grpc.FeatureViewReportingServiceStub
+    forecasting_demand_forecast_approval: forecasting_v1_demand_forecast_approval_service_pb2_grpc.DemandForecastApprovalServiceStub
+    forecasting_demand_forecast_query: forecasting_v1_demand_forecast_query_service_pb2_grpc.DemandForecastQueryServiceStub
+    forecasting_demand_forecast: forecasting_v1_demand_forecast_service_pb2_grpc.DemandForecastServiceStub
+    forecasting_demand_forecast_validation: forecasting_v1_demand_forecast_validation_service_pb2_grpc.DemandForecastValidationServiceStub
+    forecasting_demand_forecast_workflow: forecasting_v1_demand_forecast_workflow_service_pb2_grpc.DemandForecastWorkflowServiceStub
+    forecasting_forecast_model_approval: forecasting_v1_forecast_model_approval_service_pb2_grpc.ForecastModelApprovalServiceStub
+    forecasting_forecast_model_query: forecasting_v1_forecast_model_query_service_pb2_grpc.ForecastModelQueryServiceStub
+    forecasting_forecast_model_validation: forecasting_v1_forecast_model_validation_service_pb2_grpc.ForecastModelValidationServiceStub
+    forecasting_scenario_approval: forecasting_v1_scenario_approval_service_pb2_grpc.ScenarioApprovalServiceStub
+    forecasting_scenario_calculation: forecasting_v1_scenario_calculation_service_pb2_grpc.ScenarioCalculationServiceStub
+    forecasting_scenario_validation: forecasting_v1_scenario_validation_service_pb2_grpc.ScenarioValidationServiceStub
+    identity_user_query: identity_v1_user_query_service_pb2_grpc.UserQueryServiceStub
+    identity_user: identity_v1_user_service_pb2_grpc.UserServiceStub
+    identity_user_validation: identity_v1_user_validation_service_pb2_grpc.UserValidationServiceStub
+    labeling_annotation_validation: labeling_v1_annotation_validation_service_pb2_grpc.AnnotationValidationServiceStub
+    labeling_annotation_workflow: labeling_v1_annotation_workflow_service_pb2_grpc.AnnotationWorkflowServiceStub
+    labeling_label_set_validation: labeling_v1_label_set_validation_service_pb2_grpc.LabelSetValidationServiceStub
+    labeling_labeling_task_calculation: labeling_v1_labeling_task_calculation_service_pb2_grpc.LabelingTaskCalculationServiceStub
+    labeling_labeling_task_query: labeling_v1_labeling_task_query_service_pb2_grpc.LabelingTaskQueryServiceStub
+    labeling_labeling_task_validation: labeling_v1_labeling_task_validation_service_pb2_grpc.LabelingTaskValidationServiceStub
+    labeling_labeling_task_workflow: labeling_v1_labeling_task_workflow_service_pb2_grpc.LabelingTaskWorkflowServiceStub
+    ledger_ledger_account_query: ledger_v1_ledger_account_query_service_pb2_grpc.LedgerAccountQueryServiceStub
+    ledger_ledger_account_validation: ledger_v1_ledger_account_validation_service_pb2_grpc.LedgerAccountValidationServiceStub
+    lineage_impact_calculation: lineage_v1_impact_calculation_service_pb2_grpc.ImpactCalculationServiceStub
+    lineage_impact_workflow: lineage_v1_impact_workflow_service_pb2_grpc.ImpactWorkflowServiceStub
+    lineage_lineage_node: lineage_v1_lineage_node_service_pb2_grpc.LineageNodeServiceStub
+    lineage_lineage_node_sync: lineage_v1_lineage_node_sync_service_pb2_grpc.LineageNodeSyncServiceStub
+    metrics_dashboard_notification: metrics_v1_dashboard_notification_service_pb2_grpc.DashboardNotificationServiceStub
+    metrics_dashboard_sync: metrics_v1_dashboard_sync_service_pb2_grpc.DashboardSyncServiceStub
+    metrics_dashboard_validation: metrics_v1_dashboard_validation_service_pb2_grpc.DashboardValidationServiceStub
+    metrics_metric_alert_export: metrics_v1_metric_alert_export_service_pb2_grpc.MetricAlertExportServiceStub
+    metrics_metric_alert_history: metrics_v1_metric_alert_history_service_pb2_grpc.MetricAlertHistoryServiceStub
+    metrics_metric_alert_query: metrics_v1_metric_alert_query_service_pb2_grpc.MetricAlertQueryServiceStub
+    metrics_metric_series_export: metrics_v1_metric_series_export_service_pb2_grpc.MetricSeriesExportServiceStub
+    metrics_metric_series_history: metrics_v1_metric_series_history_service_pb2_grpc.MetricSeriesHistoryServiceStub
+    metrics_metric_series_notification: metrics_v1_metric_series_notification_service_pb2_grpc.MetricSeriesNotificationServiceStub
+    metrics_metric_series_query: metrics_v1_metric_series_query_service_pb2_grpc.MetricSeriesQueryServiceStub
+    metrics_metric_series_validation: metrics_v1_metric_series_validation_service_pb2_grpc.MetricSeriesValidationServiceStub
+    modelregistry_deployment_approval: modelregistry_v1_deployment_approval_service_pb2_grpc.DeploymentApprovalServiceStub
+    modelregistry_deployment_sync: modelregistry_v1_deployment_sync_service_pb2_grpc.DeploymentSyncServiceStub
+    modelregistry_deployment_validation: modelregistry_v1_deployment_validation_service_pb2_grpc.DeploymentValidationServiceStub
+    modelregistry_model_version_lifecycle: modelregistry_v1_model_version_lifecycle_service_pb2_grpc.ModelVersionLifecycleServiceStub
+    modelregistry_model_version_validation: modelregistry_v1_model_version_validation_service_pb2_grpc.ModelVersionValidationServiceStub
+    modelregistry_registered_model_query: modelregistry_v1_registered_model_query_service_pb2_grpc.RegisteredModelQueryServiceStub
+    modelregistry_registered_model_workflow: modelregistry_v1_registered_model_workflow_service_pb2_grpc.RegisteredModelWorkflowServiceStub
+    notifications_notification_query: notifications_v1_notification_query_service_pb2_grpc.NotificationQueryServiceStub
+    notifications_notification: notifications_v1_notification_service_pb2_grpc.NotificationServiceStub
+    notifications_notification_validation: notifications_v1_notification_validation_service_pb2_grpc.NotificationValidationServiceStub
+    patients_patient_query: patients_v1_patient_query_service_pb2_grpc.PatientQueryServiceStub
+    pipelines_pipeline_reporting: pipelines_v1_pipeline_reporting_service_pb2_grpc.PipelineReportingServiceStub
+    pipelines_pipeline_run_calculation: pipelines_v1_pipeline_run_calculation_service_pb2_grpc.PipelineRunCalculationServiceStub
+    pipelines_pipeline_run_validation: pipelines_v1_pipeline_run_validation_service_pb2_grpc.PipelineRunValidationServiceStub
+    pipelines_pipeline_step_calculation: pipelines_v1_pipeline_step_calculation_service_pb2_grpc.PipelineStepCalculationServiceStub
+    pipelines_pipeline_step_export: pipelines_v1_pipeline_step_export_service_pb2_grpc.PipelineStepExportServiceStub
+    pipelines_pipeline_step_import: pipelines_v1_pipeline_step_import_service_pb2_grpc.PipelineStepImportServiceStub
+    pipelines_pipeline_step_validation: pipelines_v1_pipeline_step_validation_service_pb2_grpc.PipelineStepValidationServiceStub
+    pipelines_pipeline_workflow: pipelines_v1_pipeline_workflow_service_pb2_grpc.PipelineWorkflowServiceStub
+    ratelimiting_rate_limit_query: ratelimiting_v1_rate_limit_query_service_pb2_grpc.RateLimitQueryServiceStub
+    recommendations_interaction_approval: recommendations_v1_interaction_approval_service_pb2_grpc.InteractionApprovalServiceStub
+    recommendations_recommendation_model_calculation: recommendations_v1_recommendation_model_calculation_service_pb2_grpc.RecommendationModelCalculationServiceStub
+    recommendations_recommendation_model_workflow: recommendations_v1_recommendation_model_workflow_service_pb2_grpc.RecommendationModelWorkflowServiceStub
+    recommendations_recommendation_set_query: recommendations_v1_recommendation_set_query_service_pb2_grpc.RecommendationSetQueryServiceStub
+    routing_route: routing_v1_route_service_pb2_grpc.RouteServiceStub
+    search_search_index: search_v1_search_index_service_pb2_grpc.SearchIndexServiceStub
+    search_search_index_validation: search_v1_search_index_validation_service_pb2_grpc.SearchIndexValidationServiceStub
+    shows_show_calculation: shows_v1_show_calculation_service_pb2_grpc.ShowCalculationServiceStub
+    shows_show_query: shows_v1_show_query_service_pb2_grpc.ShowQueryServiceStub
+    suppliers_supplier: suppliers_v1_supplier_service_pb2_grpc.SupplierServiceStub
+    tours_tour_query: tours_v1_tour_query_service_pb2_grpc.TourQueryServiceStub
+    venues_venue_query: venues_v1_venue_query_service_pb2_grpc.VenueQueryServiceStub
+    venues_venue: venues_v1_venue_service_pb2_grpc.VenueServiceStub
+    venues_venue_validation: venues_v1_venue_validation_service_pb2_grpc.VenueValidationServiceStub
+    webhooks_webhook_endpoint: webhooks_v1_webhook_endpoint_service_pb2_grpc.WebhookEndpointServiceStub
+    registry: dict[str, object]
+
+
+@dataclass(frozen=True, slots=True)
+class Dependencies:
+    clients: Clients
+    repository: DomainRepository
+    settings: Settings
+    bus: EventBus

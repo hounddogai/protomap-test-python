@@ -1,0 +1,234 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datahub.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/datahub/v1/datahub.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datahub.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datahub/v1;datahubv1";
+option java_multiple_files = true;
+option java_outer_classname = "WorkspaceIntegrationServiceProto";
+option java_package = "com.acme.datahub.v1";
+
+// Connects external systems that send workspace events.
+service WorkspaceIntegrationService {
+  // Connects a workspace.
+  rpc ConnectWorkspaceSource(ConnectWorkspaceSourceRequest) returns (ConnectWorkspaceSourceResponse);
+
+  // Disconnects a workspace.
+  rpc DisconnectWorkspaceSource(DisconnectWorkspaceSourceRequest) returns (DisconnectWorkspaceSourceResponse);
+
+  // Replays a workspace.
+  rpc ReplayWorkspaceEvents(ReplayWorkspaceEventsRequest) returns (ReplayWorkspaceEventsResponse);
+
+  // Acknowledges a workspace.
+  rpc AcknowledgeWorkspaceEvent(AcknowledgeWorkspaceEventRequest) returns (AcknowledgeWorkspaceEventResponse);
+
+  // Exchanges changes of workspaces with a peer.
+  rpc RelayWorkspaceMessages(stream RelayWorkspaceMessagesRequest) returns (stream RelayWorkspaceMessagesResponse);
+
+  // Tests a workspace.
+  rpc TestWorkspaceConnection(TestWorkspaceConnectionRequest) returns (TestWorkspaceConnectionResponse);
+}
+
+// The request of `ConnectWorkspaceSource`.
+message ConnectWorkspaceSourceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  ConnectWorkspaceSourceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ConnectWorkspaceSource`.
+message ConnectWorkspaceSourceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Workspace workspace = 1;
+  ConnectWorkspaceSourceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DisconnectWorkspaceSource`.
+message DisconnectWorkspaceSourceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  DisconnectWorkspaceSourceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `DisconnectWorkspaceSource`.
+message DisconnectWorkspaceSourceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Workspace workspace = 1;
+  DisconnectWorkspaceSourceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReplayWorkspaceEvents`.
+message ReplayWorkspaceEventsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  ReplayWorkspaceEventsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReplayWorkspaceEvents`.
+message ReplayWorkspaceEventsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Workspace workspace = 1;
+  ReplayWorkspaceEventsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AcknowledgeWorkspaceEvent`.
+message AcknowledgeWorkspaceEventRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  AcknowledgeWorkspaceEventRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `AcknowledgeWorkspaceEvent`.
+message AcknowledgeWorkspaceEventResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Workspace workspace = 1;
+  AcknowledgeWorkspaceEventResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RelayWorkspaceMessages`.
+message RelayWorkspaceMessagesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    Workspace change = 2;
+    RelayWorkspaceMessagesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `RelayWorkspaceMessages`.
+message RelayWorkspaceMessagesResponse {
+  Workspace workspace = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `TestWorkspaceConnection`.
+message TestWorkspaceConnectionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string workspace_id = 2;
+  TestWorkspaceConnectionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TestWorkspaceConnection`.
+message TestWorkspaceConnectionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Workspace workspace = 1;
+  TestWorkspaceConnectionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

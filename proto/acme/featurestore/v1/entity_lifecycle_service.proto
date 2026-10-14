@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featurestore.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/featurestore/v1/featurestore.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featurestore.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featurestore/v1;featurestorev1";
+option java_multiple_files = true;
+option java_outer_classname = "EntityLifecycleServiceProto";
+option java_package = "com.acme.featurestore.v1";
+
+// Moves an entity between the states of its lifecycle.
+service EntityLifecycleService {
+  // Activates an entity.
+  rpc ActivateEntity(ActivateEntityRequest) returns (ActivateEntityResponse);
+
+  // Suspends an entity.
+  rpc SuspendEntity(SuspendEntityRequest) returns (SuspendEntityResponse);
+
+  // Reinstates an entity.
+  rpc ReinstateEntity(ReinstateEntityRequest) returns (ReinstateEntityResponse);
+
+  // Terminates an entity.
+  rpc TerminateEntity(TerminateEntityRequest) returns (TerminateEntityResponse);
+
+  // Renews an entity.
+  rpc RenewEntity(RenewEntityRequest) returns (RenewEntityResponse);
+
+  // Expires an entity.
+  rpc ExpireEntity(ExpireEntityRequest) returns (ExpireEntityResponse);
+
+  // Returns an entity.
+  rpc GetEntityLifecycle(GetEntityLifecycleRequest) returns (GetEntityLifecycleResponse);
+
+  // Schedules an entity.
+  rpc ScheduleEntityExpiry(ScheduleEntityExpiryRequest) returns (ScheduleEntityExpiryResponse);
+}
+
+// The request of `ActivateEntity`.
+message ActivateEntityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  ActivateEntityRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateEntity`.
+message ActivateEntityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  ActivateEntityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendEntity`.
+message SuspendEntityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  SuspendEntityRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendEntity`.
+message SuspendEntityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  SuspendEntityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateEntity`.
+message ReinstateEntityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  ReinstateEntityRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateEntity`.
+message ReinstateEntityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  ReinstateEntityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateEntity`.
+message TerminateEntityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  TerminateEntityRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateEntity`.
+message TerminateEntityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  TerminateEntityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewEntity`.
+message RenewEntityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  RenewEntityRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewEntity`.
+message RenewEntityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  RenewEntityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireEntity`.
+message ExpireEntityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  ExpireEntityRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireEntity`.
+message ExpireEntityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  ExpireEntityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetEntityLifecycle`.
+message GetEntityLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetEntityLifecycle`.
+message GetEntityLifecycleResponse {
+  Entity entity = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleEntityExpiry`.
+message ScheduleEntityExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  ScheduleEntityExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleEntityExpiry`.
+message ScheduleEntityExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  ScheduleEntityExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

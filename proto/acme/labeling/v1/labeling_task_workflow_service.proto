@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.labeling.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/labeling/v1/labeling.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Labeling.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/labeling/v1;labelingv1";
+option java_multiple_files = true;
+option java_outer_classname = "LabelingTaskWorkflowServiceProto";
+option java_package = "com.acme.labeling.v1";
+
+// Runs the long-lived workflow that takes a labeling task from start to finish.
+service LabelingTaskWorkflowService {
+  // Starts a labeling task.
+  rpc StartLabelingTaskWorkflow(StartLabelingTaskWorkflowRequest) returns (StartLabelingTaskWorkflowResponse);
+
+  // Advances a labeling task.
+  rpc AdvanceLabelingTaskWorkflow(AdvanceLabelingTaskWorkflowRequest) returns (AdvanceLabelingTaskWorkflowResponse);
+
+  // Cancels a labeling task.
+  rpc CancelLabelingTaskWorkflow(CancelLabelingTaskWorkflowRequest) returns (CancelLabelingTaskWorkflowResponse);
+
+  // Retrys a labeling task.
+  rpc RetryLabelingTaskWorkflow(RetryLabelingTaskWorkflowRequest) returns (RetryLabelingTaskWorkflowResponse);
+
+  // Pauses a labeling task.
+  rpc PauseLabelingTaskWorkflow(PauseLabelingTaskWorkflowRequest) returns (PauseLabelingTaskWorkflowResponse);
+
+  // Resumes a labeling task.
+  rpc ResumeLabelingTaskWorkflow(ResumeLabelingTaskWorkflowRequest) returns (ResumeLabelingTaskWorkflowResponse);
+
+  // Returns a labeling task.
+  rpc InspectLabelingTaskWorkflow(InspectLabelingTaskWorkflowRequest) returns (InspectLabelingTaskWorkflowResponse);
+
+  // Lists labeling tasks a page at a time.
+  rpc ListLabelingTaskWorkflows(ListLabelingTaskWorkflowsRequest) returns (ListLabelingTaskWorkflowsResponse);
+
+  // Signals a labeling task.
+  rpc SignalLabelingTaskWorkflow(SignalLabelingTaskWorkflowRequest) returns (SignalLabelingTaskWorkflowResponse);
+}
+
+// The request of `StartLabelingTaskWorkflow`.
+message StartLabelingTaskWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  StartLabelingTaskWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartLabelingTaskWorkflow`.
+message StartLabelingTaskWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  StartLabelingTaskWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceLabelingTaskWorkflow`.
+message AdvanceLabelingTaskWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  AdvanceLabelingTaskWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceLabelingTaskWorkflow`.
+message AdvanceLabelingTaskWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  AdvanceLabelingTaskWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelLabelingTaskWorkflow`.
+message CancelLabelingTaskWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  CancelLabelingTaskWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelLabelingTaskWorkflow`.
+message CancelLabelingTaskWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  CancelLabelingTaskWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryLabelingTaskWorkflow`.
+message RetryLabelingTaskWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  RetryLabelingTaskWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryLabelingTaskWorkflow`.
+message RetryLabelingTaskWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  RetryLabelingTaskWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseLabelingTaskWorkflow`.
+message PauseLabelingTaskWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  PauseLabelingTaskWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseLabelingTaskWorkflow`.
+message PauseLabelingTaskWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  PauseLabelingTaskWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeLabelingTaskWorkflow`.
+message ResumeLabelingTaskWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  ResumeLabelingTaskWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeLabelingTaskWorkflow`.
+message ResumeLabelingTaskWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  ResumeLabelingTaskWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectLabelingTaskWorkflow`.
+message InspectLabelingTaskWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectLabelingTaskWorkflow`.
+message InspectLabelingTaskWorkflowResponse {
+  LabelingTask labeling_task = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListLabelingTaskWorkflows`.
+message ListLabelingTaskWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LabelingTaskStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListLabelingTaskWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListLabelingTaskWorkflows`.
+message ListLabelingTaskWorkflowsResponse {
+  repeated LabelingTask labeling_tasks = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalLabelingTaskWorkflow`.
+message SignalLabelingTaskWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  LabelingTask labeling_task = 3;
+  SignalLabelingTaskWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalLabelingTaskWorkflow`.
+message SignalLabelingTaskWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  SignalLabelingTaskWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

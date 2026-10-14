@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.analytics.v1;
+
+import "acme/analytics/v1/analytics.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Analytics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/analytics/v1;analyticsv1";
+option java_multiple_files = true;
+option java_outer_classname = "CohortCalculationServiceProto";
+option java_package = "com.acme.analytics.v1";
+
+// Computes the figures of a cohort, such as totals, taxes, and estimates.
+service CohortCalculationService {
+  // Calculates a cohort.
+  rpc CalculateCohort(CalculateCohortRequest) returns (CalculateCohortResponse);
+
+  // Estimates a cohort.
+  rpc EstimateCohort(EstimateCohortRequest) returns (EstimateCohortResponse);
+
+  // Quotes a cohort.
+  rpc QuoteCohort(QuoteCohortRequest) returns (QuoteCohortResponse);
+
+  // Compares a cohort.
+  rpc CompareCohortOptions(CompareCohortOptionsRequest) returns (CompareCohortOptionsResponse);
+
+  // Recalculates a cohort.
+  rpc RecalculateCohorts(RecalculateCohortsRequest) returns (RecalculateCohortsResponse);
+
+  // Simulates a cohort.
+  rpc SimulateCohort(SimulateCohortRequest) returns (SimulateCohortResponse);
+
+  // Explains a cohort.
+  rpc ExplainCohortCalculation(ExplainCohortCalculationRequest) returns (ExplainCohortCalculationResponse);
+
+  // Returns a cohort.
+  rpc GetCohortRates(GetCohortRatesRequest) returns (GetCohortRatesResponse);
+}
+
+// The request of `CalculateCohort`.
+message CalculateCohortRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  Cohort cohort = 3;
+  CalculateCohortRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateCohort`.
+message CalculateCohortResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateCohortResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Cohort cohort = 1;
+  CalculateCohortResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateCohort`.
+message EstimateCohortRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  Cohort cohort = 3;
+  EstimateCohortRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateCohort`.
+message EstimateCohortResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateCohortResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Cohort cohort = 1;
+  EstimateCohortResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteCohort`.
+message QuoteCohortRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  Cohort cohort = 3;
+  QuoteCohortRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteCohort`.
+message QuoteCohortResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteCohortResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Cohort cohort = 1;
+  QuoteCohortResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareCohortOptions`.
+message CompareCohortOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  Cohort cohort = 3;
+  CompareCohortOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareCohortOptions`.
+message CompareCohortOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareCohortOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Cohort cohort = 1;
+  CompareCohortOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateCohorts`.
+message RecalculateCohortsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  Cohort cohort = 3;
+  RecalculateCohortsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateCohorts`.
+message RecalculateCohortsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateCohortsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Cohort cohort = 1;
+  RecalculateCohortsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateCohort`.
+message SimulateCohortRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  Cohort cohort = 3;
+  SimulateCohortRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateCohort`.
+message SimulateCohortResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateCohortResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Cohort cohort = 1;
+  SimulateCohortResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainCohortCalculation`.
+message ExplainCohortCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  Cohort cohort = 3;
+  ExplainCohortCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainCohortCalculation`.
+message ExplainCohortCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Cohort cohort = 1;
+  ExplainCohortCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCohortRates`.
+message GetCohortRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string cohort_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCohortRates`.
+message GetCohortRatesResponse {
+  Cohort cohort = 1;
+  acme.common.v1.OperationResult result = 2;
+}

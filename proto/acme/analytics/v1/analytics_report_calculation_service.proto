@@ -1,0 +1,318 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.analytics.v1;
+
+import "acme/analytics/v1/analytics.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Analytics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/analytics/v1;analyticsv1";
+option java_multiple_files = true;
+option java_outer_classname = "AnalyticsReportCalculationServiceProto";
+option java_package = "com.acme.analytics.v1";
+
+// Computes the figures of an analytics report, such as totals, taxes, and estimates.
+service AnalyticsReportCalculationService {
+  // Calculates an analytics report.
+  rpc CalculateAnalyticsReport(CalculateAnalyticsReportRequest) returns (CalculateAnalyticsReportResponse);
+
+  // Estimates an analytics report.
+  rpc EstimateAnalyticsReport(EstimateAnalyticsReportRequest) returns (EstimateAnalyticsReportResponse);
+
+  // Quotes an analytics report.
+  rpc QuoteAnalyticsReport(QuoteAnalyticsReportRequest) returns (QuoteAnalyticsReportResponse);
+
+  // Compares an analytics report.
+  rpc CompareAnalyticsReportOptions(CompareAnalyticsReportOptionsRequest) returns (CompareAnalyticsReportOptionsResponse);
+
+  // Recalculates an analytics report.
+  rpc RecalculateAnalyticsReports(RecalculateAnalyticsReportsRequest) returns (RecalculateAnalyticsReportsResponse);
+
+  // Simulates an analytics report.
+  rpc SimulateAnalyticsReport(SimulateAnalyticsReportRequest) returns (SimulateAnalyticsReportResponse);
+
+  // Explains an analytics report.
+  rpc ExplainAnalyticsReportCalculation(ExplainAnalyticsReportCalculationRequest) returns (ExplainAnalyticsReportCalculationResponse);
+}
+
+// The request of `CalculateAnalyticsReport`.
+message CalculateAnalyticsReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  AnalyticsReport analytics_report = 3;
+  CalculateAnalyticsReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateAnalyticsReport`.
+message CalculateAnalyticsReportResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateAnalyticsReportResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  CalculateAnalyticsReportResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateAnalyticsReport`.
+message EstimateAnalyticsReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  AnalyticsReport analytics_report = 3;
+  EstimateAnalyticsReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateAnalyticsReport`.
+message EstimateAnalyticsReportResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateAnalyticsReportResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  EstimateAnalyticsReportResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteAnalyticsReport`.
+message QuoteAnalyticsReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  AnalyticsReport analytics_report = 3;
+  QuoteAnalyticsReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteAnalyticsReport`.
+message QuoteAnalyticsReportResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteAnalyticsReportResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  QuoteAnalyticsReportResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareAnalyticsReportOptions`.
+message CompareAnalyticsReportOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  AnalyticsReport analytics_report = 3;
+  CompareAnalyticsReportOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareAnalyticsReportOptions`.
+message CompareAnalyticsReportOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareAnalyticsReportOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  CompareAnalyticsReportOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateAnalyticsReports`.
+message RecalculateAnalyticsReportsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  AnalyticsReport analytics_report = 3;
+  RecalculateAnalyticsReportsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateAnalyticsReports`.
+message RecalculateAnalyticsReportsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateAnalyticsReportsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  RecalculateAnalyticsReportsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateAnalyticsReport`.
+message SimulateAnalyticsReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  AnalyticsReport analytics_report = 3;
+  SimulateAnalyticsReportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateAnalyticsReport`.
+message SimulateAnalyticsReportResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateAnalyticsReportResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  SimulateAnalyticsReportResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainAnalyticsReportCalculation`.
+message ExplainAnalyticsReportCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  AnalyticsReport analytics_report = 3;
+  ExplainAnalyticsReportCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainAnalyticsReportCalculation`.
+message ExplainAnalyticsReportCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  ExplainAnalyticsReportCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

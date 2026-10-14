@@ -1,0 +1,267 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.modelregistry.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/modelregistry/v1/modelregistry.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Modelregistry.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/modelregistry/v1;modelregistryv1";
+option java_multiple_files = true;
+option java_outer_classname = "RegisteredModelSyncServiceProto";
+option java_package = "com.acme.modelregistry.v1";
+
+// Keeps registered models in step with the systems of record in other regions.
+service RegisteredModelSyncService {
+  // Syncs a registered model.
+  rpc SyncRegisteredModels(SyncRegisteredModelsRequest) returns (SyncRegisteredModelsResponse);
+
+  // Pushs a registered model.
+  rpc PushRegisteredModel(PushRegisteredModelRequest) returns (PushRegisteredModelResponse);
+
+  // Pulls a registered model.
+  rpc PullRegisteredModels(PullRegisteredModelsRequest) returns (PullRegisteredModelsResponse);
+
+  // Reconciles a registered model.
+  rpc ReconcileRegisteredModels(ReconcileRegisteredModelsRequest) returns (ReconcileRegisteredModelsResponse);
+
+  // Exchanges changes of registered models with a peer.
+  rpc StreamRegisteredModelChanges(stream StreamRegisteredModelChangesRequest) returns (stream StreamRegisteredModelChangesResponse);
+
+  // Resolves a registered model.
+  rpc ResolveRegisteredModelConflict(ResolveRegisteredModelConflictRequest) returns (ResolveRegisteredModelConflictResponse);
+
+  // Lists registered models a page at a time.
+  rpc ListRegisteredModelConflicts(ListRegisteredModelConflictsRequest) returns (ListRegisteredModelConflictsResponse);
+}
+
+// The request of `SyncRegisteredModels`.
+message SyncRegisteredModelsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  SyncRegisteredModelsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncRegisteredModels`.
+message SyncRegisteredModelsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  SyncRegisteredModelsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushRegisteredModel`.
+message PushRegisteredModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  PushRegisteredModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushRegisteredModel`.
+message PushRegisteredModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  PushRegisteredModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PullRegisteredModels`.
+message PullRegisteredModelsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  PullRegisteredModelsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PullRegisteredModels`.
+message PullRegisteredModelsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  PullRegisteredModelsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReconcileRegisteredModels`.
+message ReconcileRegisteredModelsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  ReconcileRegisteredModelsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ReconcileRegisteredModels`.
+message ReconcileRegisteredModelsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  ReconcileRegisteredModelsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamRegisteredModelChanges`.
+message StreamRegisteredModelChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    RegisteredModel change = 2;
+    StreamRegisteredModelChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamRegisteredModelChanges`.
+message StreamRegisteredModelChangesResponse {
+  RegisteredModel registered_model = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolveRegisteredModelConflict`.
+message ResolveRegisteredModelConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  ResolveRegisteredModelConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolveRegisteredModelConflict`.
+message ResolveRegisteredModelConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  ResolveRegisteredModelConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListRegisteredModelConflicts`.
+message ListRegisteredModelConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RegisteredModelStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListRegisteredModelConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListRegisteredModelConflicts`.
+message ListRegisteredModelConflictsResponse {
+  repeated RegisteredModel registered_models = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.labeling.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/labeling/v1/labeling.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Labeling.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/labeling/v1;labelingv1";
+option java_multiple_files = true;
+option java_outer_classname = "LabelSetValidationServiceProto";
+option java_package = "com.acme.labeling.v1";
+
+// Checks label sets against the rules before anything acts on them.
+service LabelSetValidationService {
+  // Validates a label set.
+  rpc ValidateLabelSet(ValidateLabelSetRequest) returns (ValidateLabelSetResponse);
+
+  // Previews a label set.
+  rpc PreviewLabelSet(PreviewLabelSetRequest) returns (PreviewLabelSetResponse);
+
+  // Checks a label set.
+  rpc CheckLabelSetEligibility(CheckLabelSetEligibilityRequest) returns (CheckLabelSetEligibilityResponse);
+
+  // Normalizes a label set.
+  rpc NormalizeLabelSet(NormalizeLabelSetRequest) returns (NormalizeLabelSetResponse);
+
+  // Explains a label set.
+  rpc ExplainLabelSetDecision(ExplainLabelSetDecisionRequest) returns (ExplainLabelSetDecisionResponse);
+
+  // Scores a label set.
+  rpc ScoreLabelSet(ScoreLabelSetRequest) returns (ScoreLabelSetResponse);
+
+  // Lints a label set.
+  rpc LintLabelSets(LintLabelSetsRequest) returns (LintLabelSetsResponse);
+
+  // Returns a label set.
+  rpc GetLabelSetRules(GetLabelSetRulesRequest) returns (GetLabelSetRulesResponse);
+}
+
+// The request of `ValidateLabelSet`.
+message ValidateLabelSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  ValidateLabelSetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateLabelSet`.
+message ValidateLabelSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  ValidateLabelSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewLabelSet`.
+message PreviewLabelSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  PreviewLabelSetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewLabelSet`.
+message PreviewLabelSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  PreviewLabelSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckLabelSetEligibility`.
+message CheckLabelSetEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  CheckLabelSetEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckLabelSetEligibility`.
+message CheckLabelSetEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  CheckLabelSetEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeLabelSet`.
+message NormalizeLabelSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  NormalizeLabelSetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeLabelSet`.
+message NormalizeLabelSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  NormalizeLabelSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainLabelSetDecision`.
+message ExplainLabelSetDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  ExplainLabelSetDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainLabelSetDecision`.
+message ExplainLabelSetDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  ExplainLabelSetDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreLabelSet`.
+message ScoreLabelSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  ScoreLabelSetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreLabelSet`.
+message ScoreLabelSetResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreLabelSetResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  LabelSet label_set = 1;
+  ScoreLabelSetResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintLabelSets`.
+message LintLabelSetsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  LintLabelSetsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintLabelSets`.
+message LintLabelSetsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  LintLabelSetsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLabelSetRules`.
+message GetLabelSetRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLabelSetRules`.
+message GetLabelSetRulesResponse {
+  LabelSet label_set = 1;
+  acme.common.v1.OperationResult result = 2;
+}

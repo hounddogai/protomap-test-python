@@ -1,0 +1,200 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.modelregistry.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/modelregistry/v1/modelregistry.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Modelregistry.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/modelregistry/v1;modelregistryv1";
+option java_multiple_files = true;
+option java_outer_classname = "ModelVersionQueryServiceProto";
+option java_package = "com.acme.modelregistry.v1";
+
+// Answers read-only questions about model versions, for screens and reports.
+service ModelVersionQueryService {
+  // Returns a model version.
+  rpc LookupModelVersion(LookupModelVersionRequest) returns (LookupModelVersionResponse);
+
+  // Lists model versions a page at a time.
+  rpc BrowseModelVersions(BrowseModelVersionsRequest) returns (BrowseModelVersionsResponse);
+
+  // Counts model versions by status.
+  rpc CountModelVersions(CountModelVersionsRequest) returns (CountModelVersionsResponse);
+
+  // Streams every matching model version.
+  rpc ExportModelVersions(ExportModelVersionsRequest) returns (stream ExportModelVersionsResponse);
+
+  // Summarizes a model version.
+  rpc SummarizeModelVersions(SummarizeModelVersionsRequest) returns (SummarizeModelVersionsResponse);
+
+  // Lists model versions a page at a time.
+  rpc SuggestModelVersions(SuggestModelVersionsRequest) returns (SuggestModelVersionsResponse);
+
+  // Returns a model version.
+  rpc PeekModelVersion(PeekModelVersionRequest) returns (PeekModelVersionResponse);
+}
+
+// The request of `LookupModelVersion`.
+message LookupModelVersionRequest {
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupModelVersion`.
+message LookupModelVersionResponse {
+  ModelVersion model_version = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseModelVersions`.
+message BrowseModelVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ModelVersionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseModelVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseModelVersions`.
+message BrowseModelVersionsResponse {
+  repeated ModelVersion model_versions = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountModelVersions`.
+message CountModelVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ModelVersionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountModelVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountModelVersions`.
+message CountModelVersionsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExportModelVersions`.
+message ExportModelVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ModelVersionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  ExportModelVersionsRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `ExportModelVersions`.
+message ExportModelVersionsResponse {
+  ModelVersion model_version = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SummarizeModelVersions`.
+message SummarizeModelVersionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  SummarizeModelVersionsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SummarizeModelVersions`.
+message SummarizeModelVersionsResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestModelVersions`.
+message SuggestModelVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ModelVersionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestModelVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestModelVersions`.
+message SuggestModelVersionsResponse {
+  repeated ModelVersion model_versions = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PeekModelVersion`.
+message PeekModelVersionRequest {
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekModelVersion`.
+message PeekModelVersionResponse {
+  ModelVersion model_version = 1;
+  acme.common.v1.OperationResult result = 2;
+}

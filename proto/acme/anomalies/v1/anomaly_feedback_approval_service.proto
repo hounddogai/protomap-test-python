@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.anomalies.v1;
+
+import "acme/anomalies/v1/anomalies.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Anomalies.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/anomalies/v1;anomaliesv1";
+option java_multiple_files = true;
+option java_outer_classname = "AnomalyFeedbackApprovalServiceProto";
+option java_package = "com.acme.anomalies.v1";
+
+// Routes anomaly feedbacks through approval, with escalation and delegation.
+service AnomalyFeedbackApprovalService {
+  // Submits an anomaly feedback.
+  rpc SubmitAnomalyFeedback(SubmitAnomalyFeedbackRequest) returns (SubmitAnomalyFeedbackResponse);
+
+  // Approves an anomaly feedback.
+  rpc ApproveAnomalyFeedback(ApproveAnomalyFeedbackRequest) returns (ApproveAnomalyFeedbackResponse);
+
+  // Rejects an anomaly feedback.
+  rpc RejectAnomalyFeedback(RejectAnomalyFeedbackRequest) returns (RejectAnomalyFeedbackResponse);
+
+  // Escalates an anomaly feedback.
+  rpc EscalateAnomalyFeedback(EscalateAnomalyFeedbackRequest) returns (EscalateAnomalyFeedbackResponse);
+
+  // Lists anomaly feedbacks a page at a time.
+  rpc ListPendingAnomalyFeedbacks(ListPendingAnomalyFeedbacksRequest) returns (ListPendingAnomalyFeedbacksResponse);
+
+  // Delegates an anomaly feedback.
+  rpc DelegateAnomalyFeedbackApproval(DelegateAnomalyFeedbackApprovalRequest) returns (DelegateAnomalyFeedbackApprovalResponse);
+
+  // Recalls an anomaly feedback.
+  rpc RecallAnomalyFeedback(RecallAnomalyFeedbackRequest) returns (RecallAnomalyFeedbackResponse);
+
+  // Returns an anomaly feedback.
+  rpc GetAnomalyFeedbackApprovalStatus(GetAnomalyFeedbackApprovalStatusRequest) returns (GetAnomalyFeedbackApprovalStatusResponse);
+
+  // Comments an anomaly feedback.
+  rpc CommentAnomalyFeedbackApproval(CommentAnomalyFeedbackApprovalRequest) returns (CommentAnomalyFeedbackApprovalResponse);
+}
+
+// The request of `SubmitAnomalyFeedback`.
+message SubmitAnomalyFeedbackRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  AnomalyFeedback anomaly_feedback = 3;
+  SubmitAnomalyFeedbackRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitAnomalyFeedback`.
+message SubmitAnomalyFeedbackResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnomalyFeedback anomaly_feedback = 1;
+  SubmitAnomalyFeedbackResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveAnomalyFeedback`.
+message ApproveAnomalyFeedbackRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  AnomalyFeedback anomaly_feedback = 3;
+  ApproveAnomalyFeedbackRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveAnomalyFeedback`.
+message ApproveAnomalyFeedbackResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnomalyFeedback anomaly_feedback = 1;
+  ApproveAnomalyFeedbackResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectAnomalyFeedback`.
+message RejectAnomalyFeedbackRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  AnomalyFeedback anomaly_feedback = 3;
+  RejectAnomalyFeedbackRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectAnomalyFeedback`.
+message RejectAnomalyFeedbackResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnomalyFeedback anomaly_feedback = 1;
+  RejectAnomalyFeedbackResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateAnomalyFeedback`.
+message EscalateAnomalyFeedbackRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  AnomalyFeedback anomaly_feedback = 3;
+  EscalateAnomalyFeedbackRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateAnomalyFeedback`.
+message EscalateAnomalyFeedbackResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnomalyFeedback anomaly_feedback = 1;
+  EscalateAnomalyFeedbackResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingAnomalyFeedbacks`.
+message ListPendingAnomalyFeedbacksRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AnomalyFeedbackStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingAnomalyFeedbacksRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingAnomalyFeedbacks`.
+message ListPendingAnomalyFeedbacksResponse {
+  repeated AnomalyFeedback anomaly_feedbacks = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateAnomalyFeedbackApproval`.
+message DelegateAnomalyFeedbackApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  AnomalyFeedback anomaly_feedback = 3;
+  DelegateAnomalyFeedbackApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateAnomalyFeedbackApproval`.
+message DelegateAnomalyFeedbackApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnomalyFeedback anomaly_feedback = 1;
+  DelegateAnomalyFeedbackApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallAnomalyFeedback`.
+message RecallAnomalyFeedbackRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  AnomalyFeedback anomaly_feedback = 3;
+  RecallAnomalyFeedbackRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallAnomalyFeedback`.
+message RecallAnomalyFeedbackResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnomalyFeedback anomaly_feedback = 1;
+  RecallAnomalyFeedbackResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAnomalyFeedbackApprovalStatus`.
+message GetAnomalyFeedbackApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAnomalyFeedbackApprovalStatus`.
+message GetAnomalyFeedbackApprovalStatusResponse {
+  AnomalyFeedback anomaly_feedback = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentAnomalyFeedbackApproval`.
+message CommentAnomalyFeedbackApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string anomaly_feedback_id = 2;
+  AnomalyFeedback anomaly_feedback = 3;
+  CommentAnomalyFeedbackApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentAnomalyFeedbackApproval`.
+message CommentAnomalyFeedbackApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnomalyFeedback anomaly_feedback = 1;
+  CommentAnomalyFeedbackApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

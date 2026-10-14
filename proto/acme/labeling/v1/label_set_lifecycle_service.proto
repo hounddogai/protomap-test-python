@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.labeling.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/labeling/v1/labeling.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Labeling.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/labeling/v1;labelingv1";
+option java_multiple_files = true;
+option java_outer_classname = "LabelSetLifecycleServiceProto";
+option java_package = "com.acme.labeling.v1";
+
+// Moves a label set between the states of its lifecycle.
+service LabelSetLifecycleService {
+  // Activates a label set.
+  rpc ActivateLabelSet(ActivateLabelSetRequest) returns (ActivateLabelSetResponse);
+
+  // Suspends a label set.
+  rpc SuspendLabelSet(SuspendLabelSetRequest) returns (SuspendLabelSetResponse);
+
+  // Reinstates a label set.
+  rpc ReinstateLabelSet(ReinstateLabelSetRequest) returns (ReinstateLabelSetResponse);
+
+  // Terminates a label set.
+  rpc TerminateLabelSet(TerminateLabelSetRequest) returns (TerminateLabelSetResponse);
+
+  // Renews a label set.
+  rpc RenewLabelSet(RenewLabelSetRequest) returns (RenewLabelSetResponse);
+
+  // Expires a label set.
+  rpc ExpireLabelSet(ExpireLabelSetRequest) returns (ExpireLabelSetResponse);
+
+  // Returns a label set.
+  rpc GetLabelSetLifecycle(GetLabelSetLifecycleRequest) returns (GetLabelSetLifecycleResponse);
+
+  // Schedules a label set.
+  rpc ScheduleLabelSetExpiry(ScheduleLabelSetExpiryRequest) returns (ScheduleLabelSetExpiryResponse);
+}
+
+// The request of `ActivateLabelSet`.
+message ActivateLabelSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  ActivateLabelSetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateLabelSet`.
+message ActivateLabelSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  ActivateLabelSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendLabelSet`.
+message SuspendLabelSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  SuspendLabelSetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendLabelSet`.
+message SuspendLabelSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  SuspendLabelSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateLabelSet`.
+message ReinstateLabelSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  ReinstateLabelSetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateLabelSet`.
+message ReinstateLabelSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  ReinstateLabelSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateLabelSet`.
+message TerminateLabelSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  TerminateLabelSetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateLabelSet`.
+message TerminateLabelSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  TerminateLabelSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewLabelSet`.
+message RenewLabelSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  RenewLabelSetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewLabelSet`.
+message RenewLabelSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  RenewLabelSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireLabelSet`.
+message ExpireLabelSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  ExpireLabelSetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireLabelSet`.
+message ExpireLabelSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  ExpireLabelSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLabelSetLifecycle`.
+message GetLabelSetLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLabelSetLifecycle`.
+message GetLabelSetLifecycleResponse {
+  LabelSet label_set = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleLabelSetExpiry`.
+message ScheduleLabelSetExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  ScheduleLabelSetExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleLabelSetExpiry`.
+message ScheduleLabelSetExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  ScheduleLabelSetExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

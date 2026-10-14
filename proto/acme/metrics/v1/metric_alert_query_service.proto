@@ -1,0 +1,245 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.metrics.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/metrics/v1/metrics.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Metrics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/metrics/v1;metricsv1";
+option java_multiple_files = true;
+option java_outer_classname = "MetricAlertQueryServiceProto";
+option java_package = "com.acme.metrics.v1";
+
+// Answers read-only questions about metric alerts, for screens and reports.
+service MetricAlertQueryService {
+  // Returns a metric alert.
+  rpc LookupMetricAlert(LookupMetricAlertRequest) returns (LookupMetricAlertResponse);
+
+  // Lists metric alerts a page at a time.
+  rpc BrowseMetricAlerts(BrowseMetricAlertsRequest) returns (BrowseMetricAlertsResponse);
+
+  // Lists metric alerts a page at a time.
+  rpc FindMetricAlerts(FindMetricAlertsRequest) returns (FindMetricAlertsResponse);
+
+  // Counts metric alerts by status.
+  rpc CountMetricAlerts(CountMetricAlertsRequest) returns (CountMetricAlertsResponse);
+
+  // Returns several metric alerts at once.
+  rpc ResolveMetricAlerts(ResolveMetricAlertsRequest) returns (ResolveMetricAlertsResponse);
+
+  // Streams every matching metric alert.
+  rpc ExportMetricAlerts(ExportMetricAlertsRequest) returns (stream ExportMetricAlertsResponse);
+
+  // Summarizes a metric alert.
+  rpc SummarizeMetricAlerts(SummarizeMetricAlertsRequest) returns (SummarizeMetricAlertsResponse);
+
+  // Lists metric alerts a page at a time.
+  rpc SuggestMetricAlerts(SuggestMetricAlertsRequest) returns (SuggestMetricAlertsResponse);
+
+  // Returns a metric alert.
+  rpc PeekMetricAlert(PeekMetricAlertRequest) returns (PeekMetricAlertResponse);
+}
+
+// The request of `LookupMetricAlert`.
+message LookupMetricAlertRequest {
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupMetricAlert`.
+message LookupMetricAlertResponse {
+  MetricAlert metric_alert = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseMetricAlerts`.
+message BrowseMetricAlertsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated MetricAlertStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseMetricAlertsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseMetricAlerts`.
+message BrowseMetricAlertsResponse {
+  repeated MetricAlert metric_alerts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindMetricAlerts`.
+message FindMetricAlertsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated MetricAlertStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindMetricAlertsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindMetricAlerts`.
+message FindMetricAlertsResponse {
+  repeated MetricAlert metric_alerts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountMetricAlerts`.
+message CountMetricAlertsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated MetricAlertStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountMetricAlertsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountMetricAlerts`.
+message CountMetricAlertsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResolveMetricAlerts`.
+message ResolveMetricAlertsRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string metric_alert_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `ResolveMetricAlerts`.
+message ResolveMetricAlertsResponse {
+  repeated MetricAlert metric_alerts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExportMetricAlerts`.
+message ExportMetricAlertsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated MetricAlertStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  ExportMetricAlertsRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `ExportMetricAlerts`.
+message ExportMetricAlertsResponse {
+  MetricAlert metric_alert = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SummarizeMetricAlerts`.
+message SummarizeMetricAlertsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  SummarizeMetricAlertsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SummarizeMetricAlerts`.
+message SummarizeMetricAlertsResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestMetricAlerts`.
+message SuggestMetricAlertsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated MetricAlertStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestMetricAlertsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestMetricAlerts`.
+message SuggestMetricAlertsResponse {
+  repeated MetricAlert metric_alerts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PeekMetricAlert`.
+message PeekMetricAlertRequest {
+  acme.common.v1.RequestContext context = 1;
+  string metric_alert_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekMetricAlert`.
+message PeekMetricAlertResponse {
+  MetricAlert metric_alert = 1;
+  acme.common.v1.OperationResult result = 2;
+}

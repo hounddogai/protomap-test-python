@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lineage.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/lineage/v1/lineage.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lineage.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lineage/v1;lineagev1";
+option java_multiple_files = true;
+option java_outer_classname = "LineageNodeApprovalServiceProto";
+option java_package = "com.acme.lineage.v1";
+
+// Routes lineage nodes through approval, with escalation and delegation.
+service LineageNodeApprovalService {
+  // Submits a lineage node.
+  rpc SubmitLineageNode(SubmitLineageNodeRequest) returns (SubmitLineageNodeResponse);
+
+  // Approves a lineage node.
+  rpc ApproveLineageNode(ApproveLineageNodeRequest) returns (ApproveLineageNodeResponse);
+
+  // Rejects a lineage node.
+  rpc RejectLineageNode(RejectLineageNodeRequest) returns (RejectLineageNodeResponse);
+
+  // Escalates a lineage node.
+  rpc EscalateLineageNode(EscalateLineageNodeRequest) returns (EscalateLineageNodeResponse);
+
+  // Lists lineage nodes a page at a time.
+  rpc ListPendingLineageNodes(ListPendingLineageNodesRequest) returns (ListPendingLineageNodesResponse);
+
+  // Delegates a lineage node.
+  rpc DelegateLineageNodeApproval(DelegateLineageNodeApprovalRequest) returns (DelegateLineageNodeApprovalResponse);
+
+  // Recalls a lineage node.
+  rpc RecallLineageNode(RecallLineageNodeRequest) returns (RecallLineageNodeResponse);
+
+  // Returns a lineage node.
+  rpc GetLineageNodeApprovalStatus(GetLineageNodeApprovalStatusRequest) returns (GetLineageNodeApprovalStatusResponse);
+
+  // Comments a lineage node.
+  rpc CommentLineageNodeApproval(CommentLineageNodeApprovalRequest) returns (CommentLineageNodeApprovalResponse);
+}
+
+// The request of `SubmitLineageNode`.
+message SubmitLineageNodeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  SubmitLineageNodeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitLineageNode`.
+message SubmitLineageNodeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  SubmitLineageNodeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveLineageNode`.
+message ApproveLineageNodeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  ApproveLineageNodeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveLineageNode`.
+message ApproveLineageNodeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  ApproveLineageNodeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectLineageNode`.
+message RejectLineageNodeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  RejectLineageNodeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectLineageNode`.
+message RejectLineageNodeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  RejectLineageNodeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateLineageNode`.
+message EscalateLineageNodeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  EscalateLineageNodeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateLineageNode`.
+message EscalateLineageNodeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  EscalateLineageNodeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingLineageNodes`.
+message ListPendingLineageNodesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LineageNodeStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingLineageNodesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingLineageNodes`.
+message ListPendingLineageNodesResponse {
+  repeated LineageNode lineage_nodes = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateLineageNodeApproval`.
+message DelegateLineageNodeApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  DelegateLineageNodeApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateLineageNodeApproval`.
+message DelegateLineageNodeApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  DelegateLineageNodeApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallLineageNode`.
+message RecallLineageNodeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  RecallLineageNodeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallLineageNode`.
+message RecallLineageNodeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  RecallLineageNodeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLineageNodeApprovalStatus`.
+message GetLineageNodeApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLineageNodeApprovalStatus`.
+message GetLineageNodeApprovalStatusResponse {
+  LineageNode lineage_node = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentLineageNodeApproval`.
+message CommentLineageNodeApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_node_id = 2;
+  LineageNode lineage_node = 3;
+  CommentLineageNodeApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentLineageNodeApproval`.
+message CommentLineageNodeApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageNode lineage_node = 1;
+  CommentLineageNodeApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

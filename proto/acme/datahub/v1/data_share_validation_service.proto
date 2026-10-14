@@ -1,0 +1,288 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datahub.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/datahub/v1/datahub.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datahub.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datahub/v1;datahubv1";
+option java_multiple_files = true;
+option java_outer_classname = "DataShareValidationServiceProto";
+option java_package = "com.acme.datahub.v1";
+
+// Checks data shares against the rules before anything acts on them.
+service DataShareValidationService {
+  // Validates a data share.
+  rpc ValidateDataShare(ValidateDataShareRequest) returns (ValidateDataShareResponse);
+
+  // Previews a data share.
+  rpc PreviewDataShare(PreviewDataShareRequest) returns (PreviewDataShareResponse);
+
+  // Checks a data share.
+  rpc CheckDataShareEligibility(CheckDataShareEligibilityRequest) returns (CheckDataShareEligibilityResponse);
+
+  // Normalizes a data share.
+  rpc NormalizeDataShare(NormalizeDataShareRequest) returns (NormalizeDataShareResponse);
+
+  // Explains a data share.
+  rpc ExplainDataShareDecision(ExplainDataShareDecisionRequest) returns (ExplainDataShareDecisionResponse);
+
+  // Scores a data share.
+  rpc ScoreDataShare(ScoreDataShareRequest) returns (ScoreDataShareResponse);
+
+  // Lints a data share.
+  rpc LintDataShares(LintDataSharesRequest) returns (LintDataSharesResponse);
+}
+
+// The request of `ValidateDataShare`.
+message ValidateDataShareRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  ValidateDataShareRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateDataShare`.
+message ValidateDataShareResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  ValidateDataShareResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewDataShare`.
+message PreviewDataShareRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  PreviewDataShareRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewDataShare`.
+message PreviewDataShareResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  PreviewDataShareResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckDataShareEligibility`.
+message CheckDataShareEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  CheckDataShareEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckDataShareEligibility`.
+message CheckDataShareEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  CheckDataShareEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeDataShare`.
+message NormalizeDataShareRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  NormalizeDataShareRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeDataShare`.
+message NormalizeDataShareResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  NormalizeDataShareResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainDataShareDecision`.
+message ExplainDataShareDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  ExplainDataShareDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainDataShareDecision`.
+message ExplainDataShareDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  ExplainDataShareDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreDataShare`.
+message ScoreDataShareRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  ScoreDataShareRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreDataShare`.
+message ScoreDataShareResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreDataShareResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  DataShare data_share = 1;
+  ScoreDataShareResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintDataShares`.
+message LintDataSharesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  LintDataSharesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintDataShares`.
+message LintDataSharesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  LintDataSharesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

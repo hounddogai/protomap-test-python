@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.pipelines.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/pipelines/v1/pipelines.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Pipelines.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/pipelines/v1;pipelinesv1";
+option java_multiple_files = true;
+option java_outer_classname = "PipelineRunLifecycleServiceProto";
+option java_package = "com.acme.pipelines.v1";
+
+// Moves a pipeline run between the states of its lifecycle.
+service PipelineRunLifecycleService {
+  // Activates a pipeline run.
+  rpc ActivatePipelineRun(ActivatePipelineRunRequest) returns (ActivatePipelineRunResponse);
+
+  // Suspends a pipeline run.
+  rpc SuspendPipelineRun(SuspendPipelineRunRequest) returns (SuspendPipelineRunResponse);
+
+  // Reinstates a pipeline run.
+  rpc ReinstatePipelineRun(ReinstatePipelineRunRequest) returns (ReinstatePipelineRunResponse);
+
+  // Terminates a pipeline run.
+  rpc TerminatePipelineRun(TerminatePipelineRunRequest) returns (TerminatePipelineRunResponse);
+
+  // Renews a pipeline run.
+  rpc RenewPipelineRun(RenewPipelineRunRequest) returns (RenewPipelineRunResponse);
+
+  // Expires a pipeline run.
+  rpc ExpirePipelineRun(ExpirePipelineRunRequest) returns (ExpirePipelineRunResponse);
+
+  // Returns a pipeline run.
+  rpc GetPipelineRunLifecycle(GetPipelineRunLifecycleRequest) returns (GetPipelineRunLifecycleResponse);
+
+  // Schedules a pipeline run.
+  rpc SchedulePipelineRunExpiry(SchedulePipelineRunExpiryRequest) returns (SchedulePipelineRunExpiryResponse);
+}
+
+// The request of `ActivatePipelineRun`.
+message ActivatePipelineRunRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  ActivatePipelineRunRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivatePipelineRun`.
+message ActivatePipelineRunResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineRun pipeline_run = 1;
+  ActivatePipelineRunResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendPipelineRun`.
+message SuspendPipelineRunRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  SuspendPipelineRunRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendPipelineRun`.
+message SuspendPipelineRunResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineRun pipeline_run = 1;
+  SuspendPipelineRunResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstatePipelineRun`.
+message ReinstatePipelineRunRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  ReinstatePipelineRunRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstatePipelineRun`.
+message ReinstatePipelineRunResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineRun pipeline_run = 1;
+  ReinstatePipelineRunResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminatePipelineRun`.
+message TerminatePipelineRunRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  TerminatePipelineRunRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminatePipelineRun`.
+message TerminatePipelineRunResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineRun pipeline_run = 1;
+  TerminatePipelineRunResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewPipelineRun`.
+message RenewPipelineRunRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  RenewPipelineRunRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewPipelineRun`.
+message RenewPipelineRunResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineRun pipeline_run = 1;
+  RenewPipelineRunResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpirePipelineRun`.
+message ExpirePipelineRunRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  ExpirePipelineRunRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpirePipelineRun`.
+message ExpirePipelineRunResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineRun pipeline_run = 1;
+  ExpirePipelineRunResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPipelineRunLifecycle`.
+message GetPipelineRunLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPipelineRunLifecycle`.
+message GetPipelineRunLifecycleResponse {
+  PipelineRun pipeline_run = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `SchedulePipelineRunExpiry`.
+message SchedulePipelineRunExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_run_id = 2;
+  PipelineRun pipeline_run = 3;
+  SchedulePipelineRunExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SchedulePipelineRunExpiry`.
+message SchedulePipelineRunExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineRun pipeline_run = 1;
+  SchedulePipelineRunExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

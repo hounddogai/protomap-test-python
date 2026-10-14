@@ -1,0 +1,231 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datasets.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/datasets/v1/datasets.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datasets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datasets/v1;datasetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DataSchemaValidationServiceProto";
+option java_package = "com.acme.datasets.v1";
+
+// Checks data schemas against the rules before anything acts on them.
+service DataSchemaValidationService {
+  // Validates a data schema.
+  rpc ValidateDataSchema(ValidateDataSchemaRequest) returns (ValidateDataSchemaResponse);
+
+  // Previews a data schema.
+  rpc PreviewDataSchema(PreviewDataSchemaRequest) returns (PreviewDataSchemaResponse);
+
+  // Checks a data schema.
+  rpc CheckDataSchemaEligibility(CheckDataSchemaEligibilityRequest) returns (CheckDataSchemaEligibilityResponse);
+
+  // Explains a data schema.
+  rpc ExplainDataSchemaDecision(ExplainDataSchemaDecisionRequest) returns (ExplainDataSchemaDecisionResponse);
+
+  // Scores a data schema.
+  rpc ScoreDataSchema(ScoreDataSchemaRequest) returns (ScoreDataSchemaResponse);
+
+  // Returns a data schema.
+  rpc GetDataSchemaRules(GetDataSchemaRulesRequest) returns (GetDataSchemaRulesResponse);
+}
+
+// The request of `ValidateDataSchema`.
+message ValidateDataSchemaRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  ValidateDataSchemaRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateDataSchema`.
+message ValidateDataSchemaResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  ValidateDataSchemaResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewDataSchema`.
+message PreviewDataSchemaRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  PreviewDataSchemaRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewDataSchema`.
+message PreviewDataSchemaResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  PreviewDataSchemaResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckDataSchemaEligibility`.
+message CheckDataSchemaEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  CheckDataSchemaEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckDataSchemaEligibility`.
+message CheckDataSchemaEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  CheckDataSchemaEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainDataSchemaDecision`.
+message ExplainDataSchemaDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  ExplainDataSchemaDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainDataSchemaDecision`.
+message ExplainDataSchemaDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  ExplainDataSchemaDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreDataSchema`.
+message ScoreDataSchemaRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  ScoreDataSchemaRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreDataSchema`.
+message ScoreDataSchemaResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreDataSchemaResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  DataSchema data_schema = 1;
+  ScoreDataSchemaResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDataSchemaRules`.
+message GetDataSchemaRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDataSchemaRules`.
+message GetDataSchemaRulesResponse {
+  DataSchema data_schema = 1;
+  acme.common.v1.OperationResult result = 2;
+}

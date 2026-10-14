@@ -1,0 +1,255 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.labeling.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/labeling/v1/labeling.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Labeling.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/labeling/v1;labelingv1";
+option java_multiple_files = true;
+option java_outer_classname = "LabelingTaskLifecycleServiceProto";
+option java_package = "com.acme.labeling.v1";
+
+// Moves a labeling task between the states of its lifecycle.
+service LabelingTaskLifecycleService {
+  // Activates a labeling task.
+  rpc ActivateLabelingTask(ActivateLabelingTaskRequest) returns (ActivateLabelingTaskResponse);
+
+  // Suspends a labeling task.
+  rpc SuspendLabelingTask(SuspendLabelingTaskRequest) returns (SuspendLabelingTaskResponse);
+
+  // Reinstates a labeling task.
+  rpc ReinstateLabelingTask(ReinstateLabelingTaskRequest) returns (ReinstateLabelingTaskResponse);
+
+  // Terminates a labeling task.
+  rpc TerminateLabelingTask(TerminateLabelingTaskRequest) returns (TerminateLabelingTaskResponse);
+
+  // Renews a labeling task.
+  rpc RenewLabelingTask(RenewLabelingTaskRequest) returns (RenewLabelingTaskResponse);
+
+  // Expires a labeling task.
+  rpc ExpireLabelingTask(ExpireLabelingTaskRequest) returns (ExpireLabelingTaskResponse);
+
+  // Returns a labeling task.
+  rpc GetLabelingTaskLifecycle(GetLabelingTaskLifecycleRequest) returns (GetLabelingTaskLifecycleResponse);
+}
+
+// The request of `ActivateLabelingTask`.
+message ActivateLabelingTaskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  ActivateLabelingTaskRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateLabelingTask`.
+message ActivateLabelingTaskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  ActivateLabelingTaskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendLabelingTask`.
+message SuspendLabelingTaskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  SuspendLabelingTaskRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendLabelingTask`.
+message SuspendLabelingTaskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  SuspendLabelingTaskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateLabelingTask`.
+message ReinstateLabelingTaskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  ReinstateLabelingTaskRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateLabelingTask`.
+message ReinstateLabelingTaskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  ReinstateLabelingTaskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateLabelingTask`.
+message TerminateLabelingTaskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  TerminateLabelingTaskRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateLabelingTask`.
+message TerminateLabelingTaskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  TerminateLabelingTaskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewLabelingTask`.
+message RenewLabelingTaskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  RenewLabelingTaskRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewLabelingTask`.
+message RenewLabelingTaskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  RenewLabelingTaskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireLabelingTask`.
+message ExpireLabelingTaskRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  ExpireLabelingTaskRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireLabelingTask`.
+message ExpireLabelingTaskResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelingTask labeling_task = 1;
+  ExpireLabelingTaskResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLabelingTaskLifecycle`.
+message GetLabelingTaskLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string labeling_task_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLabelingTaskLifecycle`.
+message GetLabelingTaskLifecycleResponse {
+  LabelingTask labeling_task = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.analytics.v1;
+
+import "acme/analytics/v1/analytics.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Analytics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/analytics/v1;analyticsv1";
+option java_multiple_files = true;
+option java_outer_classname = "AnalyticsReportLifecycleServiceProto";
+option java_package = "com.acme.analytics.v1";
+
+// Moves an analytics report between the states of its lifecycle.
+service AnalyticsReportLifecycleService {
+  // Activates an analytics report.
+  rpc ActivateAnalyticsReport(ActivateAnalyticsReportRequest) returns (ActivateAnalyticsReportResponse);
+
+  // Suspends an analytics report.
+  rpc SuspendAnalyticsReport(SuspendAnalyticsReportRequest) returns (SuspendAnalyticsReportResponse);
+
+  // Reinstates an analytics report.
+  rpc ReinstateAnalyticsReport(ReinstateAnalyticsReportRequest) returns (ReinstateAnalyticsReportResponse);
+
+  // Terminates an analytics report.
+  rpc TerminateAnalyticsReport(TerminateAnalyticsReportRequest) returns (TerminateAnalyticsReportResponse);
+
+  // Renews an analytics report.
+  rpc RenewAnalyticsReport(RenewAnalyticsReportRequest) returns (RenewAnalyticsReportResponse);
+
+  // Expires an analytics report.
+  rpc ExpireAnalyticsReport(ExpireAnalyticsReportRequest) returns (ExpireAnalyticsReportResponse);
+
+  // Returns an analytics report.
+  rpc GetAnalyticsReportLifecycle(GetAnalyticsReportLifecycleRequest) returns (GetAnalyticsReportLifecycleResponse);
+
+  // Schedules an analytics report.
+  rpc ScheduleAnalyticsReportExpiry(ScheduleAnalyticsReportExpiryRequest) returns (ScheduleAnalyticsReportExpiryResponse);
+}
+
+// The request of `ActivateAnalyticsReport`.
+message ActivateAnalyticsReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  ActivateAnalyticsReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateAnalyticsReport`.
+message ActivateAnalyticsReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  ActivateAnalyticsReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendAnalyticsReport`.
+message SuspendAnalyticsReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  SuspendAnalyticsReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendAnalyticsReport`.
+message SuspendAnalyticsReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  SuspendAnalyticsReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateAnalyticsReport`.
+message ReinstateAnalyticsReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  ReinstateAnalyticsReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateAnalyticsReport`.
+message ReinstateAnalyticsReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  ReinstateAnalyticsReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateAnalyticsReport`.
+message TerminateAnalyticsReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  TerminateAnalyticsReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateAnalyticsReport`.
+message TerminateAnalyticsReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  TerminateAnalyticsReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewAnalyticsReport`.
+message RenewAnalyticsReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  RenewAnalyticsReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewAnalyticsReport`.
+message RenewAnalyticsReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  RenewAnalyticsReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireAnalyticsReport`.
+message ExpireAnalyticsReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  ExpireAnalyticsReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireAnalyticsReport`.
+message ExpireAnalyticsReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  ExpireAnalyticsReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAnalyticsReportLifecycle`.
+message GetAnalyticsReportLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAnalyticsReportLifecycle`.
+message GetAnalyticsReportLifecycleResponse {
+  AnalyticsReport analytics_report = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleAnalyticsReportExpiry`.
+message ScheduleAnalyticsReportExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_report_id = 2;
+  AnalyticsReport analytics_report = 3;
+  ScheduleAnalyticsReportExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleAnalyticsReportExpiry`.
+message ScheduleAnalyticsReportExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsReport analytics_report = 1;
+  ScheduleAnalyticsReportExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

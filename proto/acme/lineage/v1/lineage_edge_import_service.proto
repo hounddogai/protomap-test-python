@@ -1,0 +1,253 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lineage.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/lineage/v1/lineage.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lineage.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lineage/v1;lineagev1";
+option java_multiple_files = true;
+option java_outer_classname = "LineageEdgeImportServiceProto";
+option java_package = "com.acme.lineage.v1";
+
+// Takes lineage edges in bulk from partners and legacy systems.
+service LineageEdgeImportService {
+  // Takes a stream of lineage edges and answers once at the end.
+  rpc ImportLineageEdges(stream ImportLineageEdgesRequest) returns (ImportLineageEdgesResponse);
+
+  // Returns a lineage edge.
+  rpc GetLineageEdgeImportStatus(GetLineageEdgeImportStatusRequest) returns (GetLineageEdgeImportStatusResponse);
+
+  // Cancels a lineage edge.
+  rpc CancelLineageEdgeImport(CancelLineageEdgeImportRequest) returns (CancelLineageEdgeImportResponse);
+
+  // Validates a lineage edge.
+  rpc ValidateLineageEdgeImport(ValidateLineageEdgeImportRequest) returns (ValidateLineageEdgeImportResponse);
+
+  // Lists lineage edges a page at a time.
+  rpc ListLineageEdgeImports(ListLineageEdgeImportsRequest) returns (ListLineageEdgeImportsResponse);
+
+  // Retrys a lineage edge.
+  rpc RetryLineageEdgeImport(RetryLineageEdgeImportRequest) returns (RetryLineageEdgeImportResponse);
+
+  // Maps a lineage edge.
+  rpc MapLineageEdgeImportColumns(MapLineageEdgeImportColumnsRequest) returns (MapLineageEdgeImportColumnsResponse);
+}
+
+// The request of `ImportLineageEdges`.
+message ImportLineageEdgesRequest {
+  // What a stream of records starts with.
+  message StreamHeader {
+    string source = 1;
+    string format = 2;
+    int64 total_records = 3;
+    acme.common.v1.ContactInfo submitted_by = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof chunk {
+    ImportLineageEdgesRequest.StreamHeader header = 2;
+    LineageEdge record = 3;
+  }
+  int64 sequence = 4;
+}
+
+// The response of `ImportLineageEdges`.
+message ImportLineageEdgesResponse {
+  // A record the import turned down.
+  message Rejection {
+    int64 sequence = 1;
+    string reason = 2;
+    string lineage_edge_id = 3;
+  }
+
+  int64 accepted = 1;
+  int64 rejected = 2;
+  repeated ImportLineageEdgesResponse.Rejection rejections = 3;
+  acme.common.v1.OperationResult result = 4;
+}
+
+// The request of `GetLineageEdgeImportStatus`.
+message GetLineageEdgeImportStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLineageEdgeImportStatus`.
+message GetLineageEdgeImportStatusResponse {
+  LineageEdge lineage_edge = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CancelLineageEdgeImport`.
+message CancelLineageEdgeImportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  CancelLineageEdgeImportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `CancelLineageEdgeImport`.
+message CancelLineageEdgeImportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  CancelLineageEdgeImportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ValidateLineageEdgeImport`.
+message ValidateLineageEdgeImportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  ValidateLineageEdgeImportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateLineageEdgeImport`.
+message ValidateLineageEdgeImportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  ValidateLineageEdgeImportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListLineageEdgeImports`.
+message ListLineageEdgeImportsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated LineageEdgeStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListLineageEdgeImportsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListLineageEdgeImports`.
+message ListLineageEdgeImportsResponse {
+  repeated LineageEdge lineage_edges = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryLineageEdgeImport`.
+message RetryLineageEdgeImportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  RetryLineageEdgeImportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryLineageEdgeImport`.
+message RetryLineageEdgeImportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  RetryLineageEdgeImportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `MapLineageEdgeImportColumns`.
+message MapLineageEdgeImportColumnsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string lineage_edge_id = 2;
+  LineageEdge lineage_edge = 3;
+  MapLineageEdgeImportColumnsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `MapLineageEdgeImportColumns`.
+message MapLineageEdgeImportColumnsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LineageEdge lineage_edge = 1;
+  MapLineageEdgeImportColumnsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

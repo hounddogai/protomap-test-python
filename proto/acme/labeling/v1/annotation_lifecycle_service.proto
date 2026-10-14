@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.labeling.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/labeling/v1/labeling.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Labeling.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/labeling/v1;labelingv1";
+option java_multiple_files = true;
+option java_outer_classname = "AnnotationLifecycleServiceProto";
+option java_package = "com.acme.labeling.v1";
+
+// Moves an annotation between the states of its lifecycle.
+service AnnotationLifecycleService {
+  // Activates an annotation.
+  rpc ActivateAnnotation(ActivateAnnotationRequest) returns (ActivateAnnotationResponse);
+
+  // Suspends an annotation.
+  rpc SuspendAnnotation(SuspendAnnotationRequest) returns (SuspendAnnotationResponse);
+
+  // Reinstates an annotation.
+  rpc ReinstateAnnotation(ReinstateAnnotationRequest) returns (ReinstateAnnotationResponse);
+
+  // Terminates an annotation.
+  rpc TerminateAnnotation(TerminateAnnotationRequest) returns (TerminateAnnotationResponse);
+
+  // Renews an annotation.
+  rpc RenewAnnotation(RenewAnnotationRequest) returns (RenewAnnotationResponse);
+
+  // Expires an annotation.
+  rpc ExpireAnnotation(ExpireAnnotationRequest) returns (ExpireAnnotationResponse);
+
+  // Returns an annotation.
+  rpc GetAnnotationLifecycle(GetAnnotationLifecycleRequest) returns (GetAnnotationLifecycleResponse);
+
+  // Schedules an annotation.
+  rpc ScheduleAnnotationExpiry(ScheduleAnnotationExpiryRequest) returns (ScheduleAnnotationExpiryResponse);
+}
+
+// The request of `ActivateAnnotation`.
+message ActivateAnnotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  ActivateAnnotationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateAnnotation`.
+message ActivateAnnotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  ActivateAnnotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendAnnotation`.
+message SuspendAnnotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  SuspendAnnotationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendAnnotation`.
+message SuspendAnnotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  SuspendAnnotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateAnnotation`.
+message ReinstateAnnotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  ReinstateAnnotationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateAnnotation`.
+message ReinstateAnnotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  ReinstateAnnotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateAnnotation`.
+message TerminateAnnotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  TerminateAnnotationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateAnnotation`.
+message TerminateAnnotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  TerminateAnnotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewAnnotation`.
+message RenewAnnotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  RenewAnnotationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewAnnotation`.
+message RenewAnnotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  RenewAnnotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireAnnotation`.
+message ExpireAnnotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  ExpireAnnotationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireAnnotation`.
+message ExpireAnnotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  ExpireAnnotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAnnotationLifecycle`.
+message GetAnnotationLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAnnotationLifecycle`.
+message GetAnnotationLifecycleResponse {
+  Annotation annotation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleAnnotationExpiry`.
+message ScheduleAnnotationExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string annotation_id = 2;
+  Annotation annotation = 3;
+  ScheduleAnnotationExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleAnnotationExpiry`.
+message ScheduleAnnotationExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Annotation annotation = 1;
+  ScheduleAnnotationExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datasets.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/datasets/v1/datasets.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datasets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datasets/v1;datasetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DatasetVersionValidationServiceProto";
+option java_package = "com.acme.datasets.v1";
+
+// Checks dataset versions against the rules before anything acts on them.
+service DatasetVersionValidationService {
+  // Validates a dataset version.
+  rpc ValidateDatasetVersion(ValidateDatasetVersionRequest) returns (ValidateDatasetVersionResponse);
+
+  // Previews a dataset version.
+  rpc PreviewDatasetVersion(PreviewDatasetVersionRequest) returns (PreviewDatasetVersionResponse);
+
+  // Checks a dataset version.
+  rpc CheckDatasetVersionEligibility(CheckDatasetVersionEligibilityRequest) returns (CheckDatasetVersionEligibilityResponse);
+
+  // Normalizes a dataset version.
+  rpc NormalizeDatasetVersion(NormalizeDatasetVersionRequest) returns (NormalizeDatasetVersionResponse);
+
+  // Explains a dataset version.
+  rpc ExplainDatasetVersionDecision(ExplainDatasetVersionDecisionRequest) returns (ExplainDatasetVersionDecisionResponse);
+
+  // Scores a dataset version.
+  rpc ScoreDatasetVersion(ScoreDatasetVersionRequest) returns (ScoreDatasetVersionResponse);
+
+  // Lints a dataset version.
+  rpc LintDatasetVersions(LintDatasetVersionsRequest) returns (LintDatasetVersionsResponse);
+
+  // Returns a dataset version.
+  rpc GetDatasetVersionRules(GetDatasetVersionRulesRequest) returns (GetDatasetVersionRulesResponse);
+}
+
+// The request of `ValidateDatasetVersion`.
+message ValidateDatasetVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  ValidateDatasetVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateDatasetVersion`.
+message ValidateDatasetVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  ValidateDatasetVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewDatasetVersion`.
+message PreviewDatasetVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  PreviewDatasetVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewDatasetVersion`.
+message PreviewDatasetVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  PreviewDatasetVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckDatasetVersionEligibility`.
+message CheckDatasetVersionEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  CheckDatasetVersionEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckDatasetVersionEligibility`.
+message CheckDatasetVersionEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  CheckDatasetVersionEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeDatasetVersion`.
+message NormalizeDatasetVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  NormalizeDatasetVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeDatasetVersion`.
+message NormalizeDatasetVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  NormalizeDatasetVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainDatasetVersionDecision`.
+message ExplainDatasetVersionDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  ExplainDatasetVersionDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainDatasetVersionDecision`.
+message ExplainDatasetVersionDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  ExplainDatasetVersionDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreDatasetVersion`.
+message ScoreDatasetVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  ScoreDatasetVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreDatasetVersion`.
+message ScoreDatasetVersionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreDatasetVersionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  DatasetVersion dataset_version = 1;
+  ScoreDatasetVersionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintDatasetVersions`.
+message LintDatasetVersionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  LintDatasetVersionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintDatasetVersions`.
+message LintDatasetVersionsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  LintDatasetVersionsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDatasetVersionRules`.
+message GetDatasetVersionRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDatasetVersionRules`.
+message GetDatasetVersionRulesResponse {
+  DatasetVersion dataset_version = 1;
+  acme.common.v1.OperationResult result = 2;
+}

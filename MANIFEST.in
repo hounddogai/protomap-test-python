@@ -1,0 +1,3 @@
+recursive-include proto *.proto
+recursive-include tools *.py
+recursive-include src *.py py.typed

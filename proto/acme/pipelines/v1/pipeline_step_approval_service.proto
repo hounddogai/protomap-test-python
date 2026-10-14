@@ -1,0 +1,249 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.pipelines.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/pipelines/v1/pipelines.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Pipelines.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/pipelines/v1;pipelinesv1";
+option java_multiple_files = true;
+option java_outer_classname = "PipelineStepApprovalServiceProto";
+option java_package = "com.acme.pipelines.v1";
+
+// Routes pipeline steps through approval, with escalation and delegation.
+service PipelineStepApprovalService {
+  // Submits a pipeline step.
+  rpc SubmitPipelineStep(SubmitPipelineStepRequest) returns (SubmitPipelineStepResponse);
+
+  // Approves a pipeline step.
+  rpc ApprovePipelineStep(ApprovePipelineStepRequest) returns (ApprovePipelineStepResponse);
+
+  // Rejects a pipeline step.
+  rpc RejectPipelineStep(RejectPipelineStepRequest) returns (RejectPipelineStepResponse);
+
+  // Escalates a pipeline step.
+  rpc EscalatePipelineStep(EscalatePipelineStepRequest) returns (EscalatePipelineStepResponse);
+
+  // Delegates a pipeline step.
+  rpc DelegatePipelineStepApproval(DelegatePipelineStepApprovalRequest) returns (DelegatePipelineStepApprovalResponse);
+
+  // Comments a pipeline step.
+  rpc CommentPipelineStepApproval(CommentPipelineStepApprovalRequest) returns (CommentPipelineStepApprovalResponse);
+}
+
+// The request of `SubmitPipelineStep`.
+message SubmitPipelineStepRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  PipelineStep pipeline_step = 3;
+  SubmitPipelineStepRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitPipelineStep`.
+message SubmitPipelineStepResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineStep pipeline_step = 1;
+  SubmitPipelineStepResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApprovePipelineStep`.
+message ApprovePipelineStepRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  PipelineStep pipeline_step = 3;
+  ApprovePipelineStepRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApprovePipelineStep`.
+message ApprovePipelineStepResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineStep pipeline_step = 1;
+  ApprovePipelineStepResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectPipelineStep`.
+message RejectPipelineStepRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  PipelineStep pipeline_step = 3;
+  RejectPipelineStepRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectPipelineStep`.
+message RejectPipelineStepResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineStep pipeline_step = 1;
+  RejectPipelineStepResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalatePipelineStep`.
+message EscalatePipelineStepRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  PipelineStep pipeline_step = 3;
+  EscalatePipelineStepRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalatePipelineStep`.
+message EscalatePipelineStepResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineStep pipeline_step = 1;
+  EscalatePipelineStepResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegatePipelineStepApproval`.
+message DelegatePipelineStepApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  PipelineStep pipeline_step = 3;
+  DelegatePipelineStepApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegatePipelineStepApproval`.
+message DelegatePipelineStepApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineStep pipeline_step = 1;
+  DelegatePipelineStepApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CommentPipelineStepApproval`.
+message CommentPipelineStepApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  PipelineStep pipeline_step = 3;
+  CommentPipelineStepApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentPipelineStepApproval`.
+message CommentPipelineStepApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineStep pipeline_step = 1;
+  CommentPipelineStepApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

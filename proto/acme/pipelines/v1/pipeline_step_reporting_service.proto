@@ -1,0 +1,205 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.pipelines.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/pipelines/v1/pipelines.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Pipelines.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/pipelines/v1;pipelinesv1";
+option java_multiple_files = true;
+option java_outer_classname = "PipelineStepReportingServiceProto";
+option java_package = "com.acme.pipelines.v1";
+
+// Builds and schedules reports about pipeline steps.
+service PipelineStepReportingService {
+  // Generates a pipeline step.
+  rpc GeneratePipelineStepReport(GeneratePipelineStepReportRequest) returns (GeneratePipelineStepReportResponse);
+
+  // Returns a pipeline step.
+  rpc FetchPipelineStepReport(FetchPipelineStepReportRequest) returns (FetchPipelineStepReportResponse);
+
+  // Schedules a pipeline step.
+  rpc SchedulePipelineStepReport(SchedulePipelineStepReportRequest) returns (SchedulePipelineStepReportResponse);
+
+  // Streams the changes of pipeline steps as they happen.
+  rpc StreamPipelineStepMetrics(StreamPipelineStepMetricsRequest) returns (stream StreamPipelineStepMetricsResponse);
+
+  // Lists pipeline steps a page at a time.
+  rpc ListPipelineStepReports(ListPipelineStepReportsRequest) returns (ListPipelineStepReportsResponse);
+
+  // Counts pipeline steps by status.
+  rpc CountPipelineStepTotals(CountPipelineStepTotalsRequest) returns (CountPipelineStepTotalsResponse);
+
+  // Deletes a pipeline step.
+  rpc DeletePipelineStepReport(DeletePipelineStepReportRequest) returns (DeletePipelineStepReportResponse);
+}
+
+// The request of `GeneratePipelineStepReport`.
+message GeneratePipelineStepReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  GeneratePipelineStepReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `GeneratePipelineStepReport`.
+message GeneratePipelineStepReportResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `FetchPipelineStepReport`.
+message FetchPipelineStepReportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `FetchPipelineStepReport`.
+message FetchPipelineStepReportResponse {
+  PipelineStep pipeline_step = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `SchedulePipelineStepReport`.
+message SchedulePipelineStepReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  SchedulePipelineStepReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SchedulePipelineStepReport`.
+message SchedulePipelineStepReportResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `StreamPipelineStepMetrics`.
+message StreamPipelineStepMetricsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PipelineStepStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamPipelineStepMetricsRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamPipelineStepMetrics`.
+message StreamPipelineStepMetricsResponse {
+  PipelineStep pipeline_step = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ListPipelineStepReports`.
+message ListPipelineStepReportsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PipelineStepStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPipelineStepReportsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPipelineStepReports`.
+message ListPipelineStepReportsResponse {
+  repeated PipelineStep pipeline_steps = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountPipelineStepTotals`.
+message CountPipelineStepTotalsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PipelineStepStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountPipelineStepTotalsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountPipelineStepTotals`.
+message CountPipelineStepTotalsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DeletePipelineStepReport`.
+message DeletePipelineStepReportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `DeletePipelineStepReport`.
+message DeletePipelineStepReportResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

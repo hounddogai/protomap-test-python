@@ -1,0 +1,243 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.lineage.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/lineage/v1/lineage.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Lineage.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/lineage/v1;lineagev1";
+option java_multiple_files = true;
+option java_outer_classname = "ImpactReportingServiceProto";
+option java_package = "com.acme.lineage.v1";
+
+// Builds and schedules reports about impacts.
+service ImpactReportingService {
+  // Generates an impact.
+  rpc GenerateImpactReport(GenerateImpactReportRequest) returns (GenerateImpactReportResponse);
+
+  // Returns an impact.
+  rpc FetchImpactReport(FetchImpactReportRequest) returns (FetchImpactReportResponse);
+
+  // Schedules an impact.
+  rpc ScheduleImpactReport(ScheduleImpactReportRequest) returns (ScheduleImpactReportResponse);
+
+  // Streams the changes of impacts as they happen.
+  rpc StreamImpactMetrics(StreamImpactMetricsRequest) returns (stream StreamImpactMetricsResponse);
+
+  // Lists impacts a page at a time.
+  rpc ListImpactReports(ListImpactReportsRequest) returns (ListImpactReportsResponse);
+
+  // Shares an impact.
+  rpc ShareImpactReport(ShareImpactReportRequest) returns (ShareImpactReportResponse);
+
+  // Counts impacts by status.
+  rpc CountImpactTotals(CountImpactTotalsRequest) returns (CountImpactTotalsResponse);
+
+  // Deletes an impact.
+  rpc DeleteImpactReport(DeleteImpactReportRequest) returns (DeleteImpactReportResponse);
+}
+
+// The request of `GenerateImpactReport`.
+message GenerateImpactReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  GenerateImpactReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `GenerateImpactReport`.
+message GenerateImpactReportResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `FetchImpactReport`.
+message FetchImpactReportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `FetchImpactReport`.
+message FetchImpactReportResponse {
+  Impact impact = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleImpactReport`.
+message ScheduleImpactReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  ScheduleImpactReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ScheduleImpactReport`.
+message ScheduleImpactReportResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `StreamImpactMetrics`.
+message StreamImpactMetricsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ImpactStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamImpactMetricsRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamImpactMetrics`.
+message StreamImpactMetricsResponse {
+  Impact impact = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ListImpactReports`.
+message ListImpactReportsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ImpactStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListImpactReportsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListImpactReports`.
+message ListImpactReportsResponse {
+  repeated Impact impacts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ShareImpactReport`.
+message ShareImpactReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  ShareImpactReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ShareImpactReport`.
+message ShareImpactReportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Impact impact = 1;
+  ShareImpactReportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountImpactTotals`.
+message CountImpactTotalsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ImpactStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountImpactTotalsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountImpactTotals`.
+message CountImpactTotalsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DeleteImpactReport`.
+message DeleteImpactReportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string impact_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `DeleteImpactReport`.
+message DeleteImpactReportResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

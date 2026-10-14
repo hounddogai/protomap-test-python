@@ -1,0 +1,311 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.metrics.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/metrics/v1/metrics.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Metrics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/metrics/v1;metricsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DashboardAdminServiceProto";
+option java_package = "com.acme.metrics.v1";
+
+// Operator actions on dashboards that support staff run by hand.
+service DashboardAdminService {
+  // Archives a dashboard.
+  rpc ArchiveDashboard(ArchiveDashboardRequest) returns (ArchiveDashboardResponse);
+
+  // Restores a dashboard.
+  rpc RestoreDashboard(RestoreDashboardRequest) returns (RestoreDashboardResponse);
+
+  // Deletes a dashboard.
+  rpc PurgeDashboard(PurgeDashboardRequest) returns (PurgeDashboardResponse);
+
+  // Reassigns a dashboard.
+  rpc ReassignDashboard(ReassignDashboardRequest) returns (ReassignDashboardResponse);
+
+  // Locks a dashboard.
+  rpc LockDashboard(LockDashboardRequest) returns (LockDashboardResponse);
+
+  // Unlocks a dashboard.
+  rpc UnlockDashboard(UnlockDashboardRequest) returns (UnlockDashboardResponse);
+
+  // Transfers a dashboard.
+  rpc TransferDashboard(TransferDashboardRequest) returns (TransferDashboardResponse);
+
+  // Repairs a dashboard.
+  rpc RepairDashboard(RepairDashboardRequest) returns (RepairDashboardResponse);
+
+  // Returns a dashboard.
+  rpc InspectDashboard(InspectDashboardRequest) returns (InspectDashboardResponse);
+}
+
+// The request of `ArchiveDashboard`.
+message ArchiveDashboardRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  ArchiveDashboardRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ArchiveDashboard`.
+message ArchiveDashboardResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  ArchiveDashboardResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RestoreDashboard`.
+message RestoreDashboardRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  RestoreDashboardRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RestoreDashboard`.
+message RestoreDashboardResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  RestoreDashboardResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PurgeDashboard`.
+message PurgeDashboardRequest {
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PurgeDashboard`.
+message PurgeDashboardResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}
+
+// The request of `ReassignDashboard`.
+message ReassignDashboardRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.identity.v1.UserRef assignee = 1;
+    string queue = 2;
+    int32 capacity = 3;
+    string assignee_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  ReassignDashboardRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReassignDashboard`.
+message ReassignDashboardResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  ReassignDashboardResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LockDashboard`.
+message LockDashboardRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  LockDashboardRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `LockDashboard`.
+message LockDashboardResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  LockDashboardResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnlockDashboard`.
+message UnlockDashboardRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  UnlockDashboardRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnlockDashboard`.
+message UnlockDashboardResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  UnlockDashboardResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TransferDashboard`.
+message TransferDashboardRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  TransferDashboardRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TransferDashboard`.
+message TransferDashboardResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  TransferDashboardResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RepairDashboard`.
+message RepairDashboardRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  Dashboard dashboard = 3;
+  RepairDashboardRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RepairDashboard`.
+message RepairDashboardResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  RepairDashboardResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectDashboard`.
+message InspectDashboardRequest {
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectDashboard`.
+message InspectDashboardResponse {
+  Dashboard dashboard = 1;
+  acme.common.v1.OperationResult result = 2;
+}

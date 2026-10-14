@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.recommendations.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/recommendations/v1/recommendations.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Recommendations.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/recommendations/v1;recommendationsv1";
+option java_multiple_files = true;
+option java_outer_classname = "InteractionCalculationServiceProto";
+option java_package = "com.acme.recommendations.v1";
+
+// Computes the figures of an interaction, such as totals, taxes, and estimates.
+service InteractionCalculationService {
+  // Calculates an interaction.
+  rpc CalculateInteraction(CalculateInteractionRequest) returns (CalculateInteractionResponse);
+
+  // Estimates an interaction.
+  rpc EstimateInteraction(EstimateInteractionRequest) returns (EstimateInteractionResponse);
+
+  // Quotes an interaction.
+  rpc QuoteInteraction(QuoteInteractionRequest) returns (QuoteInteractionResponse);
+
+  // Compares an interaction.
+  rpc CompareInteractionOptions(CompareInteractionOptionsRequest) returns (CompareInteractionOptionsResponse);
+
+  // Recalculates an interaction.
+  rpc RecalculateInteractions(RecalculateInteractionsRequest) returns (RecalculateInteractionsResponse);
+
+  // Simulates an interaction.
+  rpc SimulateInteraction(SimulateInteractionRequest) returns (SimulateInteractionResponse);
+
+  // Explains an interaction.
+  rpc ExplainInteractionCalculation(ExplainInteractionCalculationRequest) returns (ExplainInteractionCalculationResponse);
+
+  // Returns an interaction.
+  rpc GetInteractionRates(GetInteractionRatesRequest) returns (GetInteractionRatesResponse);
+}
+
+// The request of `CalculateInteraction`.
+message CalculateInteractionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  Interaction interaction = 3;
+  CalculateInteractionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateInteraction`.
+message CalculateInteractionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateInteractionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Interaction interaction = 1;
+  CalculateInteractionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateInteraction`.
+message EstimateInteractionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  Interaction interaction = 3;
+  EstimateInteractionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateInteraction`.
+message EstimateInteractionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateInteractionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Interaction interaction = 1;
+  EstimateInteractionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteInteraction`.
+message QuoteInteractionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  Interaction interaction = 3;
+  QuoteInteractionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteInteraction`.
+message QuoteInteractionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteInteractionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Interaction interaction = 1;
+  QuoteInteractionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareInteractionOptions`.
+message CompareInteractionOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  Interaction interaction = 3;
+  CompareInteractionOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareInteractionOptions`.
+message CompareInteractionOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareInteractionOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Interaction interaction = 1;
+  CompareInteractionOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateInteractions`.
+message RecalculateInteractionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  Interaction interaction = 3;
+  RecalculateInteractionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateInteractions`.
+message RecalculateInteractionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateInteractionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Interaction interaction = 1;
+  RecalculateInteractionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateInteraction`.
+message SimulateInteractionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  Interaction interaction = 3;
+  SimulateInteractionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateInteraction`.
+message SimulateInteractionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateInteractionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Interaction interaction = 1;
+  SimulateInteractionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainInteractionCalculation`.
+message ExplainInteractionCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  Interaction interaction = 3;
+  ExplainInteractionCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainInteractionCalculation`.
+message ExplainInteractionCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Interaction interaction = 1;
+  ExplainInteractionCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetInteractionRates`.
+message GetInteractionRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetInteractionRates`.
+message GetInteractionRatesResponse {
+  Interaction interaction = 1;
+  acme.common.v1.OperationResult result = 2;
+}

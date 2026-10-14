@@ -1,0 +1,263 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datahub.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/datahub/v1/datahub.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datahub.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datahub/v1;datahubv1";
+option java_multiple_files = true;
+option java_outer_classname = "DataShareIntegrationServiceProto";
+option java_package = "com.acme.datahub.v1";
+
+// Connects external systems that send data share events.
+service DataShareIntegrationService {
+  // Connects a data share.
+  rpc ConnectDataShareSource(ConnectDataShareSourceRequest) returns (ConnectDataShareSourceResponse);
+
+  // Disconnects a data share.
+  rpc DisconnectDataShareSource(DisconnectDataShareSourceRequest) returns (DisconnectDataShareSourceResponse);
+
+  // Takes a stream of data shares and answers once at the end.
+  rpc IngestDataShareEvents(stream IngestDataShareEventsRequest) returns (IngestDataShareEventsResponse);
+
+  // Replays a data share.
+  rpc ReplayDataShareEvents(ReplayDataShareEventsRequest) returns (ReplayDataShareEventsResponse);
+
+  // Acknowledges a data share.
+  rpc AcknowledgeDataShareEvent(AcknowledgeDataShareEventRequest) returns (AcknowledgeDataShareEventResponse);
+
+  // Exchanges changes of data shares with a peer.
+  rpc RelayDataShareMessages(stream RelayDataShareMessagesRequest) returns (stream RelayDataShareMessagesResponse);
+
+  // Lists data shares a page at a time.
+  rpc ListDataShareSources(ListDataShareSourcesRequest) returns (ListDataShareSourcesResponse);
+}
+
+// The request of `ConnectDataShareSource`.
+message ConnectDataShareSourceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  ConnectDataShareSourceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ConnectDataShareSource`.
+message ConnectDataShareSourceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  ConnectDataShareSourceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DisconnectDataShareSource`.
+message DisconnectDataShareSourceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DisconnectDataShareSourceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `DisconnectDataShareSource`.
+message DisconnectDataShareSourceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  DisconnectDataShareSourceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `IngestDataShareEvents`.
+message IngestDataShareEventsRequest {
+  // What a stream of records starts with.
+  message StreamHeader {
+    string source = 1;
+    string format = 2;
+    int64 total_records = 3;
+    acme.common.v1.ContactInfo submitted_by = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof chunk {
+    IngestDataShareEventsRequest.StreamHeader header = 2;
+    DataShare record = 3;
+  }
+  int64 sequence = 4;
+}
+
+// The response of `IngestDataShareEvents`.
+message IngestDataShareEventsResponse {
+  // A record the import turned down.
+  message Rejection {
+    int64 sequence = 1;
+    string reason = 2;
+    string data_share_id = 3;
+  }
+
+  int64 accepted = 1;
+  int64 rejected = 2;
+  repeated IngestDataShareEventsResponse.Rejection rejections = 3;
+  acme.common.v1.OperationResult result = 4;
+}
+
+// The request of `ReplayDataShareEvents`.
+message ReplayDataShareEventsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  ReplayDataShareEventsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReplayDataShareEvents`.
+message ReplayDataShareEventsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  ReplayDataShareEventsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AcknowledgeDataShareEvent`.
+message AcknowledgeDataShareEventRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  AcknowledgeDataShareEventRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `AcknowledgeDataShareEvent`.
+message AcknowledgeDataShareEventResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  AcknowledgeDataShareEventResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RelayDataShareMessages`.
+message RelayDataShareMessagesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    DataShare change = 2;
+    RelayDataShareMessagesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `RelayDataShareMessages`.
+message RelayDataShareMessagesResponse {
+  DataShare data_share = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ListDataShareSources`.
+message ListDataShareSourcesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DataShareStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListDataShareSourcesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListDataShareSources`.
+message ListDataShareSourcesResponse {
+  repeated DataShare data_shares = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

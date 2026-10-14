@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.pipelines.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/pipelines/v1/pipelines.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Pipelines.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/pipelines/v1;pipelinesv1";
+option java_multiple_files = true;
+option java_outer_classname = "PipelineWorkflowServiceProto";
+option java_package = "com.acme.pipelines.v1";
+
+// Runs the long-lived workflow that takes a pipeline from start to finish.
+service PipelineWorkflowService {
+  // Starts a pipeline.
+  rpc StartPipelineWorkflow(StartPipelineWorkflowRequest) returns (StartPipelineWorkflowResponse);
+
+  // Advances a pipeline.
+  rpc AdvancePipelineWorkflow(AdvancePipelineWorkflowRequest) returns (AdvancePipelineWorkflowResponse);
+
+  // Cancels a pipeline.
+  rpc CancelPipelineWorkflow(CancelPipelineWorkflowRequest) returns (CancelPipelineWorkflowResponse);
+
+  // Retrys a pipeline.
+  rpc RetryPipelineWorkflow(RetryPipelineWorkflowRequest) returns (RetryPipelineWorkflowResponse);
+
+  // Pauses a pipeline.
+  rpc PausePipelineWorkflow(PausePipelineWorkflowRequest) returns (PausePipelineWorkflowResponse);
+
+  // Resumes a pipeline.
+  rpc ResumePipelineWorkflow(ResumePipelineWorkflowRequest) returns (ResumePipelineWorkflowResponse);
+
+  // Returns a pipeline.
+  rpc InspectPipelineWorkflow(InspectPipelineWorkflowRequest) returns (InspectPipelineWorkflowResponse);
+
+  // Lists pipelines a page at a time.
+  rpc ListPipelineWorkflows(ListPipelineWorkflowsRequest) returns (ListPipelineWorkflowsResponse);
+
+  // Signals a pipeline.
+  rpc SignalPipelineWorkflow(SignalPipelineWorkflowRequest) returns (SignalPipelineWorkflowResponse);
+}
+
+// The request of `StartPipelineWorkflow`.
+message StartPipelineWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  StartPipelineWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartPipelineWorkflow`.
+message StartPipelineWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  StartPipelineWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvancePipelineWorkflow`.
+message AdvancePipelineWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  AdvancePipelineWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvancePipelineWorkflow`.
+message AdvancePipelineWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  AdvancePipelineWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelPipelineWorkflow`.
+message CancelPipelineWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  CancelPipelineWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelPipelineWorkflow`.
+message CancelPipelineWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  CancelPipelineWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryPipelineWorkflow`.
+message RetryPipelineWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  RetryPipelineWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryPipelineWorkflow`.
+message RetryPipelineWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  RetryPipelineWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PausePipelineWorkflow`.
+message PausePipelineWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  PausePipelineWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PausePipelineWorkflow`.
+message PausePipelineWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  PausePipelineWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumePipelineWorkflow`.
+message ResumePipelineWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  ResumePipelineWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumePipelineWorkflow`.
+message ResumePipelineWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  ResumePipelineWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectPipelineWorkflow`.
+message InspectPipelineWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectPipelineWorkflow`.
+message InspectPipelineWorkflowResponse {
+  Pipeline pipeline = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListPipelineWorkflows`.
+message ListPipelineWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PipelineStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPipelineWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPipelineWorkflows`.
+message ListPipelineWorkflowsResponse {
+  repeated Pipeline pipelines = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalPipelineWorkflow`.
+message SignalPipelineWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_id = 2;
+  Pipeline pipeline = 3;
+  SignalPipelineWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalPipelineWorkflow`.
+message SignalPipelineWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Pipeline pipeline = 1;
+  SignalPipelineWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

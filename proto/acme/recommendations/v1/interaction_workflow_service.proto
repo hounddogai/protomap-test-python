@@ -1,0 +1,258 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.recommendations.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/recommendations/v1/recommendations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Recommendations.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/recommendations/v1;recommendationsv1";
+option java_multiple_files = true;
+option java_outer_classname = "InteractionWorkflowServiceProto";
+option java_package = "com.acme.recommendations.v1";
+
+// Runs the long-lived workflow that takes an interaction from start to finish.
+service InteractionWorkflowService {
+  // Starts an interaction.
+  rpc StartInteractionWorkflow(StartInteractionWorkflowRequest) returns (StartInteractionWorkflowResponse);
+
+  // Advances an interaction.
+  rpc AdvanceInteractionWorkflow(AdvanceInteractionWorkflowRequest) returns (AdvanceInteractionWorkflowResponse);
+
+  // Pauses an interaction.
+  rpc PauseInteractionWorkflow(PauseInteractionWorkflowRequest) returns (PauseInteractionWorkflowResponse);
+
+  // Resumes an interaction.
+  rpc ResumeInteractionWorkflow(ResumeInteractionWorkflowRequest) returns (ResumeInteractionWorkflowResponse);
+
+  // Returns an interaction.
+  rpc InspectInteractionWorkflow(InspectInteractionWorkflowRequest) returns (InspectInteractionWorkflowResponse);
+
+  // Lists interactions a page at a time.
+  rpc ListInteractionWorkflows(ListInteractionWorkflowsRequest) returns (ListInteractionWorkflowsResponse);
+
+  // Signals an interaction.
+  rpc SignalInteractionWorkflow(SignalInteractionWorkflowRequest) returns (SignalInteractionWorkflowResponse);
+}
+
+// The request of `StartInteractionWorkflow`.
+message StartInteractionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  Interaction interaction = 3;
+  StartInteractionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartInteractionWorkflow`.
+message StartInteractionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Interaction interaction = 1;
+  StartInteractionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceInteractionWorkflow`.
+message AdvanceInteractionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  Interaction interaction = 3;
+  AdvanceInteractionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceInteractionWorkflow`.
+message AdvanceInteractionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Interaction interaction = 1;
+  AdvanceInteractionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseInteractionWorkflow`.
+message PauseInteractionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  Interaction interaction = 3;
+  PauseInteractionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseInteractionWorkflow`.
+message PauseInteractionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Interaction interaction = 1;
+  PauseInteractionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeInteractionWorkflow`.
+message ResumeInteractionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  Interaction interaction = 3;
+  ResumeInteractionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeInteractionWorkflow`.
+message ResumeInteractionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Interaction interaction = 1;
+  ResumeInteractionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectInteractionWorkflow`.
+message InspectInteractionWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectInteractionWorkflow`.
+message InspectInteractionWorkflowResponse {
+  Interaction interaction = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListInteractionWorkflows`.
+message ListInteractionWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated InteractionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListInteractionWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListInteractionWorkflows`.
+message ListInteractionWorkflowsResponse {
+  repeated Interaction interactions = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalInteractionWorkflow`.
+message SignalInteractionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  Interaction interaction = 3;
+  SignalInteractionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalInteractionWorkflow`.
+message SignalInteractionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Interaction interaction = 1;
+  SignalInteractionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

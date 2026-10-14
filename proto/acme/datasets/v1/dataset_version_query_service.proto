@@ -1,0 +1,214 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datasets.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/datasets/v1/datasets.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datasets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datasets/v1;datasetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DatasetVersionQueryServiceProto";
+option java_package = "com.acme.datasets.v1";
+
+// Answers read-only questions about dataset versions, for screens and reports.
+service DatasetVersionQueryService {
+  // Returns a dataset version.
+  rpc LookupDatasetVersion(LookupDatasetVersionRequest) returns (LookupDatasetVersionResponse);
+
+  // Lists dataset versions a page at a time.
+  rpc BrowseDatasetVersions(BrowseDatasetVersionsRequest) returns (BrowseDatasetVersionsResponse);
+
+  // Lists dataset versions a page at a time.
+  rpc FindDatasetVersions(FindDatasetVersionsRequest) returns (FindDatasetVersionsResponse);
+
+  // Counts dataset versions by status.
+  rpc CountDatasetVersions(CountDatasetVersionsRequest) returns (CountDatasetVersionsResponse);
+
+  // Returns several dataset versions at once.
+  rpc ResolveDatasetVersions(ResolveDatasetVersionsRequest) returns (ResolveDatasetVersionsResponse);
+
+  // Summarizes a dataset version.
+  rpc SummarizeDatasetVersions(SummarizeDatasetVersionsRequest) returns (SummarizeDatasetVersionsResponse);
+
+  // Lists dataset versions a page at a time.
+  rpc SuggestDatasetVersions(SuggestDatasetVersionsRequest) returns (SuggestDatasetVersionsResponse);
+
+  // Returns a dataset version.
+  rpc PeekDatasetVersion(PeekDatasetVersionRequest) returns (PeekDatasetVersionResponse);
+}
+
+// The request of `LookupDatasetVersion`.
+message LookupDatasetVersionRequest {
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupDatasetVersion`.
+message LookupDatasetVersionResponse {
+  DatasetVersion dataset_version = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseDatasetVersions`.
+message BrowseDatasetVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DatasetVersionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseDatasetVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseDatasetVersions`.
+message BrowseDatasetVersionsResponse {
+  repeated DatasetVersion dataset_versions = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindDatasetVersions`.
+message FindDatasetVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DatasetVersionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindDatasetVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindDatasetVersions`.
+message FindDatasetVersionsResponse {
+  repeated DatasetVersion dataset_versions = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountDatasetVersions`.
+message CountDatasetVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DatasetVersionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountDatasetVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountDatasetVersions`.
+message CountDatasetVersionsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResolveDatasetVersions`.
+message ResolveDatasetVersionsRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string dataset_version_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `ResolveDatasetVersions`.
+message ResolveDatasetVersionsResponse {
+  repeated DatasetVersion dataset_versions = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SummarizeDatasetVersions`.
+message SummarizeDatasetVersionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  SummarizeDatasetVersionsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SummarizeDatasetVersions`.
+message SummarizeDatasetVersionsResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestDatasetVersions`.
+message SuggestDatasetVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DatasetVersionStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestDatasetVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestDatasetVersions`.
+message SuggestDatasetVersionsResponse {
+  repeated DatasetVersion dataset_versions = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PeekDatasetVersion`.
+message PeekDatasetVersionRequest {
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekDatasetVersion`.
+message PeekDatasetVersionResponse {
+  DatasetVersion dataset_version = 1;
+  acme.common.v1.OperationResult result = 2;
+}

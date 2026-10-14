@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.forecasting.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/forecasting/v1/forecasting.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Forecasting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/forecasting/v1;forecastingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ScenarioValidationServiceProto";
+option java_package = "com.acme.forecasting.v1";
+
+// Checks scenarios against the rules before anything acts on them.
+service ScenarioValidationService {
+  // Validates a scenario.
+  rpc ValidateScenario(ValidateScenarioRequest) returns (ValidateScenarioResponse);
+
+  // Previews a scenario.
+  rpc PreviewScenario(PreviewScenarioRequest) returns (PreviewScenarioResponse);
+
+  // Checks a scenario.
+  rpc CheckScenarioEligibility(CheckScenarioEligibilityRequest) returns (CheckScenarioEligibilityResponse);
+
+  // Normalizes a scenario.
+  rpc NormalizeScenario(NormalizeScenarioRequest) returns (NormalizeScenarioResponse);
+
+  // Explains a scenario.
+  rpc ExplainScenarioDecision(ExplainScenarioDecisionRequest) returns (ExplainScenarioDecisionResponse);
+
+  // Scores a scenario.
+  rpc ScoreScenario(ScoreScenarioRequest) returns (ScoreScenarioResponse);
+
+  // Lints a scenario.
+  rpc LintScenarios(LintScenariosRequest) returns (LintScenariosResponse);
+
+  // Returns a scenario.
+  rpc GetScenarioRules(GetScenarioRulesRequest) returns (GetScenarioRulesResponse);
+}
+
+// The request of `ValidateScenario`.
+message ValidateScenarioRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string scenario_id = 2;
+  Scenario scenario = 3;
+  ValidateScenarioRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateScenario`.
+message ValidateScenarioResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Scenario scenario = 1;
+  ValidateScenarioResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewScenario`.
+message PreviewScenarioRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string scenario_id = 2;
+  Scenario scenario = 3;
+  PreviewScenarioRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewScenario`.
+message PreviewScenarioResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Scenario scenario = 1;
+  PreviewScenarioResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckScenarioEligibility`.
+message CheckScenarioEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string scenario_id = 2;
+  Scenario scenario = 3;
+  CheckScenarioEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckScenarioEligibility`.
+message CheckScenarioEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Scenario scenario = 1;
+  CheckScenarioEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeScenario`.
+message NormalizeScenarioRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string scenario_id = 2;
+  Scenario scenario = 3;
+  NormalizeScenarioRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeScenario`.
+message NormalizeScenarioResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Scenario scenario = 1;
+  NormalizeScenarioResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainScenarioDecision`.
+message ExplainScenarioDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string scenario_id = 2;
+  Scenario scenario = 3;
+  ExplainScenarioDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainScenarioDecision`.
+message ExplainScenarioDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Scenario scenario = 1;
+  ExplainScenarioDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreScenario`.
+message ScoreScenarioRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string scenario_id = 2;
+  Scenario scenario = 3;
+  ScoreScenarioRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreScenario`.
+message ScoreScenarioResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreScenarioResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Scenario scenario = 1;
+  ScoreScenarioResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintScenarios`.
+message LintScenariosRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string scenario_id = 2;
+  Scenario scenario = 3;
+  LintScenariosRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintScenarios`.
+message LintScenariosResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Scenario scenario = 1;
+  LintScenariosResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetScenarioRules`.
+message GetScenarioRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string scenario_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetScenarioRules`.
+message GetScenarioRulesResponse {
+  Scenario scenario = 1;
+  acme.common.v1.OperationResult result = 2;
+}

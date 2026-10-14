@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.analytics.v1;
+
+import "acme/analytics/v1/analytics.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Analytics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/analytics/v1;analyticsv1";
+option java_multiple_files = true;
+option java_outer_classname = "AnalyticsEventWorkflowServiceProto";
+option java_package = "com.acme.analytics.v1";
+
+// Runs the long-lived workflow that takes an analytics event from start to finish.
+service AnalyticsEventWorkflowService {
+  // Starts an analytics event.
+  rpc StartAnalyticsEventWorkflow(StartAnalyticsEventWorkflowRequest) returns (StartAnalyticsEventWorkflowResponse);
+
+  // Advances an analytics event.
+  rpc AdvanceAnalyticsEventWorkflow(AdvanceAnalyticsEventWorkflowRequest) returns (AdvanceAnalyticsEventWorkflowResponse);
+
+  // Cancels an analytics event.
+  rpc CancelAnalyticsEventWorkflow(CancelAnalyticsEventWorkflowRequest) returns (CancelAnalyticsEventWorkflowResponse);
+
+  // Retrys an analytics event.
+  rpc RetryAnalyticsEventWorkflow(RetryAnalyticsEventWorkflowRequest) returns (RetryAnalyticsEventWorkflowResponse);
+
+  // Pauses an analytics event.
+  rpc PauseAnalyticsEventWorkflow(PauseAnalyticsEventWorkflowRequest) returns (PauseAnalyticsEventWorkflowResponse);
+
+  // Resumes an analytics event.
+  rpc ResumeAnalyticsEventWorkflow(ResumeAnalyticsEventWorkflowRequest) returns (ResumeAnalyticsEventWorkflowResponse);
+
+  // Returns an analytics event.
+  rpc InspectAnalyticsEventWorkflow(InspectAnalyticsEventWorkflowRequest) returns (InspectAnalyticsEventWorkflowResponse);
+
+  // Lists analytics events a page at a time.
+  rpc ListAnalyticsEventWorkflows(ListAnalyticsEventWorkflowsRequest) returns (ListAnalyticsEventWorkflowsResponse);
+
+  // Signals an analytics event.
+  rpc SignalAnalyticsEventWorkflow(SignalAnalyticsEventWorkflowRequest) returns (SignalAnalyticsEventWorkflowResponse);
+}
+
+// The request of `StartAnalyticsEventWorkflow`.
+message StartAnalyticsEventWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_event_id = 2;
+  AnalyticsEvent analytics_event = 3;
+  StartAnalyticsEventWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartAnalyticsEventWorkflow`.
+message StartAnalyticsEventWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsEvent analytics_event = 1;
+  StartAnalyticsEventWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceAnalyticsEventWorkflow`.
+message AdvanceAnalyticsEventWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_event_id = 2;
+  AnalyticsEvent analytics_event = 3;
+  AdvanceAnalyticsEventWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceAnalyticsEventWorkflow`.
+message AdvanceAnalyticsEventWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsEvent analytics_event = 1;
+  AdvanceAnalyticsEventWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelAnalyticsEventWorkflow`.
+message CancelAnalyticsEventWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_event_id = 2;
+  AnalyticsEvent analytics_event = 3;
+  CancelAnalyticsEventWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelAnalyticsEventWorkflow`.
+message CancelAnalyticsEventWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsEvent analytics_event = 1;
+  CancelAnalyticsEventWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryAnalyticsEventWorkflow`.
+message RetryAnalyticsEventWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_event_id = 2;
+  AnalyticsEvent analytics_event = 3;
+  RetryAnalyticsEventWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryAnalyticsEventWorkflow`.
+message RetryAnalyticsEventWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsEvent analytics_event = 1;
+  RetryAnalyticsEventWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseAnalyticsEventWorkflow`.
+message PauseAnalyticsEventWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_event_id = 2;
+  AnalyticsEvent analytics_event = 3;
+  PauseAnalyticsEventWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseAnalyticsEventWorkflow`.
+message PauseAnalyticsEventWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsEvent analytics_event = 1;
+  PauseAnalyticsEventWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeAnalyticsEventWorkflow`.
+message ResumeAnalyticsEventWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_event_id = 2;
+  AnalyticsEvent analytics_event = 3;
+  ResumeAnalyticsEventWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeAnalyticsEventWorkflow`.
+message ResumeAnalyticsEventWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsEvent analytics_event = 1;
+  ResumeAnalyticsEventWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectAnalyticsEventWorkflow`.
+message InspectAnalyticsEventWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string analytics_event_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectAnalyticsEventWorkflow`.
+message InspectAnalyticsEventWorkflowResponse {
+  AnalyticsEvent analytics_event = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListAnalyticsEventWorkflows`.
+message ListAnalyticsEventWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AnalyticsEventStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListAnalyticsEventWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListAnalyticsEventWorkflows`.
+message ListAnalyticsEventWorkflowsResponse {
+  repeated AnalyticsEvent analytics_events = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalAnalyticsEventWorkflow`.
+message SignalAnalyticsEventWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string analytics_event_id = 2;
+  AnalyticsEvent analytics_event = 3;
+  SignalAnalyticsEventWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalAnalyticsEventWorkflow`.
+message SignalAnalyticsEventWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AnalyticsEvent analytics_event = 1;
+  SignalAnalyticsEventWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

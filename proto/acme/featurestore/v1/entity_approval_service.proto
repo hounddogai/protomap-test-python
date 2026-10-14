@@ -1,0 +1,240 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featurestore.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/featurestore/v1/featurestore.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featurestore.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featurestore/v1;featurestorev1";
+option java_multiple_files = true;
+option java_outer_classname = "EntityApprovalServiceProto";
+option java_package = "com.acme.featurestore.v1";
+
+// Routes entities through approval, with escalation and delegation.
+service EntityApprovalService {
+  // Submits an entity.
+  rpc SubmitEntity(SubmitEntityRequest) returns (SubmitEntityResponse);
+
+  // Approves an entity.
+  rpc ApproveEntity(ApproveEntityRequest) returns (ApproveEntityResponse);
+
+  // Rejects an entity.
+  rpc RejectEntity(RejectEntityRequest) returns (RejectEntityResponse);
+
+  // Lists entities a page at a time.
+  rpc ListPendingEntities(ListPendingEntitiesRequest) returns (ListPendingEntitiesResponse);
+
+  // Recalls an entity.
+  rpc RecallEntity(RecallEntityRequest) returns (RecallEntityResponse);
+
+  // Comments an entity.
+  rpc CommentEntityApproval(CommentEntityApprovalRequest) returns (CommentEntityApprovalResponse);
+}
+
+// The request of `SubmitEntity`.
+message SubmitEntityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  SubmitEntityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitEntity`.
+message SubmitEntityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  SubmitEntityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveEntity`.
+message ApproveEntityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  ApproveEntityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveEntity`.
+message ApproveEntityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  ApproveEntityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectEntity`.
+message RejectEntityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  RejectEntityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectEntity`.
+message RejectEntityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  RejectEntityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingEntities`.
+message ListPendingEntitiesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated EntityStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingEntitiesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingEntities`.
+message ListPendingEntitiesResponse {
+  repeated Entity entities = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallEntity`.
+message RecallEntityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  RecallEntityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallEntity`.
+message RecallEntityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  RecallEntityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CommentEntityApproval`.
+message CommentEntityApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string entity_id = 2;
+  Entity entity = 3;
+  CommentEntityApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentEntityApproval`.
+message CommentEntityApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Entity entity = 1;
+  CommentEntityApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.forecasting.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/forecasting/v1/forecasting.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Forecasting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/forecasting/v1;forecastingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ForecastModelApprovalServiceProto";
+option java_package = "com.acme.forecasting.v1";
+
+// Routes forecast models through approval, with escalation and delegation.
+service ForecastModelApprovalService {
+  // Submits a forecast model.
+  rpc SubmitForecastModel(SubmitForecastModelRequest) returns (SubmitForecastModelResponse);
+
+  // Approves a forecast model.
+  rpc ApproveForecastModel(ApproveForecastModelRequest) returns (ApproveForecastModelResponse);
+
+  // Rejects a forecast model.
+  rpc RejectForecastModel(RejectForecastModelRequest) returns (RejectForecastModelResponse);
+
+  // Escalates a forecast model.
+  rpc EscalateForecastModel(EscalateForecastModelRequest) returns (EscalateForecastModelResponse);
+
+  // Lists forecast models a page at a time.
+  rpc ListPendingForecastModels(ListPendingForecastModelsRequest) returns (ListPendingForecastModelsResponse);
+
+  // Delegates a forecast model.
+  rpc DelegateForecastModelApproval(DelegateForecastModelApprovalRequest) returns (DelegateForecastModelApprovalResponse);
+
+  // Returns a forecast model.
+  rpc GetForecastModelApprovalStatus(GetForecastModelApprovalStatusRequest) returns (GetForecastModelApprovalStatusResponse);
+
+  // Comments a forecast model.
+  rpc CommentForecastModelApproval(CommentForecastModelApprovalRequest) returns (CommentForecastModelApprovalResponse);
+}
+
+// The request of `SubmitForecastModel`.
+message SubmitForecastModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_model_id = 2;
+  ForecastModel forecast_model = 3;
+  SubmitForecastModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitForecastModel`.
+message SubmitForecastModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ForecastModel forecast_model = 1;
+  SubmitForecastModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveForecastModel`.
+message ApproveForecastModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_model_id = 2;
+  ForecastModel forecast_model = 3;
+  ApproveForecastModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveForecastModel`.
+message ApproveForecastModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ForecastModel forecast_model = 1;
+  ApproveForecastModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectForecastModel`.
+message RejectForecastModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_model_id = 2;
+  ForecastModel forecast_model = 3;
+  RejectForecastModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectForecastModel`.
+message RejectForecastModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ForecastModel forecast_model = 1;
+  RejectForecastModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateForecastModel`.
+message EscalateForecastModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_model_id = 2;
+  ForecastModel forecast_model = 3;
+  EscalateForecastModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateForecastModel`.
+message EscalateForecastModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ForecastModel forecast_model = 1;
+  EscalateForecastModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingForecastModels`.
+message ListPendingForecastModelsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ForecastModelStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingForecastModelsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingForecastModels`.
+message ListPendingForecastModelsResponse {
+  repeated ForecastModel forecast_models = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateForecastModelApproval`.
+message DelegateForecastModelApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_model_id = 2;
+  ForecastModel forecast_model = 3;
+  DelegateForecastModelApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateForecastModelApproval`.
+message DelegateForecastModelApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ForecastModel forecast_model = 1;
+  DelegateForecastModelApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetForecastModelApprovalStatus`.
+message GetForecastModelApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string forecast_model_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetForecastModelApprovalStatus`.
+message GetForecastModelApprovalStatusResponse {
+  ForecastModel forecast_model = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentForecastModelApproval`.
+message CommentForecastModelApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string forecast_model_id = 2;
+  ForecastModel forecast_model = 3;
+  CommentForecastModelApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentForecastModelApproval`.
+message CommentForecastModelApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ForecastModel forecast_model = 1;
+  CommentForecastModelApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

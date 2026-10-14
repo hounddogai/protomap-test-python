@@ -1,0 +1,267 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datasets.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/datasets/v1/datasets.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datasets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datasets/v1;datasetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DatasetVersionWorkflowServiceProto";
+option java_package = "com.acme.datasets.v1";
+
+// Runs the long-lived workflow that takes a dataset version from start to finish.
+service DatasetVersionWorkflowService {
+  // Starts a dataset version.
+  rpc StartDatasetVersionWorkflow(StartDatasetVersionWorkflowRequest) returns (StartDatasetVersionWorkflowResponse);
+
+  // Advances a dataset version.
+  rpc AdvanceDatasetVersionWorkflow(AdvanceDatasetVersionWorkflowRequest) returns (AdvanceDatasetVersionWorkflowResponse);
+
+  // Cancels a dataset version.
+  rpc CancelDatasetVersionWorkflow(CancelDatasetVersionWorkflowRequest) returns (CancelDatasetVersionWorkflowResponse);
+
+  // Retrys a dataset version.
+  rpc RetryDatasetVersionWorkflow(RetryDatasetVersionWorkflowRequest) returns (RetryDatasetVersionWorkflowResponse);
+
+  // Pauses a dataset version.
+  rpc PauseDatasetVersionWorkflow(PauseDatasetVersionWorkflowRequest) returns (PauseDatasetVersionWorkflowResponse);
+
+  // Resumes a dataset version.
+  rpc ResumeDatasetVersionWorkflow(ResumeDatasetVersionWorkflowRequest) returns (ResumeDatasetVersionWorkflowResponse);
+
+  // Returns a dataset version.
+  rpc InspectDatasetVersionWorkflow(InspectDatasetVersionWorkflowRequest) returns (InspectDatasetVersionWorkflowResponse);
+}
+
+// The request of `StartDatasetVersionWorkflow`.
+message StartDatasetVersionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  StartDatasetVersionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartDatasetVersionWorkflow`.
+message StartDatasetVersionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  StartDatasetVersionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceDatasetVersionWorkflow`.
+message AdvanceDatasetVersionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  AdvanceDatasetVersionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceDatasetVersionWorkflow`.
+message AdvanceDatasetVersionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  AdvanceDatasetVersionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelDatasetVersionWorkflow`.
+message CancelDatasetVersionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  CancelDatasetVersionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelDatasetVersionWorkflow`.
+message CancelDatasetVersionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  CancelDatasetVersionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryDatasetVersionWorkflow`.
+message RetryDatasetVersionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  RetryDatasetVersionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryDatasetVersionWorkflow`.
+message RetryDatasetVersionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  RetryDatasetVersionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseDatasetVersionWorkflow`.
+message PauseDatasetVersionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  PauseDatasetVersionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseDatasetVersionWorkflow`.
+message PauseDatasetVersionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  PauseDatasetVersionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeDatasetVersionWorkflow`.
+message ResumeDatasetVersionWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  DatasetVersion dataset_version = 3;
+  ResumeDatasetVersionWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeDatasetVersionWorkflow`.
+message ResumeDatasetVersionWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DatasetVersion dataset_version = 1;
+  ResumeDatasetVersionWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectDatasetVersionWorkflow`.
+message InspectDatasetVersionWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string dataset_version_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectDatasetVersionWorkflow`.
+message InspectDatasetVersionWorkflowResponse {
+  DatasetVersion dataset_version = 1;
+  acme.common.v1.OperationResult result = 2;
+}

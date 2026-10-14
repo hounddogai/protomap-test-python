@@ -1,0 +1,218 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.metrics.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/metrics/v1/metrics.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Metrics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/metrics/v1;metricsv1";
+option java_multiple_files = true;
+option java_outer_classname = "MetricSeriesNotificationServiceProto";
+option java_package = "com.acme.metrics.v1";
+
+// Tells the people who follow a metric series what changed.
+service MetricSeriesNotificationService {
+  // Subscribes a metric series.
+  rpc SubscribeMetricSeriesUpdates(SubscribeMetricSeriesUpdatesRequest) returns (SubscribeMetricSeriesUpdatesResponse);
+
+  // Unsubscribes a metric series.
+  rpc UnsubscribeMetricSeriesUpdates(UnsubscribeMetricSeriesUpdatesRequest) returns (UnsubscribeMetricSeriesUpdatesResponse);
+
+  // Notifys a metric series.
+  rpc NotifyMetricSeriesWatchers(NotifyMetricSeriesWatchersRequest) returns (NotifyMetricSeriesWatchersResponse);
+
+  // Sends a metric series.
+  rpc SendMetricSeriesTestNotice(SendMetricSeriesTestNoticeRequest) returns (SendMetricSeriesTestNoticeResponse);
+
+  // Returns a metric series.
+  rpc GetMetricSeriesPreferences(GetMetricSeriesPreferencesRequest) returns (GetMetricSeriesPreferencesResponse);
+
+  // Streams the changes of metric serieses as they happen.
+  rpc StreamMetricSeriesNotices(StreamMetricSeriesNoticesRequest) returns (stream StreamMetricSeriesNoticesResponse);
+}
+
+// The request of `SubscribeMetricSeriesUpdates`.
+message SubscribeMetricSeriesUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  SubscribeMetricSeriesUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SubscribeMetricSeriesUpdates`.
+message SubscribeMetricSeriesUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricSeries metric_series = 1;
+  SubscribeMetricSeriesUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnsubscribeMetricSeriesUpdates`.
+message UnsubscribeMetricSeriesUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  UnsubscribeMetricSeriesUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnsubscribeMetricSeriesUpdates`.
+message UnsubscribeMetricSeriesUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricSeries metric_series = 1;
+  UnsubscribeMetricSeriesUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NotifyMetricSeriesWatchers`.
+message NotifyMetricSeriesWatchersRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  NotifyMetricSeriesWatchersRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `NotifyMetricSeriesWatchers`.
+message NotifyMetricSeriesWatchersResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricSeries metric_series = 1;
+  NotifyMetricSeriesWatchersResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SendMetricSeriesTestNotice`.
+message SendMetricSeriesTestNoticeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  SendMetricSeriesTestNoticeRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SendMetricSeriesTestNotice`.
+message SendMetricSeriesTestNoticeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricSeries metric_series = 1;
+  SendMetricSeriesTestNoticeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetMetricSeriesPreferences`.
+message GetMetricSeriesPreferencesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetMetricSeriesPreferences`.
+message GetMetricSeriesPreferencesResponse {
+  MetricSeries metric_series = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `StreamMetricSeriesNotices`.
+message StreamMetricSeriesNoticesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated MetricSeriesStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamMetricSeriesNoticesRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamMetricSeriesNotices`.
+message StreamMetricSeriesNoticesResponse {
+  MetricSeries metric_series = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}

@@ -1,0 +1,316 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datahub.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/datahub/v1/datahub.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datahub.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datahub/v1;datahubv1";
+option java_multiple_files = true;
+option java_outer_classname = "DataShareApprovalServiceProto";
+option java_package = "com.acme.datahub.v1";
+
+// Routes data shares through approval, with escalation and delegation.
+service DataShareApprovalService {
+  // Submits a data share.
+  rpc SubmitDataShare(SubmitDataShareRequest) returns (SubmitDataShareResponse);
+
+  // Approves a data share.
+  rpc ApproveDataShare(ApproveDataShareRequest) returns (ApproveDataShareResponse);
+
+  // Rejects a data share.
+  rpc RejectDataShare(RejectDataShareRequest) returns (RejectDataShareResponse);
+
+  // Escalates a data share.
+  rpc EscalateDataShare(EscalateDataShareRequest) returns (EscalateDataShareResponse);
+
+  // Lists data shares a page at a time.
+  rpc ListPendingDataShares(ListPendingDataSharesRequest) returns (ListPendingDataSharesResponse);
+
+  // Delegates a data share.
+  rpc DelegateDataShareApproval(DelegateDataShareApprovalRequest) returns (DelegateDataShareApprovalResponse);
+
+  // Recalls a data share.
+  rpc RecallDataShare(RecallDataShareRequest) returns (RecallDataShareResponse);
+
+  // Comments a data share.
+  rpc CommentDataShareApproval(CommentDataShareApprovalRequest) returns (CommentDataShareApprovalResponse);
+}
+
+// The request of `SubmitDataShare`.
+message SubmitDataShareRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  SubmitDataShareRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitDataShare`.
+message SubmitDataShareResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  SubmitDataShareResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveDataShare`.
+message ApproveDataShareRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  ApproveDataShareRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveDataShare`.
+message ApproveDataShareResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  ApproveDataShareResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectDataShare`.
+message RejectDataShareRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  RejectDataShareRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectDataShare`.
+message RejectDataShareResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  RejectDataShareResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateDataShare`.
+message EscalateDataShareRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  EscalateDataShareRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateDataShare`.
+message EscalateDataShareResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  EscalateDataShareResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingDataShares`.
+message ListPendingDataSharesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DataShareStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingDataSharesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingDataShares`.
+message ListPendingDataSharesResponse {
+  repeated DataShare data_shares = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateDataShareApproval`.
+message DelegateDataShareApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  DelegateDataShareApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateDataShareApproval`.
+message DelegateDataShareApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  DelegateDataShareApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallDataShare`.
+message RecallDataShareRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  RecallDataShareRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallDataShare`.
+message RecallDataShareResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  RecallDataShareResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CommentDataShareApproval`.
+message CommentDataShareApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_share_id = 2;
+  DataShare data_share = 3;
+  CommentDataShareApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentDataShareApproval`.
+message CommentDataShareApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataShare data_share = 1;
+  CommentDataShareApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

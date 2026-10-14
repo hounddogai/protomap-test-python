@@ -1,0 +1,214 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.analytics.v1;
+
+import "acme/analytics/v1/analytics.proto";
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Analytics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/analytics/v1;analyticsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FunnelQueryServiceProto";
+option java_package = "com.acme.analytics.v1";
+
+// Answers read-only questions about funnels, for screens and reports.
+service FunnelQueryService {
+  // Returns a funnel.
+  rpc LookupFunnel(LookupFunnelRequest) returns (LookupFunnelResponse);
+
+  // Lists funnels a page at a time.
+  rpc BrowseFunnels(BrowseFunnelsRequest) returns (BrowseFunnelsResponse);
+
+  // Lists funnels a page at a time.
+  rpc FindFunnels(FindFunnelsRequest) returns (FindFunnelsResponse);
+
+  // Counts funnels by status.
+  rpc CountFunnels(CountFunnelsRequest) returns (CountFunnelsResponse);
+
+  // Returns several funnels at once.
+  rpc ResolveFunnels(ResolveFunnelsRequest) returns (ResolveFunnelsResponse);
+
+  // Summarizes a funnel.
+  rpc SummarizeFunnels(SummarizeFunnelsRequest) returns (SummarizeFunnelsResponse);
+
+  // Lists funnels a page at a time.
+  rpc SuggestFunnels(SuggestFunnelsRequest) returns (SuggestFunnelsResponse);
+
+  // Returns a funnel.
+  rpc PeekFunnel(PeekFunnelRequest) returns (PeekFunnelResponse);
+}
+
+// The request of `LookupFunnel`.
+message LookupFunnelRequest {
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupFunnel`.
+message LookupFunnelResponse {
+  Funnel funnel = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseFunnels`.
+message BrowseFunnelsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FunnelStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseFunnelsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseFunnels`.
+message BrowseFunnelsResponse {
+  repeated Funnel funnels = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindFunnels`.
+message FindFunnelsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FunnelStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindFunnelsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindFunnels`.
+message FindFunnelsResponse {
+  repeated Funnel funnels = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountFunnels`.
+message CountFunnelsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FunnelStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountFunnelsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountFunnels`.
+message CountFunnelsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResolveFunnels`.
+message ResolveFunnelsRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string funnel_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `ResolveFunnels`.
+message ResolveFunnelsResponse {
+  repeated Funnel funnels = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SummarizeFunnels`.
+message SummarizeFunnelsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  SummarizeFunnelsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SummarizeFunnels`.
+message SummarizeFunnelsResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestFunnels`.
+message SuggestFunnelsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FunnelStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestFunnelsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestFunnels`.
+message SuggestFunnelsResponse {
+  repeated Funnel funnels = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PeekFunnel`.
+message PeekFunnelRequest {
+  acme.common.v1.RequestContext context = 1;
+  string funnel_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekFunnel`.
+message PeekFunnelResponse {
+  Funnel funnel = 1;
+  acme.common.v1.OperationResult result = 2;
+}

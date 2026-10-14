@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datasets.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/datasets/v1/datasets.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datasets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datasets/v1;datasetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DataSchemaApprovalServiceProto";
+option java_package = "com.acme.datasets.v1";
+
+// Routes data schemas through approval, with escalation and delegation.
+service DataSchemaApprovalService {
+  // Submits a data schema.
+  rpc SubmitDataSchema(SubmitDataSchemaRequest) returns (SubmitDataSchemaResponse);
+
+  // Approves a data schema.
+  rpc ApproveDataSchema(ApproveDataSchemaRequest) returns (ApproveDataSchemaResponse);
+
+  // Rejects a data schema.
+  rpc RejectDataSchema(RejectDataSchemaRequest) returns (RejectDataSchemaResponse);
+
+  // Escalates a data schema.
+  rpc EscalateDataSchema(EscalateDataSchemaRequest) returns (EscalateDataSchemaResponse);
+
+  // Lists data schemas a page at a time.
+  rpc ListPendingDataSchemas(ListPendingDataSchemasRequest) returns (ListPendingDataSchemasResponse);
+
+  // Delegates a data schema.
+  rpc DelegateDataSchemaApproval(DelegateDataSchemaApprovalRequest) returns (DelegateDataSchemaApprovalResponse);
+
+  // Recalls a data schema.
+  rpc RecallDataSchema(RecallDataSchemaRequest) returns (RecallDataSchemaResponse);
+
+  // Returns a data schema.
+  rpc GetDataSchemaApprovalStatus(GetDataSchemaApprovalStatusRequest) returns (GetDataSchemaApprovalStatusResponse);
+
+  // Comments a data schema.
+  rpc CommentDataSchemaApproval(CommentDataSchemaApprovalRequest) returns (CommentDataSchemaApprovalResponse);
+}
+
+// The request of `SubmitDataSchema`.
+message SubmitDataSchemaRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  SubmitDataSchemaRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitDataSchema`.
+message SubmitDataSchemaResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  SubmitDataSchemaResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveDataSchema`.
+message ApproveDataSchemaRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  ApproveDataSchemaRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveDataSchema`.
+message ApproveDataSchemaResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  ApproveDataSchemaResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectDataSchema`.
+message RejectDataSchemaRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  RejectDataSchemaRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectDataSchema`.
+message RejectDataSchemaResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  RejectDataSchemaResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateDataSchema`.
+message EscalateDataSchemaRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  EscalateDataSchemaRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateDataSchema`.
+message EscalateDataSchemaResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  EscalateDataSchemaResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingDataSchemas`.
+message ListPendingDataSchemasRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DataSchemaStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingDataSchemasRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingDataSchemas`.
+message ListPendingDataSchemasResponse {
+  repeated DataSchema data_schemas = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateDataSchemaApproval`.
+message DelegateDataSchemaApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  DelegateDataSchemaApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateDataSchemaApproval`.
+message DelegateDataSchemaApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  DelegateDataSchemaApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallDataSchema`.
+message RecallDataSchemaRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  RecallDataSchemaRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallDataSchema`.
+message RecallDataSchemaResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  RecallDataSchemaResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDataSchemaApprovalStatus`.
+message GetDataSchemaApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDataSchemaApprovalStatus`.
+message GetDataSchemaApprovalStatusResponse {
+  DataSchema data_schema = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentDataSchemaApproval`.
+message CommentDataSchemaApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string data_schema_id = 2;
+  DataSchema data_schema = 3;
+  CommentDataSchemaApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentDataSchemaApproval`.
+message CommentDataSchemaApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  DataSchema data_schema = 1;
+  CommentDataSchemaApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

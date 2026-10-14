@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.metrics.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/metrics/v1/metrics.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Metrics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/metrics/v1;metricsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DashboardValidationServiceProto";
+option java_package = "com.acme.metrics.v1";
+
+// Checks dashboards against the rules before anything acts on them.
+service DashboardValidationService {
+  // Validates a dashboard.
+  rpc ValidateDashboard(ValidateDashboardRequest) returns (ValidateDashboardResponse);
+
+  // Previews a dashboard.
+  rpc PreviewDashboard(PreviewDashboardRequest) returns (PreviewDashboardResponse);
+
+  // Checks a dashboard.
+  rpc CheckDashboardEligibility(CheckDashboardEligibilityRequest) returns (CheckDashboardEligibilityResponse);
+
+  // Normalizes a dashboard.
+  rpc NormalizeDashboard(NormalizeDashboardRequest) returns (NormalizeDashboardResponse);
+
+  // Explains a dashboard.
+  rpc ExplainDashboardDecision(ExplainDashboardDecisionRequest) returns (ExplainDashboardDecisionResponse);
+
+  // Scores a dashboard.
+  rpc ScoreDashboard(ScoreDashboardRequest) returns (ScoreDashboardResponse);
+
+  // Lints a dashboard.
+  rpc LintDashboards(LintDashboardsRequest) returns (LintDashboardsResponse);
+
+  // Returns a dashboard.
+  rpc GetDashboardRules(GetDashboardRulesRequest) returns (GetDashboardRulesResponse);
+}
+
+// The request of `ValidateDashboard`.
+message ValidateDashboardRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  Dashboard dashboard = 3;
+  ValidateDashboardRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateDashboard`.
+message ValidateDashboardResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  ValidateDashboardResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewDashboard`.
+message PreviewDashboardRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  Dashboard dashboard = 3;
+  PreviewDashboardRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewDashboard`.
+message PreviewDashboardResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  PreviewDashboardResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckDashboardEligibility`.
+message CheckDashboardEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  Dashboard dashboard = 3;
+  CheckDashboardEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckDashboardEligibility`.
+message CheckDashboardEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  CheckDashboardEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeDashboard`.
+message NormalizeDashboardRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  Dashboard dashboard = 3;
+  NormalizeDashboardRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeDashboard`.
+message NormalizeDashboardResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  NormalizeDashboardResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainDashboardDecision`.
+message ExplainDashboardDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  Dashboard dashboard = 3;
+  ExplainDashboardDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainDashboardDecision`.
+message ExplainDashboardDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  ExplainDashboardDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreDashboard`.
+message ScoreDashboardRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  Dashboard dashboard = 3;
+  ScoreDashboardRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreDashboard`.
+message ScoreDashboardResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreDashboardResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Dashboard dashboard = 1;
+  ScoreDashboardResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintDashboards`.
+message LintDashboardsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  Dashboard dashboard = 3;
+  LintDashboardsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintDashboards`.
+message LintDashboardsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dashboard dashboard = 1;
+  LintDashboardsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDashboardRules`.
+message GetDashboardRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string dashboard_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDashboardRules`.
+message GetDashboardRulesResponse {
+  Dashboard dashboard = 1;
+  acme.common.v1.OperationResult result = 2;
+}

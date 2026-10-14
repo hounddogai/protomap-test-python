@@ -1,0 +1,268 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.recommendations.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/recommendations/v1/recommendations.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Recommendations.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/recommendations/v1;recommendationsv1";
+option java_multiple_files = true;
+option java_outer_classname = "RecommendationModelValidationServiceProto";
+option java_package = "com.acme.recommendations.v1";
+
+// Checks recommendation models against the rules before anything acts on them.
+service RecommendationModelValidationService {
+  // Validates a recommendation model.
+  rpc ValidateRecommendationModel(ValidateRecommendationModelRequest) returns (ValidateRecommendationModelResponse);
+
+  // Previews a recommendation model.
+  rpc PreviewRecommendationModel(PreviewRecommendationModelRequest) returns (PreviewRecommendationModelResponse);
+
+  // Checks a recommendation model.
+  rpc CheckRecommendationModelEligibility(CheckRecommendationModelEligibilityRequest) returns (CheckRecommendationModelEligibilityResponse);
+
+  // Normalizes a recommendation model.
+  rpc NormalizeRecommendationModel(NormalizeRecommendationModelRequest) returns (NormalizeRecommendationModelResponse);
+
+  // Explains a recommendation model.
+  rpc ExplainRecommendationModelDecision(ExplainRecommendationModelDecisionRequest) returns (ExplainRecommendationModelDecisionResponse);
+
+  // Scores a recommendation model.
+  rpc ScoreRecommendationModel(ScoreRecommendationModelRequest) returns (ScoreRecommendationModelResponse);
+
+  // Returns a recommendation model.
+  rpc GetRecommendationModelRules(GetRecommendationModelRulesRequest) returns (GetRecommendationModelRulesResponse);
+}
+
+// The request of `ValidateRecommendationModel`.
+message ValidateRecommendationModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  ValidateRecommendationModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateRecommendationModel`.
+message ValidateRecommendationModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  ValidateRecommendationModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewRecommendationModel`.
+message PreviewRecommendationModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  PreviewRecommendationModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewRecommendationModel`.
+message PreviewRecommendationModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  PreviewRecommendationModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckRecommendationModelEligibility`.
+message CheckRecommendationModelEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  CheckRecommendationModelEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckRecommendationModelEligibility`.
+message CheckRecommendationModelEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  CheckRecommendationModelEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeRecommendationModel`.
+message NormalizeRecommendationModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  NormalizeRecommendationModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeRecommendationModel`.
+message NormalizeRecommendationModelResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  NormalizeRecommendationModelResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainRecommendationModelDecision`.
+message ExplainRecommendationModelDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  ExplainRecommendationModelDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainRecommendationModelDecision`.
+message ExplainRecommendationModelDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  ExplainRecommendationModelDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreRecommendationModel`.
+message ScoreRecommendationModelRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  RecommendationModel recommendation_model = 3;
+  ScoreRecommendationModelRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreRecommendationModel`.
+message ScoreRecommendationModelResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreRecommendationModelResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  RecommendationModel recommendation_model = 1;
+  ScoreRecommendationModelResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRecommendationModelRules`.
+message GetRecommendationModelRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string recommendation_model_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRecommendationModelRules`.
+message GetRecommendationModelRulesResponse {
+  RecommendationModel recommendation_model = 1;
+  acme.common.v1.OperationResult result = 2;
+}

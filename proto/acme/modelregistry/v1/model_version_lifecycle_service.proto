@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.modelregistry.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/modelregistry/v1/modelregistry.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Modelregistry.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/modelregistry/v1;modelregistryv1";
+option java_multiple_files = true;
+option java_outer_classname = "ModelVersionLifecycleServiceProto";
+option java_package = "com.acme.modelregistry.v1";
+
+// Moves a model version between the states of its lifecycle.
+service ModelVersionLifecycleService {
+  // Activates a model version.
+  rpc ActivateModelVersion(ActivateModelVersionRequest) returns (ActivateModelVersionResponse);
+
+  // Suspends a model version.
+  rpc SuspendModelVersion(SuspendModelVersionRequest) returns (SuspendModelVersionResponse);
+
+  // Reinstates a model version.
+  rpc ReinstateModelVersion(ReinstateModelVersionRequest) returns (ReinstateModelVersionResponse);
+
+  // Terminates a model version.
+  rpc TerminateModelVersion(TerminateModelVersionRequest) returns (TerminateModelVersionResponse);
+
+  // Renews a model version.
+  rpc RenewModelVersion(RenewModelVersionRequest) returns (RenewModelVersionResponse);
+
+  // Expires a model version.
+  rpc ExpireModelVersion(ExpireModelVersionRequest) returns (ExpireModelVersionResponse);
+
+  // Returns a model version.
+  rpc GetModelVersionLifecycle(GetModelVersionLifecycleRequest) returns (GetModelVersionLifecycleResponse);
+
+  // Schedules a model version.
+  rpc ScheduleModelVersionExpiry(ScheduleModelVersionExpiryRequest) returns (ScheduleModelVersionExpiryResponse);
+}
+
+// The request of `ActivateModelVersion`.
+message ActivateModelVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ActivateModelVersionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateModelVersion`.
+message ActivateModelVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  ActivateModelVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendModelVersion`.
+message SuspendModelVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  SuspendModelVersionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendModelVersion`.
+message SuspendModelVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  SuspendModelVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateModelVersion`.
+message ReinstateModelVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ReinstateModelVersionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateModelVersion`.
+message ReinstateModelVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  ReinstateModelVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateModelVersion`.
+message TerminateModelVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  TerminateModelVersionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateModelVersion`.
+message TerminateModelVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  TerminateModelVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewModelVersion`.
+message RenewModelVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  RenewModelVersionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewModelVersion`.
+message RenewModelVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  RenewModelVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireModelVersion`.
+message ExpireModelVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ExpireModelVersionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireModelVersion`.
+message ExpireModelVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  ExpireModelVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetModelVersionLifecycle`.
+message GetModelVersionLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetModelVersionLifecycle`.
+message GetModelVersionLifecycleResponse {
+  ModelVersion model_version = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleModelVersionExpiry`.
+message ScheduleModelVersionExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  ScheduleModelVersionExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleModelVersionExpiry`.
+message ScheduleModelVersionExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  ScheduleModelVersionExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

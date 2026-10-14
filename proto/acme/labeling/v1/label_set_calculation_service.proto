@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.labeling.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/labeling/v1/labeling.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Labeling.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/labeling/v1;labelingv1";
+option java_multiple_files = true;
+option java_outer_classname = "LabelSetCalculationServiceProto";
+option java_package = "com.acme.labeling.v1";
+
+// Computes the figures of a label set, such as totals, taxes, and estimates.
+service LabelSetCalculationService {
+  // Calculates a label set.
+  rpc CalculateLabelSet(CalculateLabelSetRequest) returns (CalculateLabelSetResponse);
+
+  // Estimates a label set.
+  rpc EstimateLabelSet(EstimateLabelSetRequest) returns (EstimateLabelSetResponse);
+
+  // Quotes a label set.
+  rpc QuoteLabelSet(QuoteLabelSetRequest) returns (QuoteLabelSetResponse);
+
+  // Compares a label set.
+  rpc CompareLabelSetOptions(CompareLabelSetOptionsRequest) returns (CompareLabelSetOptionsResponse);
+
+  // Recalculates a label set.
+  rpc RecalculateLabelSets(RecalculateLabelSetsRequest) returns (RecalculateLabelSetsResponse);
+
+  // Simulates a label set.
+  rpc SimulateLabelSet(SimulateLabelSetRequest) returns (SimulateLabelSetResponse);
+
+  // Explains a label set.
+  rpc ExplainLabelSetCalculation(ExplainLabelSetCalculationRequest) returns (ExplainLabelSetCalculationResponse);
+
+  // Returns a label set.
+  rpc GetLabelSetRates(GetLabelSetRatesRequest) returns (GetLabelSetRatesResponse);
+}
+
+// The request of `CalculateLabelSet`.
+message CalculateLabelSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  CalculateLabelSetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateLabelSet`.
+message CalculateLabelSetResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateLabelSetResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  LabelSet label_set = 1;
+  CalculateLabelSetResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateLabelSet`.
+message EstimateLabelSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  EstimateLabelSetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateLabelSet`.
+message EstimateLabelSetResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateLabelSetResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  LabelSet label_set = 1;
+  EstimateLabelSetResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteLabelSet`.
+message QuoteLabelSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  QuoteLabelSetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteLabelSet`.
+message QuoteLabelSetResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteLabelSetResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  LabelSet label_set = 1;
+  QuoteLabelSetResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareLabelSetOptions`.
+message CompareLabelSetOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  CompareLabelSetOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareLabelSetOptions`.
+message CompareLabelSetOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareLabelSetOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  LabelSet label_set = 1;
+  CompareLabelSetOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateLabelSets`.
+message RecalculateLabelSetsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  RecalculateLabelSetsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateLabelSets`.
+message RecalculateLabelSetsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateLabelSetsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  LabelSet label_set = 1;
+  RecalculateLabelSetsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateLabelSet`.
+message SimulateLabelSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  SimulateLabelSetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateLabelSet`.
+message SimulateLabelSetResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateLabelSetResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  LabelSet label_set = 1;
+  SimulateLabelSetResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainLabelSetCalculation`.
+message ExplainLabelSetCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  LabelSet label_set = 3;
+  ExplainLabelSetCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainLabelSetCalculation`.
+message ExplainLabelSetCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  LabelSet label_set = 1;
+  ExplainLabelSetCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetLabelSetRates`.
+message GetLabelSetRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string label_set_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetLabelSetRates`.
+message GetLabelSetRatesResponse {
+  LabelSet label_set = 1;
+  acme.common.v1.OperationResult result = 2;
+}

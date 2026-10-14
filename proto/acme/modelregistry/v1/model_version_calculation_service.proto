@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.modelregistry.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/modelregistry/v1/modelregistry.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Modelregistry.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/modelregistry/v1;modelregistryv1";
+option java_multiple_files = true;
+option java_outer_classname = "ModelVersionCalculationServiceProto";
+option java_package = "com.acme.modelregistry.v1";
+
+// Computes the figures of a model version, such as totals, taxes, and estimates.
+service ModelVersionCalculationService {
+  // Calculates a model version.
+  rpc CalculateModelVersion(CalculateModelVersionRequest) returns (CalculateModelVersionResponse);
+
+  // Estimates a model version.
+  rpc EstimateModelVersion(EstimateModelVersionRequest) returns (EstimateModelVersionResponse);
+
+  // Quotes a model version.
+  rpc QuoteModelVersion(QuoteModelVersionRequest) returns (QuoteModelVersionResponse);
+
+  // Compares a model version.
+  rpc CompareModelVersionOptions(CompareModelVersionOptionsRequest) returns (CompareModelVersionOptionsResponse);
+
+  // Recalculates a model version.
+  rpc RecalculateModelVersions(RecalculateModelVersionsRequest) returns (RecalculateModelVersionsResponse);
+
+  // Simulates a model version.
+  rpc SimulateModelVersion(SimulateModelVersionRequest) returns (SimulateModelVersionResponse);
+
+  // Explains a model version.
+  rpc ExplainModelVersionCalculation(ExplainModelVersionCalculationRequest) returns (ExplainModelVersionCalculationResponse);
+
+  // Returns a model version.
+  rpc GetModelVersionRates(GetModelVersionRatesRequest) returns (GetModelVersionRatesResponse);
+}
+
+// The request of `CalculateModelVersion`.
+message CalculateModelVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  CalculateModelVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateModelVersion`.
+message CalculateModelVersionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateModelVersionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  ModelVersion model_version = 1;
+  CalculateModelVersionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateModelVersion`.
+message EstimateModelVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  EstimateModelVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateModelVersion`.
+message EstimateModelVersionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateModelVersionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  ModelVersion model_version = 1;
+  EstimateModelVersionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteModelVersion`.
+message QuoteModelVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  QuoteModelVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteModelVersion`.
+message QuoteModelVersionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteModelVersionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  ModelVersion model_version = 1;
+  QuoteModelVersionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareModelVersionOptions`.
+message CompareModelVersionOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  CompareModelVersionOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareModelVersionOptions`.
+message CompareModelVersionOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareModelVersionOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  ModelVersion model_version = 1;
+  CompareModelVersionOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateModelVersions`.
+message RecalculateModelVersionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  RecalculateModelVersionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateModelVersions`.
+message RecalculateModelVersionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateModelVersionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  ModelVersion model_version = 1;
+  RecalculateModelVersionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateModelVersion`.
+message SimulateModelVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  SimulateModelVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateModelVersion`.
+message SimulateModelVersionResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateModelVersionResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  ModelVersion model_version = 1;
+  SimulateModelVersionResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainModelVersionCalculation`.
+message ExplainModelVersionCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  ModelVersion model_version = 3;
+  ExplainModelVersionCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainModelVersionCalculation`.
+message ExplainModelVersionCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ModelVersion model_version = 1;
+  ExplainModelVersionCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetModelVersionRates`.
+message GetModelVersionRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string model_version_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetModelVersionRates`.
+message GetModelVersionRatesResponse {
+  ModelVersion model_version = 1;
+  acme.common.v1.OperationResult result = 2;
+}

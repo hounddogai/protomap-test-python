@@ -1,0 +1,288 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.forecasting.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/forecasting/v1/forecasting.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Forecasting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/forecasting/v1;forecastingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ScenarioWorkflowServiceProto";
+option java_package = "com.acme.forecasting.v1";
+
+// Runs the long-lived workflow that takes a scenario from start to finish.
+service ScenarioWorkflowService {
+  // Starts a scenario.
+  rpc StartScenarioWorkflow(StartScenarioWorkflowRequest) returns (StartScenarioWorkflowResponse);
+
+  // Advances a scenario.
+  rpc AdvanceScenarioWorkflow(AdvanceScenarioWorkflowRequest) returns (AdvanceScenarioWorkflowResponse);
+
+  // Cancels a scenario.
+  rpc CancelScenarioWorkflow(CancelScenarioWorkflowRequest) returns (CancelScenarioWorkflowResponse);
+
+  // Retrys a scenario.
+  rpc RetryScenarioWorkflow(RetryScenarioWorkflowRequest) returns (RetryScenarioWorkflowResponse);
+
+  // Pauses a scenario.
+  rpc PauseScenarioWorkflow(PauseScenarioWorkflowRequest) returns (PauseScenarioWorkflowResponse);
+
+  // Resumes a scenario.
+  rpc ResumeScenarioWorkflow(ResumeScenarioWorkflowRequest) returns (ResumeScenarioWorkflowResponse);
+
+  // Signals a scenario.
+  rpc SignalScenarioWorkflow(SignalScenarioWorkflowRequest) returns (SignalScenarioWorkflowResponse);
+}
+
+// The request of `StartScenarioWorkflow`.
+message StartScenarioWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string scenario_id = 2;
+  Scenario scenario = 3;
+  StartScenarioWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartScenarioWorkflow`.
+message StartScenarioWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Scenario scenario = 1;
+  StartScenarioWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceScenarioWorkflow`.
+message AdvanceScenarioWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string scenario_id = 2;
+  Scenario scenario = 3;
+  AdvanceScenarioWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceScenarioWorkflow`.
+message AdvanceScenarioWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Scenario scenario = 1;
+  AdvanceScenarioWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelScenarioWorkflow`.
+message CancelScenarioWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string scenario_id = 2;
+  Scenario scenario = 3;
+  CancelScenarioWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelScenarioWorkflow`.
+message CancelScenarioWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Scenario scenario = 1;
+  CancelScenarioWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryScenarioWorkflow`.
+message RetryScenarioWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string scenario_id = 2;
+  Scenario scenario = 3;
+  RetryScenarioWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryScenarioWorkflow`.
+message RetryScenarioWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Scenario scenario = 1;
+  RetryScenarioWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseScenarioWorkflow`.
+message PauseScenarioWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string scenario_id = 2;
+  Scenario scenario = 3;
+  PauseScenarioWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseScenarioWorkflow`.
+message PauseScenarioWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Scenario scenario = 1;
+  PauseScenarioWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeScenarioWorkflow`.
+message ResumeScenarioWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string scenario_id = 2;
+  Scenario scenario = 3;
+  ResumeScenarioWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeScenarioWorkflow`.
+message ResumeScenarioWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Scenario scenario = 1;
+  ResumeScenarioWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalScenarioWorkflow`.
+message SignalScenarioWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string scenario_id = 2;
+  Scenario scenario = 3;
+  SignalScenarioWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalScenarioWorkflow`.
+message SignalScenarioWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Scenario scenario = 1;
+  SignalScenarioWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

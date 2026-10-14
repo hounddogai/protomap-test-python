@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.recommendations.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/recommendations/v1/recommendations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Recommendations.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/recommendations/v1;recommendationsv1";
+option java_multiple_files = true;
+option java_outer_classname = "InteractionLifecycleServiceProto";
+option java_package = "com.acme.recommendations.v1";
+
+// Moves an interaction between the states of its lifecycle.
+service InteractionLifecycleService {
+  // Activates an interaction.
+  rpc ActivateInteraction(ActivateInteractionRequest) returns (ActivateInteractionResponse);
+
+  // Suspends an interaction.
+  rpc SuspendInteraction(SuspendInteractionRequest) returns (SuspendInteractionResponse);
+
+  // Reinstates an interaction.
+  rpc ReinstateInteraction(ReinstateInteractionRequest) returns (ReinstateInteractionResponse);
+
+  // Terminates an interaction.
+  rpc TerminateInteraction(TerminateInteractionRequest) returns (TerminateInteractionResponse);
+
+  // Renews an interaction.
+  rpc RenewInteraction(RenewInteractionRequest) returns (RenewInteractionResponse);
+
+  // Expires an interaction.
+  rpc ExpireInteraction(ExpireInteractionRequest) returns (ExpireInteractionResponse);
+
+  // Returns an interaction.
+  rpc GetInteractionLifecycle(GetInteractionLifecycleRequest) returns (GetInteractionLifecycleResponse);
+
+  // Schedules an interaction.
+  rpc ScheduleInteractionExpiry(ScheduleInteractionExpiryRequest) returns (ScheduleInteractionExpiryResponse);
+}
+
+// The request of `ActivateInteraction`.
+message ActivateInteractionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  ActivateInteractionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateInteraction`.
+message ActivateInteractionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Interaction interaction = 1;
+  ActivateInteractionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendInteraction`.
+message SuspendInteractionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  SuspendInteractionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendInteraction`.
+message SuspendInteractionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Interaction interaction = 1;
+  SuspendInteractionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateInteraction`.
+message ReinstateInteractionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  ReinstateInteractionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateInteraction`.
+message ReinstateInteractionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Interaction interaction = 1;
+  ReinstateInteractionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateInteraction`.
+message TerminateInteractionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  TerminateInteractionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateInteraction`.
+message TerminateInteractionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Interaction interaction = 1;
+  TerminateInteractionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewInteraction`.
+message RenewInteractionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  RenewInteractionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewInteraction`.
+message RenewInteractionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Interaction interaction = 1;
+  RenewInteractionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireInteraction`.
+message ExpireInteractionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  ExpireInteractionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireInteraction`.
+message ExpireInteractionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Interaction interaction = 1;
+  ExpireInteractionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetInteractionLifecycle`.
+message GetInteractionLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetInteractionLifecycle`.
+message GetInteractionLifecycleResponse {
+  Interaction interaction = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleInteractionExpiry`.
+message ScheduleInteractionExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string interaction_id = 2;
+  Interaction interaction = 3;
+  ScheduleInteractionExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleInteractionExpiry`.
+message ScheduleInteractionExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Interaction interaction = 1;
+  ScheduleInteractionExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

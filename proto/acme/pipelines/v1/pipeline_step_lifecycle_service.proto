@@ -1,0 +1,258 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.pipelines.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/pipelines/v1/pipelines.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Pipelines.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/pipelines/v1;pipelinesv1";
+option java_multiple_files = true;
+option java_outer_classname = "PipelineStepLifecycleServiceProto";
+option java_package = "com.acme.pipelines.v1";
+
+// Moves a pipeline step between the states of its lifecycle.
+service PipelineStepLifecycleService {
+  // Activates a pipeline step.
+  rpc ActivatePipelineStep(ActivatePipelineStepRequest) returns (ActivatePipelineStepResponse);
+
+  // Suspends a pipeline step.
+  rpc SuspendPipelineStep(SuspendPipelineStepRequest) returns (SuspendPipelineStepResponse);
+
+  // Terminates a pipeline step.
+  rpc TerminatePipelineStep(TerminatePipelineStepRequest) returns (TerminatePipelineStepResponse);
+
+  // Renews a pipeline step.
+  rpc RenewPipelineStep(RenewPipelineStepRequest) returns (RenewPipelineStepResponse);
+
+  // Expires a pipeline step.
+  rpc ExpirePipelineStep(ExpirePipelineStepRequest) returns (ExpirePipelineStepResponse);
+
+  // Returns a pipeline step.
+  rpc GetPipelineStepLifecycle(GetPipelineStepLifecycleRequest) returns (GetPipelineStepLifecycleResponse);
+
+  // Schedules a pipeline step.
+  rpc SchedulePipelineStepExpiry(SchedulePipelineStepExpiryRequest) returns (SchedulePipelineStepExpiryResponse);
+}
+
+// The request of `ActivatePipelineStep`.
+message ActivatePipelineStepRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  ActivatePipelineStepRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivatePipelineStep`.
+message ActivatePipelineStepResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineStep pipeline_step = 1;
+  ActivatePipelineStepResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendPipelineStep`.
+message SuspendPipelineStepRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  SuspendPipelineStepRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendPipelineStep`.
+message SuspendPipelineStepResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineStep pipeline_step = 1;
+  SuspendPipelineStepResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminatePipelineStep`.
+message TerminatePipelineStepRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  TerminatePipelineStepRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminatePipelineStep`.
+message TerminatePipelineStepResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineStep pipeline_step = 1;
+  TerminatePipelineStepResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewPipelineStep`.
+message RenewPipelineStepRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  RenewPipelineStepRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewPipelineStep`.
+message RenewPipelineStepResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineStep pipeline_step = 1;
+  RenewPipelineStepResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpirePipelineStep`.
+message ExpirePipelineStepRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  ExpirePipelineStepRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpirePipelineStep`.
+message ExpirePipelineStepResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineStep pipeline_step = 1;
+  ExpirePipelineStepResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPipelineStepLifecycle`.
+message GetPipelineStepLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPipelineStepLifecycle`.
+message GetPipelineStepLifecycleResponse {
+  PipelineStep pipeline_step = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `SchedulePipelineStepExpiry`.
+message SchedulePipelineStepExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string pipeline_step_id = 2;
+  PipelineStep pipeline_step = 3;
+  SchedulePipelineStepExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SchedulePipelineStepExpiry`.
+message SchedulePipelineStepExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PipelineStep pipeline_step = 1;
+  SchedulePipelineStepExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

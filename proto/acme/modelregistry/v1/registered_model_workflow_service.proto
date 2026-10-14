@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.modelregistry.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/modelregistry/v1/modelregistry.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Modelregistry.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/modelregistry/v1;modelregistryv1";
+option java_multiple_files = true;
+option java_outer_classname = "RegisteredModelWorkflowServiceProto";
+option java_package = "com.acme.modelregistry.v1";
+
+// Runs the long-lived workflow that takes a registered model from start to finish.
+service RegisteredModelWorkflowService {
+  // Starts a registered model.
+  rpc StartRegisteredModelWorkflow(StartRegisteredModelWorkflowRequest) returns (StartRegisteredModelWorkflowResponse);
+
+  // Advances a registered model.
+  rpc AdvanceRegisteredModelWorkflow(AdvanceRegisteredModelWorkflowRequest) returns (AdvanceRegisteredModelWorkflowResponse);
+
+  // Cancels a registered model.
+  rpc CancelRegisteredModelWorkflow(CancelRegisteredModelWorkflowRequest) returns (CancelRegisteredModelWorkflowResponse);
+
+  // Retrys a registered model.
+  rpc RetryRegisteredModelWorkflow(RetryRegisteredModelWorkflowRequest) returns (RetryRegisteredModelWorkflowResponse);
+
+  // Resumes a registered model.
+  rpc ResumeRegisteredModelWorkflow(ResumeRegisteredModelWorkflowRequest) returns (ResumeRegisteredModelWorkflowResponse);
+
+  // Returns a registered model.
+  rpc InspectRegisteredModelWorkflow(InspectRegisteredModelWorkflowRequest) returns (InspectRegisteredModelWorkflowResponse);
+
+  // Lists registered models a page at a time.
+  rpc ListRegisteredModelWorkflows(ListRegisteredModelWorkflowsRequest) returns (ListRegisteredModelWorkflowsResponse);
+
+  // Signals a registered model.
+  rpc SignalRegisteredModelWorkflow(SignalRegisteredModelWorkflowRequest) returns (SignalRegisteredModelWorkflowResponse);
+}
+
+// The request of `StartRegisteredModelWorkflow`.
+message StartRegisteredModelWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  StartRegisteredModelWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartRegisteredModelWorkflow`.
+message StartRegisteredModelWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  StartRegisteredModelWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceRegisteredModelWorkflow`.
+message AdvanceRegisteredModelWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  AdvanceRegisteredModelWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceRegisteredModelWorkflow`.
+message AdvanceRegisteredModelWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  AdvanceRegisteredModelWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelRegisteredModelWorkflow`.
+message CancelRegisteredModelWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  CancelRegisteredModelWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelRegisteredModelWorkflow`.
+message CancelRegisteredModelWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  CancelRegisteredModelWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryRegisteredModelWorkflow`.
+message RetryRegisteredModelWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  RetryRegisteredModelWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryRegisteredModelWorkflow`.
+message RetryRegisteredModelWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  RetryRegisteredModelWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeRegisteredModelWorkflow`.
+message ResumeRegisteredModelWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  ResumeRegisteredModelWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeRegisteredModelWorkflow`.
+message ResumeRegisteredModelWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  ResumeRegisteredModelWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectRegisteredModelWorkflow`.
+message InspectRegisteredModelWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectRegisteredModelWorkflow`.
+message InspectRegisteredModelWorkflowResponse {
+  RegisteredModel registered_model = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListRegisteredModelWorkflows`.
+message ListRegisteredModelWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RegisteredModelStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListRegisteredModelWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListRegisteredModelWorkflows`.
+message ListRegisteredModelWorkflowsResponse {
+  repeated RegisteredModel registered_models = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalRegisteredModelWorkflow`.
+message SignalRegisteredModelWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string registered_model_id = 2;
+  RegisteredModel registered_model = 3;
+  SignalRegisteredModelWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalRegisteredModelWorkflow`.
+message SignalRegisteredModelWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RegisteredModel registered_model = 1;
+  SignalRegisteredModelWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

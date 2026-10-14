@@ -1,0 +1,232 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.metrics.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/metrics/v1/metrics.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Metrics.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/metrics/v1;metricsv1";
+option java_multiple_files = true;
+option java_outer_classname = "MetricSeriesHistoryServiceProto";
+option java_package = "com.acme.metrics.v1";
+
+// Keeps every version of a metric series and restores earlier ones.
+service MetricSeriesHistoryService {
+  // Records a metric series.
+  rpc RecordMetricSeriesVersion(RecordMetricSeriesVersionRequest) returns (RecordMetricSeriesVersionResponse);
+
+  // Lists metric serieses a page at a time.
+  rpc ListMetricSeriesVersions(ListMetricSeriesVersionsRequest) returns (ListMetricSeriesVersionsResponse);
+
+  // Returns a metric series.
+  rpc GetMetricSeriesVersion(GetMetricSeriesVersionRequest) returns (GetMetricSeriesVersionResponse);
+
+  // Compares a metric series.
+  rpc CompareMetricSeriesVersions(CompareMetricSeriesVersionsRequest) returns (CompareMetricSeriesVersionsResponse);
+
+  // Reverts a metric series.
+  rpc RevertMetricSeries(RevertMetricSeriesRequest) returns (RevertMetricSeriesResponse);
+
+  // Annotates a metric series.
+  rpc AnnotateMetricSeriesVersion(AnnotateMetricSeriesVersionRequest) returns (AnnotateMetricSeriesVersionResponse);
+
+  // Deletes a metric series.
+  rpc PruneMetricSeriesVersions(PruneMetricSeriesVersionsRequest) returns (PruneMetricSeriesVersionsResponse);
+}
+
+// The request of `RecordMetricSeriesVersion`.
+message RecordMetricSeriesVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  MetricSeries metric_series = 3;
+  RecordMetricSeriesVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecordMetricSeriesVersion`.
+message RecordMetricSeriesVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricSeries metric_series = 1;
+  RecordMetricSeriesVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListMetricSeriesVersions`.
+message ListMetricSeriesVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated MetricSeriesStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListMetricSeriesVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListMetricSeriesVersions`.
+message ListMetricSeriesVersionsResponse {
+  repeated MetricSeries metric_serieses = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetMetricSeriesVersion`.
+message GetMetricSeriesVersionRequest {
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetMetricSeriesVersion`.
+message GetMetricSeriesVersionResponse {
+  MetricSeries metric_series = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CompareMetricSeriesVersions`.
+message CompareMetricSeriesVersionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  MetricSeries metric_series = 3;
+  CompareMetricSeriesVersionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareMetricSeriesVersions`.
+message CompareMetricSeriesVersionsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricSeries metric_series = 1;
+  CompareMetricSeriesVersionsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RevertMetricSeries`.
+message RevertMetricSeriesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  MetricSeries metric_series = 3;
+  RevertMetricSeriesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RevertMetricSeries`.
+message RevertMetricSeriesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricSeries metric_series = 1;
+  RevertMetricSeriesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AnnotateMetricSeriesVersion`.
+message AnnotateMetricSeriesVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  MetricSeries metric_series = 3;
+  AnnotateMetricSeriesVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AnnotateMetricSeriesVersion`.
+message AnnotateMetricSeriesVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  MetricSeries metric_series = 1;
+  AnnotateMetricSeriesVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PruneMetricSeriesVersions`.
+message PruneMetricSeriesVersionsRequest {
+  acme.common.v1.RequestContext context = 1;
+  string metric_series_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PruneMetricSeriesVersions`.
+message PruneMetricSeriesVersionsResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

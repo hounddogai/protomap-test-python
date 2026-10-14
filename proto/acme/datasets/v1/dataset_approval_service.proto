@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.datasets.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/datasets/v1/datasets.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Datasets.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/datasets/v1;datasetsv1";
+option java_multiple_files = true;
+option java_outer_classname = "DatasetApprovalServiceProto";
+option java_package = "com.acme.datasets.v1";
+
+// Routes datasets through approval, with escalation and delegation.
+service DatasetApprovalService {
+  // Submits a dataset.
+  rpc SubmitDataset(SubmitDatasetRequest) returns (SubmitDatasetResponse);
+
+  // Approves a dataset.
+  rpc ApproveDataset(ApproveDatasetRequest) returns (ApproveDatasetResponse);
+
+  // Rejects a dataset.
+  rpc RejectDataset(RejectDatasetRequest) returns (RejectDatasetResponse);
+
+  // Escalates a dataset.
+  rpc EscalateDataset(EscalateDatasetRequest) returns (EscalateDatasetResponse);
+
+  // Lists datasets a page at a time.
+  rpc ListPendingDatasets(ListPendingDatasetsRequest) returns (ListPendingDatasetsResponse);
+
+  // Delegates a dataset.
+  rpc DelegateDatasetApproval(DelegateDatasetApprovalRequest) returns (DelegateDatasetApprovalResponse);
+
+  // Recalls a dataset.
+  rpc RecallDataset(RecallDatasetRequest) returns (RecallDatasetResponse);
+
+  // Returns a dataset.
+  rpc GetDatasetApprovalStatus(GetDatasetApprovalStatusRequest) returns (GetDatasetApprovalStatusResponse);
+
+  // Comments a dataset.
+  rpc CommentDatasetApproval(CommentDatasetApprovalRequest) returns (CommentDatasetApprovalResponse);
+}
+
+// The request of `SubmitDataset`.
+message SubmitDatasetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_id = 2;
+  Dataset dataset = 3;
+  SubmitDatasetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitDataset`.
+message SubmitDatasetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dataset dataset = 1;
+  SubmitDatasetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveDataset`.
+message ApproveDatasetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_id = 2;
+  Dataset dataset = 3;
+  ApproveDatasetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveDataset`.
+message ApproveDatasetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dataset dataset = 1;
+  ApproveDatasetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectDataset`.
+message RejectDatasetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_id = 2;
+  Dataset dataset = 3;
+  RejectDatasetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectDataset`.
+message RejectDatasetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dataset dataset = 1;
+  RejectDatasetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateDataset`.
+message EscalateDatasetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_id = 2;
+  Dataset dataset = 3;
+  EscalateDatasetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateDataset`.
+message EscalateDatasetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dataset dataset = 1;
+  EscalateDatasetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingDatasets`.
+message ListPendingDatasetsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated DatasetStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingDatasetsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingDatasets`.
+message ListPendingDatasetsResponse {
+  repeated Dataset datasets = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateDatasetApproval`.
+message DelegateDatasetApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_id = 2;
+  Dataset dataset = 3;
+  DelegateDatasetApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateDatasetApproval`.
+message DelegateDatasetApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dataset dataset = 1;
+  DelegateDatasetApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallDataset`.
+message RecallDatasetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_id = 2;
+  Dataset dataset = 3;
+  RecallDatasetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallDataset`.
+message RecallDatasetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dataset dataset = 1;
+  RecallDatasetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetDatasetApprovalStatus`.
+message GetDatasetApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string dataset_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetDatasetApprovalStatus`.
+message GetDatasetApprovalStatusResponse {
+  Dataset dataset = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentDatasetApproval`.
+message CommentDatasetApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string dataset_id = 2;
+  Dataset dataset = 3;
+  CommentDatasetApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentDatasetApproval`.
+message CommentDatasetApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Dataset dataset = 1;
+  CommentDatasetApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
